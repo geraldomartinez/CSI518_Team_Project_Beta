@@ -24,7 +24,7 @@
     <body class="city_bg">
         <div id="page_wrapper" style="height: 22em; overflow-y: visible;">
             <div id="header">GREAT DANES ELECTRONICS</div>
-            <div id="sub_header"><span id="sub_header_pt_1">Sell and buy electronics222.</span></div>
+            <div id="sub_header"><span id="sub_header_pt_1">Sell and buy electronics 123</span></div>
             <%
                 //If the user is already logged in, just forward them to the account page
                 String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
@@ -52,7 +52,7 @@
             <div id="welcome_message"><%= welcomeMsg%></div>
             <%@include file="nav.jsp"%>
             <%                
-            if (loggedIn.equals("true")) { //If the user is logged in, show the logout button
+            if (loggedIn.equals("true")) { //If the user is logged , show the logout button
             %>
             <%@include file="logout.jsp"%>
             <%
