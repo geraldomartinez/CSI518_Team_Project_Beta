@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Pellino Financial, LLC.</title>
+        <title>Great Danes Electronics</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
@@ -23,7 +23,7 @@
     </head>
     <body class="city_bg">
         <div id="page_wrapper" style="height: 22em; overflow-y: visible;">
-            <div id="header">PELLINO FINANCIAL, LLC.</div>
+            <div id="header">GREAT DANES ELECTRONICS</div>
             <div id="sub_header"><span id="sub_header_pt_1">We turn your money, into our money.</span></div>
             <%
                 //If the user is already logged in, just forward them to the account page
