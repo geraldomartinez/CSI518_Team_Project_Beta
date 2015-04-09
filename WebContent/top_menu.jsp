@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="css/global.css" /> <!-- Global style sheet -->
 <div id="menu_wrapper">
 	<table>
 		<tr>
@@ -12,13 +13,13 @@
 				<a href="view_product_list.jsp">View Product List</a>
 			</td>
 			<td>
-				<a href="#">Menu Item #2</a>
+				<a href="add_product.jsp">Add Product</a>
 			</td>
 			<td>
-				<a href="#">Menu Item #3</a>
+				<a href="#">[Menu Item #4]</a>
 			</td>
 			<td>
-				<a href="#">Menu Item #4</a>
+				<a href="#">[Menu Item #5]</a>
 			</td>
 		</tr>
 	</table>

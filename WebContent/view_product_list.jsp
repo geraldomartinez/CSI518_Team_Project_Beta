@@ -7,7 +7,6 @@
 		<title>View Products</title>
 		
        	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
-        <link rel="stylesheet" type="text/css" href="css/global.css" /> <!-- Global style sheet -->
         
         <style type="text/css">
         	#product_list_table{
@@ -24,50 +23,12 @@
         		padding-left: 10px;
         	}
         	
-        	#add_product_button{
-        		vertical-align: middle;
-        		text-align: center;
-        		width: 135px;
-        		border: 1px solid green;
-        		background: #9ABF97;
-        		cursor: pointer;
-        		font-weight: bold;
-        		padding: 5px;
-        	}
-        	
-        	#add_product_button:hover{
-        		color: black;
-        	}
-        	
-        	.green_plus{
-        		vertical-align: middle;
-        		height: 20px;
-        		margin-top: -3px;
-        	}
-        	
         </style>
-        
-        <script type="text/javascript">
-        	$(document).ready(function(){
-            	$("#add_product_button").click(function(){
-            		window.location.href = "add_product.jsp";
-            	});
-        	})
-        </script>
        	
 	</head>
 	<body>
         <%@include file="top_menu.jsp"%>
-        <br />
         <div id="page_content_wrapper">
-        	<div>
-        		<div id="add_product_button">
-        			<img class="green_plus" src="img/green_plus.png" alt="green_plus" />
-        			Add Product
-        		</div>
-        	</div>
-        	<br />
-
         	<h2>Products Listing For [Seller Name]</h2>
         	<table id="product_list_table">
         		<tr>

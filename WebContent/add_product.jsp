@@ -7,7 +7,6 @@
 		<title>Add Product - Great Danes Electronics</title>
 		
        	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
-        <link rel="stylesheet" type="text/css" href="css/global.css" /> <!-- Global style sheet -->
 	</head>
 	<body>
         <%@include file="top_menu.jsp"%>
