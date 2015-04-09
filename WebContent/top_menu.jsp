@@ -16,7 +16,7 @@
 				<a href="add_product.jsp">Add Product</a>
 			</td>
 			<td>
-				<a href="register.jsp">Register</a>
+				<a href="signup.jsp">Register</a>
 			</td>
 			<td>
 				<a href="login.jsp">Login</a>
