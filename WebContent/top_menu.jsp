@@ -16,10 +16,10 @@
 				<a href="add_product.jsp">Add Product</a>
 			</td>
 			<td>
-				<a href="#">[Menu Item #4]</a>
+				<a href="register.jsp">Register</a>
 			</td>
 			<td>
-				<a href="#">[Menu Item #5]</a>
+				<a href="login.jsp">Login</a>
 			</td>
 		</tr>
 	</table>
