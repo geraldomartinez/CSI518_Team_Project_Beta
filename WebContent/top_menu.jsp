@@ -2,19 +2,23 @@
 	<table>
 		<tr>
 			<td>
-				<img id="great_dane_logo" src="img/great_dane_logo.png" />
+				<a href="index.jsp">
+					<img id="great_dane_logo" src="img/great_dane_logo.png" />
+					&nbsp;
+					Home
+				</a>
 			</td>
 			<td>
-				Menu Item 1
+				<a href="view_product_list.jsp">View Product List</a>
 			</td>
 			<td>
-				Menu Item 2
+				<a href="#">Menu Item #2</a>
 			</td>
 			<td>
-				Menu Item 3
+				<a href="#">Menu Item #3</a>
 			</td>
 			<td>
-				Menu Item 4
+				<a href="#">Menu Item #4</a>
 			</td>
 		</tr>
 	</table>

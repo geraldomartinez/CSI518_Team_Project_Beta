@@ -44,19 +44,23 @@ body{
 
 #menu_wrapper table{
 	width: 100%;
-	color: white;
 	font-weight: bold;
 	text-align: center;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
-#menu_wrapper table td, #menu_wrapper table img{
+#menu_wrapper table a{
+	color: white;
+	text-decoration: none;
+}
+
+#menu_wrapper table td a, #menu_wrapper table img{
 	cursor: pointer;
 	vertical-align: middle;
 }
 
-#menu_wrapper table td:hover{
+#menu_wrapper table td  a:hover{
 	color: #3371F5;	
 }
 
