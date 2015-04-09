@@ -5,9 +5,10 @@
 			<td>
 				<a href="index.jsp">
 					<img id="great_dane_logo" src="img/great_dane_logo.png" />
-					&nbsp;
-					Home
 				</a>
+			</td>
+			<td>
+				<a href="index.jsp">Home</a>
 			</td>
 			<td>
 				<a href="view_product_list.jsp">View Product List</a>
