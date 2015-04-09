@@ -16,7 +16,7 @@
         <link rel="stylesheet" type="text/css" href="css/index.css" /> <!-- Style sheet -->
         <link rel="stylesheet" type="text/css" href="css/goldbutton.css" /> <!-- Style sheet for gold buttons -->
         <script type="text/javascript">
-            $(document).ready(function () { //When the page loads 123
+            $(document).ready(function () { //When the page loads
                 $("#page_wrapper").fadeIn(500); //Make the page wrapper fade in over a half-second period
             });
         </script>
