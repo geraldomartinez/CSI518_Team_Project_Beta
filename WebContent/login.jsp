@@ -38,7 +38,7 @@
             }
         %>
         <div id="page_wrapper">
-            <div id="header">PELLINO FINANCIAL, LLC.</div>   
+            <div id="header">Great Danes Electronics</div>   
             <div id="sub_header">Please log in to view your account</div>
             <%
                 String loginMessage = (String) request.getAttribute("loginMessage"); //Obtain the login message from the session
