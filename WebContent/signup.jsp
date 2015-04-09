@@ -54,7 +54,7 @@
 
     <body class="money_bg">
         <div id="page_wrapper" style="top:0; height: 100%; overflow-y: scroll;">
-            <div id="header">REGISTER HERE TO PROCEED FOR SHOPPING</div>   
+            <div id="header">REGISTER HERE TO PROCEED </div>   
             <div id="sub_header">Let us know how we can help</div>
             <div id="signup_form_wrapper">
                 <%
