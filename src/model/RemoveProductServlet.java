@@ -18,13 +18,13 @@ import controller.User;
  * Servlet implementation class RemoveProduct
  */
 @WebServlet("/RemoveProduct")
-public class RemoveProduct extends HttpServlet {
+public class RemoveProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RemoveProduct() {
+    public RemoveProductServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
