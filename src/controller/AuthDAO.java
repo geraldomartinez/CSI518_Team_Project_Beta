@@ -284,6 +284,7 @@ public class AuthDAO {
  
         return (emailFromQry == null);
     }
+    
  
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
