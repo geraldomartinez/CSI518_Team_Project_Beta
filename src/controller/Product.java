@@ -94,4 +94,6 @@ public class Product {
 	public void SetNumInStock(int x /*in, number of products in stock*/){
 		numInStock = x;
 	}
+	//function for removal of product called
+	public boolean IsProductRemoved=AuthDAO.removeProduct(sellerID, productID);
 }

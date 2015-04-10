@@ -284,7 +284,34 @@ public class AuthDAO {
  
         return (emailFromQry == null);
     }
-    
+    //function to remove product
+    public static boolean removeProduct(int sellerID, int productID)
+			throws SQLException {
+
+    	Statement stmt;
+        String sql1;
+        String sql2;
+        
+        Connection conn = createConn();
+        System.out.println("Creating Statement..");
+        try {
+            stmt = conn.createStatement();
+            //sql query to delete a product by matching productID and sellerID
+            sql1 = "DELETE FROM Products WHERE productID='"+productID +"'AND sellerID=’"+sellerID+"'";
+            //sql query to delete the corresponding product review
+            sql2= "DELETE FROM ProductReviews WHERE productID='"+productID+"'";
+           //updating tables Products and ProductReviews
+            stmt.executeUpdate(sql1);
+            stmt.executeUpdate(sql2);
+        } 
+        catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+             
+        }
+        return true;
+    }
+
  
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
