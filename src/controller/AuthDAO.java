@@ -297,7 +297,7 @@ public class AuthDAO {
         try {
             stmt = conn.createStatement();
             //sql query to delete a product by matching productID and sellerID
-            sql1 = "DELETE FROM Products WHERE productID='"+productID +"'AND sellerID=’"+sellerID+"'";
+            sql1 = "DELETE FROM Products WHERE productID='"+productID +"'AND sellerID='"+sellerID+"'";
             //sql query to delete the corresponding product review
             sql2= "DELETE FROM ProductReviews WHERE productID='"+productID+"'";
            //updating tables Products and ProductReviews
