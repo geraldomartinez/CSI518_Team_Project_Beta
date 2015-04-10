@@ -1,18 +1,13 @@
-<%-- 
-    Document   : signup
-    Created on : Mar 5, 2015, 3:06:15 PM
-    Author     : Samuel
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <head>
-        <title>Pellino Financial, LLC.</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
-        <link rel="stylesheet" type="text/css" href="css/index.css" /> <!-- Style sheet -->
-        <link rel="stylesheet" type="text/css" href="css/goldbutton.css" /> <!-- Style sheet for gold buttons -->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>Signup - Great Danes Electronics</title>
+		
+       	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
+       	
         <script type="text/javascript">
             $(document).ready(function () { //When the document loads
                 $("#register_button").hide(); //Hide the register button
@@ -22,57 +17,67 @@
                 
                 $("input[name=accountType]:radio").on("change", function() {
                 	if ($(this).val() == "seller"){
-                		$("input[name=account_number]").show();
-                		$("input[name=routing_number]").show();
+                		$("input[name=account_number]").fadeIn();
+                		$("input[name=routing_number]").fadeIn();
                 	}else{
-                		$("input[name=account_number]").val('').hide();
-                		$("input[name=routing_number]").val('').hide();
+                		$("input[name=account_number]").val('').fadeOut();
+                		$("input[name=routing_number]").val('').fadeOut();
                 	}
                 });
             });
         </script>
-        <style type="text/css">
-            #page_wrapper{
-                position: fixed; /* or absolute */
-                width: 100%;
-                height: 70%;
-                top: 15%;  /* center object vertically */
-                background-color: rgba(0, 0, 0, 0.8); /* Black at 80% opacity */
-                text-align: center;
-                display: none;
-            }
-            
-            #register_message{
-                color: red;
-                font-weight: bold;
-                font-size: 1em;
-                padding-bottom: 0.2em;
-                font-family: arial;
-            }
-        </style>
-    </head>
-
-    <body class="money_bg">
-        <div id="page_wrapper" style="top:0; height: 100%; overflow-y: scroll;">
-            <div id="header">REGISTER HERE TO PROCEED </div>   
-            <div id="sub_header">Let us know how we can help</div>
-            <div id="signup_form_wrapper">
-                <%
-                    String registerMessage = (String) request.getAttribute("registerMessage"); //Obtain the message to be displayed for the register page (if there is one)
-                    if (registerMessage == null) { //Prevent null pointer exception
-                        registerMessage = "";
-                    }
-                %>
-
-                <div id="register_message"><%=registerMessage%></div>
+       	
+       	<style type="text/css">
+       		#page_content_wrapper{
+       			text-align: center;
+       		}
+       		
+       		#register_message{
+       			display: inline-block;
+       			border: 2px solid #EAAA00;
+       			background: #513D6D;
+       			padding: 5px;
+       		}
+       		
+       		#register_message:empty{
+				display: none;
+       		}
+       		
+       		#signup_form input:not([type="radio"]), #signup_form button{
+       			width: 200px;
+       			margin-top: 5px;
+       		}
+       		
+       		#signup_form button[name="submit"]{
+       			margin-top: 20px;
+       		}
+       	</style>
+	</head>
+	<body>
+        <%@include file="top_menu.jsp"%>
+        <br />
+        <div id="page_content_wrapper">
+	        <h1 id="header">REGISTRATION FORM</h1>   
+	        <h3 id="sub_header">Create a new account to buy or sell products</h3>
+	        <div id="signup_form_wrapper">
+		        <%
+		            String registerMessage = (String) request.getAttribute("registerMessage"); //Obtain the message to be displayed for the register page (if there is one)
+		            if (registerMessage == null) { //Prevent null pointer exception
+		                registerMessage = "";
+		            }
+		        %>
+	        	<div id="register_message"><%=registerMessage%></div>
+	        	<br />
+	        	<br />
                 <form id="signup_form" action="SignupServlet" method="POST">
                  	<span style="color:white;">Account Type:</span> 
                  	<input type="radio" name ="accountType" value="buyer" checked="checked"><font color="White"> Buyer</font>
                   	<input type="radio" name ="accountType" value="seller"><font color="White">Seller </font>
                   	<br />
+                  	<br />
                   	<input name="email" type="text" placeholder="Email Address"/>
                     <br />
-                    <button type="submit" class="gold_button" name="check_email" value="check_email" style="width: 18em;"><span>Check Email Availability</span></button>
+                    <button type="submit" class="gold_button" name="check_email" value="check_email"><span>Check Email Availability</span></button>
                     <br />
                     <br />
                     <input name="password" type="password" placeholder="Password"/>
@@ -101,10 +106,7 @@
                     <br />
                     <button type="submit" class="gold_button" name="submit" value="submit"><span>Submit</span></button>
                 </form>
-                <br />
-                <br />
-                <%@include file="nav.jsp"%>
-            </div>
+        	</div>
         </div>
-    </body>
+	</body>
 </html>
