@@ -49,11 +49,17 @@
         <%@include file="top_menu.jsp"%>
         <br />
         <div id="page_content_wrapper">
+        	<%
+                String addProductMessage = (String) request.getAttribute("addProductMessage"); //Obtain the message from the session (if there is one)
+                if (addProductMessage == null) { //Prevent null pointer exception
+                	addProductMessage = "";
+                }
+            %>
+            <div id="add_product_message" class="message"><%=addProductMessage%></div>
+        	<br />
         	Add Product Page
-        	
-        	<form id="add_product" name="add_product" action="Product" method="POST">
+        	<form id="add_product" name="add_product" action="ProductServlet" method="POST">
         	<table >
-        	
                    <tr> <td>Category ID </td><td><input name="categoryid" type="text" >
                     </td></tr>
                     <tr></tr>

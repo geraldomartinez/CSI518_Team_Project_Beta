@@ -39,11 +39,13 @@ public class ProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		  
-		String productID,sellerID, name, description,specs, price, categoryid, numInStock,insertbt;
-		String inputmessage = "";
+
+
+    	RequestDispatcher rd = request.getRequestDispatcher("add_product.jsp");
+        
+		String productID, sellerID, name, description, specs, price, categoryid, numInStock, insertbt;
+		String inputMessage = "";
 		boolean insertproduct=true;
-		productID=request.getParameter("productid");
 		name=request.getParameter("productname");
 		description=request.getParameter("description");
 		specs=request.getParameter("specs");
@@ -51,12 +53,9 @@ public class ProductServlet extends HttpServlet {
 		categoryid=request.getParameter("categoryid");
 		numInStock=request.getParameter("numinstock");
 		insertbt=request.getParameter("insertbt");
-		sellerID="1";
+		sellerID="4";
 		
-		if (productID == null) {
-			productID = "";
-        }
-        if (name == null) {
+		if (name == null) {
         	name = "";
         }
         if (description == null) {
@@ -82,86 +81,61 @@ public class ProductServlet extends HttpServlet {
         }
         
         if (insertbt.length() != 0) { //If the submit button was pressed
-            if (productID.equals("")) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
-                }
-                inputmessage += "You did not enter the Product ID";
-                insertproduct = false;
-            }
             if (categoryid.equals("")) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
                 }
-                inputmessage += "You did not enter  Category ID";
+                inputMessage += "You did not enter  Category ID";
                 insertproduct = false;
             }
             if (name.equals("")) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
                 }
-                inputmessage += "You did not enter the product name";
+                inputMessage += "You did not enter the product name";
                 insertproduct = false;
             }
             if (description.equals("")) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
                 }
-                inputmessage += "You did not enter the description";
+                inputMessage += "You did not enter the description";
                 insertproduct = false;
             }
             if (specs.equals("")) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
                 }
-                inputmessage += "You did not enter specs";
+                inputMessage += "You did not enter specs";
                 insertproduct = false;
             }
             if (price.equals("")) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
                 }
-                inputmessage += "You did not enter the price of product";
+                inputMessage += "You did not enter the price of product";
                 insertproduct = false;
             }
-            
-           
-            if (numInStock.length()!=10) {
-                if (!inputmessage.equals("")) {
-                	inputmessage += "<br />";
+            if (numInStock.equals("")) {
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
                 }
-                inputmessage += "The phone number you entered was not valid. Please enter a 10-digit phone number.";
+                inputMessage += "You did not enter the number of items in stock";
                 insertproduct = false;
-            }
-            
+            }            
            
             if (insertproduct) {
-                productID = AuthDAO.InsertProductDetails( sellerID, name, description, specs, price, categoryid, numInStock);
+                productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryid, numInStock);
                 if (productID == "-1") {
-                	inputmessage = "Product  Insert Failed.";
-               
-                } else {
-                	RequestDispatcher rd = request.getRequestDispatcher("signup.jsp");
-                    rd = request.getRequestDispatcher("index.jsp");
-                    request.setAttribute("indexMessage", "<span style='color: green'>Registration for [" + name + "] succesful. Log in to view your account.</span>");
-                    rd.forward(request, response);
+                	inputMessage = "Product  Insert Failed.";
                 }
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed
-            inputmessage += "An enexpected error has occured"; //There was an error in http request
+            inputMessage += "An enexpected error has occured"; //There was an error in http request
         }
 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        request.setAttribute("addProductMessage", inputMessage);
+        rd.forward(request, response);
         
 	}
 

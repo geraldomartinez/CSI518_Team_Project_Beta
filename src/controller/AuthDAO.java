@@ -346,7 +346,7 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO `Products` (`sellerID`,`categoryID',`productName`,`unitPrice`,'quantity','description','specs') VALUES ( '" + sellerID +"','" +categoryID+"','"+ name + "','"+price+"','"+numInStock+"','"+description+"','"+specs+"');";
+            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`) VALUES ( '" + sellerID +"','" +categoryID+"','"+ name + "','"+price+"','"+numInStock+"','"+description+"','"+specs+"');";
             System.out.println(sql);
             stmt.executeUpdate(sql);
             sql = "SELECT `productID` FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
@@ -359,7 +359,6 @@ public class AuthDAO {
         } catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            
         }
  
         return productID;
