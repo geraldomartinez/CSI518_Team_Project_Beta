@@ -318,8 +318,8 @@ public class AuthDAO {
             stmt = conn.createStatement();
             //sql query to verify that the seller is actually sellerID == seller who is logged in
          
-            sql = "SELECT sellerID FROM `sellerDetails` "
-            		+ "JOIN `products` ON `sellerDetails`.`sellerID`=`products`.`sellerID`"
+            sql = "SELECT sellerID FROM `SellerDetails` "
+            		+ "JOIN `Products` ON `SellerDetails`.`sellerID`=`Products`.`sellerID`"
             		+ " WHERE `sellerDetails`.`sellerID`='" + sellerID + "';";
             stmt.executeQuery(sql);
             

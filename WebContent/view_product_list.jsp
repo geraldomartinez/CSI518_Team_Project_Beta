@@ -44,11 +44,19 @@
         				[Product #1]
         			</td>
         			<td>
-        				<button>Edit</button>
-        			</td>
-        			<td>
-        				<button>Delete</button>
-        			</td>
+					<button type="submit" class="gold_button" name="edit">
+					<span>Edit</span></button>
+                    </td>
+	            	<td>
+	            	<div id="deleting_product_wrapper">
+	            	<form id="delete_product" action="RemoveProductServlet" method="post">
+	            	<button type="submit" class="golden_button" name="check_deletion" value="check_deletion">
+	            	<span>Delete</span>
+	            	</button>
+	            	</form>
+	            	</div>
+	            	</td>
+	            	
         		</tr>
         	</table>
         </div>

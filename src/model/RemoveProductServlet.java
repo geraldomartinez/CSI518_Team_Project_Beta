@@ -47,26 +47,35 @@ public class RemoveProductServlet extends HttpServlet {
 
 		int sellerID;
 		int productID;
+		String checkDelBtn;
 
 		sellerID = Integer.parseInt(request.getParameter("sellerID"));
 		productID = Integer.parseInt(request.getParameter("productID"));
-		
+		checkDelBtn = request.getParameter("check_deletion");
 		//TODO: Verify that the seller is actually sellerID == seller who is logged in
 	
-		if(usr.getAccountType()=="S")// To check If the logged in user is a seller
-		{
-			AuthDAO.VerifySellerID(sellerID);// Verify that the seller is actually sellerID == seller who is logged in
-		}
-		else if(usr.getAccountType()=="B")//To check If the logged in user is a buyer
-		{
-			System.out.println("Buyers are not allowed to delete a product");// buyers are not allowed to remove a product
-		}
-		else// if the logged in user is an Admin
-		{
-			AuthDAO.VerifySellerID(sellerID); // Admin is allowed to remove a product
-		}
+	
 		try {
-			AuthDAO.removeProduct(sellerID, productID);
+			if(usr.getAccountType()=="S")// To check If the logged in user is a seller
+			{
+				AuthDAO.VerifySellerID(sellerID);// Verify that the seller is actually sellerID == seller who is logged in
+			}
+			else if(usr.getAccountType()=="B")//To check If the logged in user is a buyer
+			{
+				System.out.println("Buyers are not allowed to delete a product");// buyers are not allowed to remove a product
+			}
+			else// if the logged in user is an Admin
+			{
+				AuthDAO.VerifySellerID(sellerID); // Admin is allowed to remove a product
+			}
+			if (checkDelBtn == null) {
+				checkDelBtn = "";
+			}
+			else if (checkDelBtn.length() != 0) {
+				AuthDAO.removeProduct(sellerID, productID);
+	    	System.out.println("Product with productID:"+productID+"has been deleted");
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
