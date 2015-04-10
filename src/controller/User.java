@@ -18,7 +18,7 @@ public class User implements Serializable {
     private String zip;//User's zip
     private String username; //User's username to the website
     private String email;
-    private String accountType;
+    private  String accountType;
     private String password; //User's password to the website
     private int userID; //User's unique ID
 
@@ -165,7 +165,7 @@ public class User implements Serializable {
 		this.zip = zip;
 	}
 
-	public String getAccountType() {
+	public  String getAccountType() {
 		return accountType;
 	}
 

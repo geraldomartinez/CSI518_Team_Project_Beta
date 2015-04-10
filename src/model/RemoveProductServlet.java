@@ -52,7 +52,19 @@ public class RemoveProductServlet extends HttpServlet {
 		productID = Integer.parseInt(request.getParameter("productID"));
 		
 		//TODO: Verify that the seller is actually sellerID == seller who is logged in
-		
+	
+		if(usr.getAccountType()=="S")// To check If the logged in user is a seller
+		{
+			AuthDAO.VerifySellerID(sellerID);// Verify that the seller is actually sellerID == seller who is logged in
+		}
+		else if(usr.getAccountType()=="B")//To check If the logged in user is a buyer
+		{
+			System.out.println("Buyers are not allowed to delete a product");// buyers are not allowed to remove a product
+		}
+		else// if the logged in user is an Admin
+		{
+			AuthDAO.VerifySellerID(sellerID); // Admin is allowed to remove a product
+		}
 		try {
 			AuthDAO.removeProduct(sellerID, productID);
 		} catch (SQLException e) {

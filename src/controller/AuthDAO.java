@@ -307,7 +307,32 @@ public class AuthDAO {
         }
         return true;
     }
-
+    public static boolean VerifySellerID(int sellerID)
+    {
+    	Statement stmt;
+        String sql;
+      
+        Connection conn = createConn();
+        System.out.println("Creating Statement..");
+        try {
+            stmt = conn.createStatement();
+            //sql query to verify that the seller is actually sellerID == seller who is logged in
+         
+            sql = "SELECT sellerID FROM `sellerDetails` "
+            		+ "JOIN `products` ON `sellerDetails`.`sellerID`=`products`.`sellerID`"
+            		+ " WHERE `sellerDetails`.`sellerID`='" + sellerID + "';";
+            stmt.executeQuery(sql);
+            
+        } 
+        catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+             
+        }
+        
+        return true;
+    }
+    
  
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
