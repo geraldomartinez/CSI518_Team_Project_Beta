@@ -56,7 +56,7 @@
                     </td>
 	            	<td>
 		            	<form id="delete_product" action="RemoveProduct" method="POST">
-		            		<input name="productID" value="1" type="text" style="display: none;" />
+		            		<input name="productID" value="2" type="text" style="display: none;" />
 			            	<button type="submit" name="delete" value="delete"> Delete </button>
 		            	</form>
 	            	</td>
