@@ -39,10 +39,6 @@ public class ProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
-		
-		
 		  
 		String productID,sellerID, name, description,specs, price, categoryid, numInStock,insertbt;
 		String inputmessage = "";
@@ -84,8 +80,6 @@ public class ProductServlet extends HttpServlet {
         {
         	insertbt="";
         }
-        
-        
         
         if (insertbt.length() != 0) { //If the submit button was pressed
             if (productID.equals("")) {
@@ -142,7 +136,7 @@ public class ProductServlet extends HttpServlet {
             
            
             if (insertproduct) {
-                productID = Product.insertproductdetails( sellerID, name, description, specs, price, categoryid, numInStock);
+                productID = AuthDAO.InsertProductDetails( sellerID, name, description, specs, price, categoryid, numInStock);
                 if (productID == "-1") {
                 	inputmessage = "Product  Insert Failed.";
                
