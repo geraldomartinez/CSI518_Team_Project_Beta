@@ -32,17 +32,6 @@
        			text-align: center;
        		}
        		
-       		#register_message{
-       			display: inline-block;
-       			border: 2px solid #EAAA00;
-       			background: #513D6D;
-       			padding: 5px;
-       		}
-       		
-       		#register_message:empty{
-				display: none;
-       		}
-       		
        		#signup_form input:not([type="radio"]), #signup_form button{
        			width: 200px;
        			margin-top: 5px;
@@ -66,9 +55,8 @@
 		                registerMessage = "";
 		            }
 		        %>
-	        	<div id="register_message"><%=registerMessage%></div>
-	        	<br />
-	        	<br />
+	        	<div id="register_message" class="message"><%=registerMessage%></div>
+        	<br />
                 <form id="signup_form" action="SignupServlet" method="POST">
                  	<span style="color:white;">Account Type:</span> 
                  	<input type="radio" name ="accountType" value="buyer" checked="checked"><font color="White"> Buyer</font>

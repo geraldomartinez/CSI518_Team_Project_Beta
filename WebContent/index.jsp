@@ -12,6 +12,14 @@
         <%@include file="top_menu.jsp"%>
         <br />
         <div id="page_content_wrapper">
+	        <%
+	            String indexMessage = (String) request.getAttribute("indexMessage"); //Obtain the message to be displayed for the index page (if there is one)
+	            if (indexMessage == null) { //Prevent null pointer exception
+	            	indexMessage = "";
+	            }
+	        %>
+        	<div id="index_message" class="message"><%=indexMessage%></div>
+        	<br />
         	Home Page
         </div>
 	</body>

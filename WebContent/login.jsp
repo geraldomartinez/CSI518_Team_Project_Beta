@@ -12,18 +12,6 @@
        			text-align: center;
        		}
        		
-       		#login_message{
-       			display: inline-block;
-       			border: 2px solid #EAAA00;
-       			background: #513D6D;
-       			padding: 5px;
-       			margin-bottom: 10px;
-       		}
-       		
-       		#login_message:empty{
-				display: none;
-       		}
-       		
        		#login_form_wrapper{
        			margin-top: 10px;
        		}
@@ -64,7 +52,8 @@
                     loginMessage = "";
                 }
             %>
-            <div id="login_message"><%=loginMessage%></div>
+            <div id="login_message" class="message"><%=loginMessage%></div>
+        	<br />
             <div id="login_form_wrapper">
                 <form id="login_form" action="LoginServlet" method="POST">
                     <input name="email" type="text" placeholder="Email"/>
