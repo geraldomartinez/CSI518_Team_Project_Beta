@@ -1,27 +1,46 @@
-<%-- 
-    Document   : login
-    Created on : Mar 5, 2015, 3:06:07 PM
-    Author     : Samuel
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <head>
-        <title>Signup - Great Danes Electronics</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
-        <link rel="stylesheet" type="text/css" href="css/index.css" /> <!-- Style sheet -->
-        <link rel="stylesheet" type="text/css" href="css/goldbutton.css" /> <!-- Style sheet for gold buttons -->
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $("#login_button, #logout_button").hide(); //Hide the login/logout buttons
-                $("#page_wrapper").fadeIn(500); //Make the page wrapper fade in over a half-second period
-            });
-        </script>
-    </head>
-    <body class="skyscraper_bg">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>Home - Great Danes Electronics</title>
+		
+       	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->       	
+       	<style type="text/css">
+       		#page_content_wrapper{
+       			text-align: center;
+       		}
+       		
+       		#login_message{
+       			display: inline-block;
+       			border: 2px solid #EAAA00;
+       			background: #513D6D;
+       			padding: 5px;
+       			margin-bottom: 10px;
+       		}
+       		
+       		#login_message:empty{
+				display: none;
+       		}
+       		
+       		#login_form_wrapper{
+       			margin-top: 10px;
+       		}
+       		
+       		#login_form input{
+       			margin-top: 5px;
+       		}
+       		
+       		#login_form button{
+       			margin-top: 10px;
+       		}
+       	</style>
+	</head>
+	<body>
+        <%@include file="top_menu.jsp"%>
+        <br />
+        <div id="page_content_wrapper">
         <%
             //If the user is already logged in, just forward them to the account page
             //(note, this will only happen if the user deliberately accesses login.jsp while logged in via the browser's address bar. The buttons to get here are hidden to the user)
@@ -37,20 +56,15 @@
                 rd.forward(request, response); //Forward the user with the response above
             }
         %>
-        <div id="page_wrapper">
-            <div id="header">Great Danes Electronics</div>   
-            <div id="sub_header">Please log in to view your account</div>
+            <h1 id="header">Great Danes Electronics</h1>   
+            <h3 id="sub_header">Please log in to view your account</h3>
             <%
                 String loginMessage = (String) request.getAttribute("loginMessage"); //Obtain the login message from the session
                 if (loginMessage == null) { //Prevent null pointer exception
                     loginMessage = "";
                 }
-                if (loginMessage != "") { //If there is a login message, display it
             %>
             <div id="login_message"><%=loginMessage%></div>
-            <%
-                }
-            %>
             <div id="login_form_wrapper">
                 <form id="login_form" action="LoginServlet" method="POST">
                     <input name="email" type="text" placeholder="Email"/>
@@ -59,8 +73,7 @@
                     <br />
                     <button type="submit" class="gold_button" name="login"><span>Log in</span></button>
                 </form>
-                <%@include file="nav.jsp"%>
             </div>
         </div>
-    </body>
+	</body>
 </html>
