@@ -44,42 +44,54 @@ public class RemoveProductServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		RequestDispatcher rd = request.getRequestDispatcher("view_product_list.jsp");
 		User usr = (User) session.getAttribute("user"); //Obtain the user object from the session (if there is one)
-
-		int sellerID;
-		int productID;
-		String checkDelBtn;
-
-		sellerID = Integer.parseInt(request.getParameter("sellerID"));
-		productID = Integer.parseInt(request.getParameter("productID"));
-		checkDelBtn = request.getParameter("check_deletion");
-		//TODO: Verify that the seller is actually sellerID == seller who is logged in
-	
-	
-		try {
-			if(usr.getAccountType()=="S")// To check If the logged in user is a seller
-			{
-				AuthDAO.VerifySellerID(sellerID);// Verify that the seller is actually sellerID == seller who is logged in
-			}
-			else if(usr.getAccountType()=="B")//To check If the logged in user is a buyer
-			{
-				System.out.println("Buyers are not allowed to delete a product");// buyers are not allowed to remove a product
-			}
-			else// if the logged in user is an Admin
-			{
-				AuthDAO.VerifySellerID(sellerID); // Admin is allowed to remove a product
-			}
-			if (checkDelBtn == null) {
-				checkDelBtn = "";
-			}
-			else if (checkDelBtn.length() != 0) {
-				AuthDAO.removeProduct(sellerID, productID);
-	    	System.out.println("Product with productID:"+productID+"has been deleted");
-			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String loggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
+		int productID = Integer.parseInt(request.getParameter("productID"));
+		String delBtn = request.getParameter("delete");
+		boolean verified = false;
+		
+		if (loggedIn == null) { //Prevent null pointer exception
+			loggedIn = "";
 		}
+		
+		if (delBtn == null) {
+			delBtn = "";
+		}		
+		
+		if (loggedIn == "")
+		{
+			request.setAttribute("productListMessage", "You must be logged in to perform this request");
+		}
+		else
+		{
+			switch(usr.getAccountType()){
+				case "B":
+					System.out.println("B");
+					request.setAttribute("productListMessage", "Buyers are not allowed to delete a product"); // buyers are not allowed to remove a product
+					break;
+				case "S":
+					System.out.println("S");
+					verified = AuthDAO.VerifySellerID(usr.GetUserID()); // Verify that the seller is actually sellerID == seller who is logged in
+					break;
+				case "A":
+					System.out.println("A");
+					verified = true;
+					break;
+			}
+
+			if (verified){
+				if (delBtn.length() != 0){
+					if (AuthDAO.removeProduct(usr.GetUserID(), productID)){
+						request.setAttribute("productListMessage", "Product with ID " + productID + " has been deleted");
+					}else{
+						request.setAttribute("productListMessage", "Deletion of product with ID " + productID + " failed");
+					}
+				}else{
+					request.setAttribute("productListMessage", "Invalid request");
+				}
+			}
+		}
+
+		rd.forward(request, response);
 	}
 
 }

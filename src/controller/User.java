@@ -16,7 +16,6 @@ public class User implements Serializable {
     private String city;//User's city
     private String state;//User's state
     private String zip;//User's zip
-    private String username; //User's username to the website
     private String email;
     private  String accountType;
     private String password; //User's password to the website
@@ -32,7 +31,6 @@ public class User implements Serializable {
         this.city="";
         this.state="";
         this.zip="";
-        this.username = "";
         this.accountType="";
         this.email="";
         this.password = "";
@@ -40,7 +38,8 @@ public class User implements Serializable {
     }
 
     public User(int userID /*in, User's unique id*/,
-            String username /*in, user's username*/,
+            String accountType /*in, user's account type*/,
+            String email /*in, user's email*/,
             String password /*in, user's password*/,
             String firstName /*in, user's first name*/,
             String middleName,
@@ -49,12 +48,9 @@ public class User implements Serializable {
              String address,//User's address
              String city,//User's city
              String state,//User's state
-             String zip)
-            //float checkingBal /*in, user's checking balance*/,
-            //float savingsBal /*in, user's savings balance*/) 
+             String zip) 
              {
         this.userID = userID; //Store the user's user ID
-        this.username = ((username == null) ? "" : username); //Store the user's username, Prevent null pointer exception
         this.firstName = ((firstName == null) ? "" : firstName); //Store the user's first name, Prevent null pointer exception
         this.lastName = ((lastName == null) ? "" : lastName); //Store the user's last name, Prevent null pointer exception
         this.phone=((phone == null) ? "" : phone);
@@ -75,16 +71,6 @@ public class User implements Serializable {
     /*Return the user's unique ID*/
     public int GetUserID() {
         return userID; //Return the user's unique ID
-    }
-
-    /*Set the user's username*/
-    public void SetUsername(String name /*in, user's username*/) {
-        this.username = name; //Set the user's username
-    }
-
-    /*Return the user's username*/
-    public String GetUsername() {
-        return username; //Return the user's username
     }
 
     /*Set the user's password*/

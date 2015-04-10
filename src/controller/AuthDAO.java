@@ -141,13 +141,13 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "SELECT * FROM `user` JOIN `user_profile` ON `user_profile`.`userID`=`user`.`userID` WHERE `user`.`userID`='" + userID + "';";
+            sql = "SELECT * FROM `Users` JOIN `UserProfile` ON `UserProfile`.`userID`=`Users`.`userID` WHERE `Users`.`userID`='" + userID + "';";
+            System.out.println(sql);
             rs = stmt.executeQuery(sql);
  
             //Extract data from result set
             while (rs.next()) {
                 //Retrieve by column name
-                username = rs.getString("username");
                 accountType=rs.getString("accountType");
                 email=rs.getString("email");
                 password = rs.getString("password");
@@ -159,9 +159,10 @@ public class AuthDAO {
                 city=rs.getString("city");
                 state=rs.getString("state");
                 zip=rs.getString("zip");
-            }
+            }            
         } catch (Exception ex) { //An error occurred
             //Log the exception
+        	System.out.println("Failed to get user by ID");
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
             return new User();
         }
@@ -175,7 +176,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        usr = new User(userID, username, password, firstName, middleName, lastName,phone,address,city,state,zip);
+        usr = new User(userID, accountType, email, password, firstName, middleName, lastName, phone, address, city, state, zip);
         return usr;
     }
  
@@ -285,9 +286,7 @@ public class AuthDAO {
         return (emailFromQry == null);
     }
     //function to remove product
-    public static boolean removeProduct(int sellerID, int productID)
-			throws SQLException {
-
+    public static boolean removeProduct(int sellerID, int productID){
     	Statement stmt;
         String sql;
         
@@ -297,15 +296,17 @@ public class AuthDAO {
             stmt = conn.createStatement();
             //sql query to delete a product by matching productID and sellerID
             sql = "DELETE FROM Products WHERE productID='"+productID +"'AND sellerID='"+sellerID+"'";
+            System.out.println("removeProduct Query:");
+            System.out.println(sql);
            //updating tables Products and ProductReviews
             stmt.executeUpdate(sql);
+            return true;
         } 
         catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-             
         }
-        return true;
+        return false;
     }
     public static boolean VerifySellerID(int sellerID)
     {

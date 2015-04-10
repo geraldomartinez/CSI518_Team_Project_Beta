@@ -29,6 +29,14 @@
 	<body>
         <%@include file="top_menu.jsp"%>
         <div id="page_content_wrapper">
+	        <%
+	            String productListMessage = (String) request.getAttribute("productListMessage"); //Obtain the message to be displayed for the product list page (if there is one)
+	            if (productListMessage == null) { //Prevent null pointer exception
+	            	productListMessage = "";
+	            }
+	        %>
+        	<div id="product_list_message" class="message"><%=productListMessage%></div>
+        	<br />
         	<h2>Products Listing For [Seller Name]</h2>
         	<table id="product_list_table">
         		<tr>
@@ -44,19 +52,14 @@
         				[Product #1]
         			</td>
         			<td>
-					<button type="submit" class="gold_button" name="edit">
-					<span>Edit</span></button>
+						<button type="submit" class="gold_button" name="edit">Edit</button>
                     </td>
 	            	<td>
-	            	<div id="deleting_product_wrapper">
-	            	<form id="delete_product" action="RemoveProductServlet" method="post">
-	            	<button type="submit" class="golden_button" name="check_deletion" value="check_deletion">
-	            	<span>Delete</span>
-	            	</button>
-	            	</form>
-	            	</div>
+		            	<form id="delete_product" action="RemoveProduct" method="POST">
+		            		<input name="productID" value="1" type="text" style="display: none;" />
+			            	<button type="submit" name="delete" value="delete"> Delete </button>
+		            	</form>
 	            	</td>
-	            	
         		</tr>
         	</table>
         </div>

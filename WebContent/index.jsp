@@ -19,6 +19,7 @@
 	            }
 	        %>
         	<div id="index_message" class="message"><%=indexMessage%></div>
+        	<br />
         	Home Page
         </div>
 	</body>

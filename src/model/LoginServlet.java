@@ -72,7 +72,7 @@ public class LoginServlet extends HttpServlet {
 				usr = AuthDAO.getUserById(checkResponse);
 				session.setAttribute("user", usr);
 				rd = request.getRequestDispatcher("index.jsp");
-				request.setAttribute("indexMessage", "<span style='color: green;'>Login Successful</span>");
+				request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
 			} else if (checkResponse == -2) {
 				request.setAttribute("loginMessage", "Database Connection Error");
 			} else if (checkResponse == -3) {
