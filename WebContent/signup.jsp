@@ -90,13 +90,13 @@
                     <br />
                     <input name="lname" type="text" placeholder="Last Name"/>
                     <br />
-                    <input name="phone" type="text" placeholder="Phone"/>
+                    <input name="phone" type="text" maxlength="10" placeholder="Phone"/>
                     <br />
                     <input name="address" type="text" placeholder="Address"/>
                     <br />
                     <input name="city" type="text" placeholder="City"/>
                     <br />
-                    <input name="state" type="text" maxlength="10" placeholder="State"/>
+                    <input name="state" type="text" maxlength="2" placeholder="State"/>
                     <br />
                     <input name="zip" type="text" placeholder="Zip"/>
                     <br />
