@@ -55,7 +55,11 @@
 						<button type="submit" class="gold_button" name="edit">Edit</button>
                     </td>
 	            	<td>
+<<<<<<< HEAD
 		            	<form id="delete_product" action="RemoveProduct" method="POST">
+=======
+		            	<form id="delete_product" action="RemoveProductServlet" method="POST">
+>>>>>>> branch 'master' of https://github.com/sampellino/CSI518_Team_Project_Beta.git
 		            		<input name="productID" value="2" type="text" style="display: none;" />
 			            	<button type="submit" name="delete" value="delete"> Delete </button>
 		            	</form>

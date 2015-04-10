@@ -25,7 +25,7 @@ public class AuthDAO {
     public static final String DB_PW = "Csi518!!"; //Database password
     public static final String DB_DRIVER = "com.mysql.jdbc.Driver"; //Database driver
     
-    private static Connection createConn(){
+    public static Connection createConn(){
     	
     	Connection conn = null;
     	
