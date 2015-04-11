@@ -63,7 +63,7 @@
                   	<input type="radio" name ="accountType" value="seller"><font color="White">Seller </font>
                   	<br />
                   	<br />
-                  	<input name="email" type="text" placeholder="Email Address"/>
+                  	<input name="email" type="email" placeholder="Email Address"/>
                     <br />
                     <button type="submit" class="gold_button" name="check_email" value="check_email"><span>Check Email Availability</span></button>
                     <br />
