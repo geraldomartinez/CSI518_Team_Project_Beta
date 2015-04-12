@@ -17,7 +17,7 @@ import controller.User;
 /**
  * Servlet implementation class RemoveProduct
  */
-@WebServlet("/RemoveProduct")
+@WebServlet("/RemoveProductServlet")
 public class RemoveProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
