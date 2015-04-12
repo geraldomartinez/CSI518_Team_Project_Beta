@@ -71,6 +71,7 @@ body{
 	min-height: 50%;
 	color: white;
 	padding: 10px;
+	border-bottom: 1px dotted pink;
 }
 
 .message{

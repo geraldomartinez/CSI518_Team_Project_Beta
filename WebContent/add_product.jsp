@@ -8,44 +8,25 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Add Product - Great Danes Electronics</title>
 		
-       	<script type="text/javascript" src="js/jquery-2.1.3.min.js">
-       	
-    /*   	function validate()
-    	{
-    	if(document.add_product.price.value !=="")
-        {
-            if (! (/^\d*(?:\.\d{0,2})?$/.test(document.add_product.price.value))) { 
-                alert("Please enter a valid Breed id"); 
-                document.add_product.price.focus(); 
-                return false; 
-            } 
-
-
-        }
-    	}*/
-       	
-       	</script> <!-- jQuery Library -->
-	</head>
-	
-	<!-- 
-	<style type="text/css">
-	
+       	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
+		<style type="text/css">
+			html, body{
+				height: 0px; /* I have no idea why, but this fixes the "full page" issue - SP */
+			}
+		
             #page_content_wrapper{
-               position: fixed; /* or absolute 
-               margin-left:auto;
-               margin-right:auto; */
-                width: 100%;
-                height: 70%;
-                top: 15%;  /* center object vertically */
-                text:color:White; /* */
-                text-align: center; 
-                display: none;
+				text-align: center;
             }
-             
-           
+            
+            #add_product table{
+            	color: white;
+            	display: inline-block;
+            	margin-left: auto;
+            	margin-right: auto;
+            }
         </style>
-         -->
-	<body >
+	</head>
+	<body>
         <%@include file="top_menu.jsp"%>
         <br />
         <div id="page_content_wrapper">
@@ -57,7 +38,7 @@
             %>
             <div id="add_product_message" class="message"><%=addProductMessage%></div>
         	<br />
-        	Add Product Page
+            <h1 id="header">Add A Product</h1>   
         	<form id="add_product" name="add_product" action="ProductServlet" method="POST">
         	<table >
                    <tr> <td>Category ID </td><td><input name="categoryid" type="text" >
