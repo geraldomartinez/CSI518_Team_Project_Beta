@@ -7,6 +7,23 @@
 		<title>Home - Great Danes Electronics</title>
 		
        	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
+       	<script type="text/javascript" src="js/jquery.cycle2.min.js"></script> <!-- Cycle2 Plug-in -->
+       	<script type="text/javascript" src="js/jquery.cycle2.tile.js"></script> <!-- Cycle2 Plug-in -->
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$("#sales img").click(function(){
+					alert($(this).data("productid"));
+				});
+			});
+		</script>
+		<style type="text/css">
+			h1{
+				text-align: center;
+			}
+			#sales{
+				cursor: pointer;
+			}
+		</style>
 	</head>
 	<body>
         <%@include file="top_menu.jsp"%>
@@ -20,7 +37,14 @@
 	        %>
         	<div id="index_message" class="message"><%=indexMessage%></div>
         	<br />
-        	Home Page
+        	<h1>Great Danes Electronics</h1>
+        	<br />
+        	<br />
+        	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide">
+			    <img src="img/specials/1.jpg" data-productid="1">
+			    <img src="img/specials/2.jpg" data-productid="2">
+			    <img src="img/specials/3.jpg" data-productid="3">
+			</div>
         </div>
 	</body>
 </html>
