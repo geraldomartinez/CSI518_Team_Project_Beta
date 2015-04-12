@@ -1,8 +1,14 @@
+<%@ page import="controller.User" %>
 <%
 	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
+	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
+	String acctType = usr.getAccountType();
 	
 	if (navLoggedIn == null) { //Prevent null pointer exception
 	    navLoggedIn = "";
+	}
+	if (acctType == null) { //Prevent null pointer exception
+		acctType = "";
 	}
 %>
 <link rel="stylesheet" type="text/css" href="css/global.css" /> <!-- Global style sheet -->
@@ -43,6 +49,17 @@
 				<a href="LogoutServlet">Logout</a>
 			</td>
 			<%
+					if (acctType.equals("B")){
+			%>
+				<td>
+					<a href="LogoutServlet">
+						<img src="img/cart.png" alt="cart" style="height: 20px;"/> 
+						&nbsp;
+						0 items ($0.00)
+					</a>
+				</td>
+			<%
+					}
 			    }
 			%>
 		</tr>
