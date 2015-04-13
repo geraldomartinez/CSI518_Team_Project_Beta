@@ -70,6 +70,7 @@ body{
 #page_content_wrapper{
 	color: white;
 	padding: 10px;
+	padding-bottom: 25px;
 }
 
 .message{
