@@ -9,6 +9,9 @@
        	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
        	
        	<style type="text/css">
+       		#page_content_wrapper{
+       			text-align: center;
+       		}
        		#page_content_wrapper a{
        			color: white;
        		}
@@ -28,10 +31,22 @@
         	<br />
         	<h1>My Account</h1>
         	<br />
-			<a href="view_product_list.jsp">View Product List</a>
-			<br />
-        	<br />
-			<a href="add_product.jsp">Add Product</a>
+			<%
+				if (acctType.equals("S") || acctType.equals("A")){
+			%>
+				<a href="view_product_list.jsp">View Product List</a>
+				<br />
+	        	<br />
+				<a href="add_product.jsp">Add Product</a>
+			<%
+				}
+			
+				if (acctType.equals("B") || acctType.equals("A")){
+			%>
+				(no features available yet for buyers)
+			<%
+				}
+			%>
         </div>
 	</body>
 </html>
