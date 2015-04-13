@@ -20,9 +20,51 @@
 			h1{
 				text-align: center;
 			}
+			
+			#banner {
+			  position: relative;
+			  margin-left: -20px;
+			  text-align: center;
+			  padding: 10px;
+			  color: white;
+			  text-shadow: 2px 2px 0 black;
+			  width: 800px;
+			  
+			  background: -webkit-linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(42,0,71,1) 25%, rgba(42,0,71,1) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(42,0,71,1) 75%, rgba(42,0,71,1) 0), rgba(39,12,61,1);
+			  background: -moz-linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(42,0,71,1) 25%, rgba(42,0,71,1) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(42,0,71,1) 75%, rgba(42,0,71,1) 0), rgba(39,12,61,1);
+			  background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(42,0,71,1) 25%, rgba(42,0,71,1) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(42,0,71,1) 75%, rgba(42,0,71,1) 0), rgba(39,12,61,1);
+			  background-position: auto auto;
+			  -webkit-background-origin: padding-box;
+			  background-origin: padding-box;
+			  -webkit-background-clip: border-box;
+			  background-clip: border-box;
+			  -webkit-background-size: 50px 50px;
+			  background-size: 50px 50px;
+			}
+			
+			#banner:before, #banner:after {
+			  content: '';
+			  border-top: 10px solid #660000;
+			  position: absolute;
+			  bottom: -10px;
+			}
+			
+			#banner:before {
+			    border-left: 10px solid transparent;
+			    left: 0;
+			}
+			
+			#banner:after {
+			    border-right: 10px solid transparent;
+			    right: 0;
+			}
+			
 			#sales{
 				cursor: pointer;
+				width: 775px;
+				margin-left: 10px;
 			}
+			
 			#footer{
 				text-align: center;
 				font-size: 10px;
@@ -41,10 +83,12 @@
 	        %>
         	<div id="index_message" class="message"><%=indexMessage%></div>
         	<h1>Great Danes Electronics</h1>
-        	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide">
-			    <img src="img/specials/1.jpg" data-productid="1">
-			    <img src="img/specials/2.jpg" data-productid="2">
-			    <img src="img/specials/3.jpg" data-productid="3">
+        	<div id="banner">
+	        	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide">
+				    <img src="img/specials/1.jpg" data-productid="1">
+				    <img src="img/specials/2.jpg" data-productid="2">
+				    <img src="img/specials/3.jpg" data-productid="3">
+				</div>
 			</div>
 			<br />
 			<br />
