@@ -9,7 +9,11 @@
 		<title>Add Product - Great Danes Electronics</title>
 		
        	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
-		<style type="text/css">		
+		<style type="text/css">
+			html, body{
+				height: 0px; /* I have no idea why, but this fixes the "full page" issue - SP */
+			}
+		
             #page_content_wrapper{
 				text-align: center;
             }
