@@ -31,22 +31,23 @@
         	<br />
         	<h1>My Account</h1>
         	<br />
+        	
 			<%
-				if (acctType.equals("S") || acctType.equals("A")){
+			if (acctType.equals("S") || acctType.equals("A")){
 			%>
-				<a href="view_product_list.jsp">View Product List</a>
-				<br />
-	        	<br />
-				<a href="add_product.jsp">Add Product</a>
+			<a href="view_product_list.jsp">View Product List</a>
+			<br />
+        	<br />
+			<a href="add_product.jsp">Add Product</a>
+			<br />
+        	<br />
+			<a href="#">My Notifications</a>
 			<%
-				}
-			
-				if (acctType.equals("B") || acctType.equals("A")){
+			}
 			%>
-				(no features available yet for buyers)
-			<%
-				}
-			%>
+			<br />
+        	<br />
+			<a href="#">My Orders</a>
         </div>
 	</body>
 </html>

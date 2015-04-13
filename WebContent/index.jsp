@@ -42,8 +42,6 @@
         	<div id="index_message" class="message"><%=indexMessage%></div>
         	<br />
         	<h1>Great Danes Electronics</h1>
-        	<br />
-        	<br />
         	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide">
 			    <img src="img/specials/1.jpg" data-productid="1">
 			    <img src="img/specials/2.jpg" data-productid="2">

@@ -42,9 +42,9 @@
 			    } else { //The user is logged in
 
 			%>
-			<td>
-				<a href="LogoutServlet">Logout</a>
-			</td>
+				<td>
+					<a href="LogoutServlet">Logout</a>
+				</td>
 				<td>
 					<a href="my_account.jsp">
 						<img src="img/user_icon.png" alt="profile icon" style="height: 20px; position: relative; top: -2px;" /> 
@@ -55,13 +55,13 @@
 			<%
 					if (acctType.equals("B")){
 			%>
-				<td>
-					<a href="#">
-						<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
-						&nbsp;
-						0 items ($0.00)
-					</a>
-				</td>
+					<td>
+						<a href="#">
+							<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
+							&nbsp;
+							0 items ($0.00)
+						</a>
+					</td>
 			<%
 					}
 			    }
