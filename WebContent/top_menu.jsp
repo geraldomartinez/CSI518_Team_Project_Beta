@@ -2,7 +2,10 @@
 <%
 	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
 	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
-	String acctType = usr.getAccountType();
+	String acctType = "";
+	if (usr != null){
+		acctType = usr.getAccountType();
+	}
 	
 	if (navLoggedIn == null) { //Prevent null pointer exception
 	    navLoggedIn = "";
@@ -26,12 +29,6 @@
 			<td>
 				<a href="#">Browse</a>
 			</td>
-			<td>
-				<a href="view_product_list.jsp">View Product List</a>
-			</td>
-			<td>
-				<a href="add_product.jsp">Add Product</a>
-			</td>
 			<%
 			    if (navLoggedIn != "true") { //If the user is not logged in
 			%>
@@ -48,12 +45,19 @@
 			<td>
 				<a href="LogoutServlet">Logout</a>
 			</td>
+				<td>
+					<a href="my_account.jsp">
+						<img src="img/user_icon.png" alt="profile icon" style="height: 20px; position: relative; top: -2px;" /> 
+						&nbsp;
+						My Account
+					</a>
+				</td>
 			<%
 					if (acctType.equals("B")){
 			%>
 				<td>
-					<a href="LogoutServlet">
-						<img src="img/cart.png" alt="cart" style="height: 20px;"/> 
+					<a href="#">
+						<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
 						&nbsp;
 						0 items ($0.00)
 					</a>

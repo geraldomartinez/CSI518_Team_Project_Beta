@@ -23,6 +23,10 @@
 			#sales{
 				cursor: pointer;
 			}
+			#footer{
+				text-align: center;
+				font-size: 10px;
+			}
 		</style>
 	</head>
 	<body>
@@ -44,6 +48,18 @@
 			    <img src="img/specials/1.jpg" data-productid="1">
 			    <img src="img/specials/2.jpg" data-productid="2">
 			    <img src="img/specials/3.jpg" data-productid="3">
+			</div>
+			<br />
+			<br />
+			<hr />
+			<div id="footer">
+				Copyright 2015 Great Danes Electronics, All rights reserved.
+				&nbsp;&nbsp;&nbsp;
+				Great Danes Electronics, LLC
+				&nbsp;&nbsp;&nbsp;
+				(555) 555-5555
+				&nbsp;&nbsp;&nbsp;
+				1 UAlbany Way, Albany, NY, 12205
 			</div>
         </div>
 	</body>
