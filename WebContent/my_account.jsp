@@ -41,13 +41,19 @@
 			<a href="add_product.jsp">Add Product</a>
 			<br />
         	<br />
-			<a href="#">My Notifications</a>
+			<a href="#">Notifications</a>
+			<%
+			}else{
+			%>
+				<br />
+	        	<br />
+				<a href="#">Wishlists</a>
 			<%
 			}
 			%>
 			<br />
         	<br />
-			<a href="#">My Orders</a>
+			<a href="#">Orders</a>
         </div>
 	</body>
 </html>
