@@ -123,7 +123,9 @@ public class ProductServlet extends HttpServlet {
             if (insertproduct) {
                 productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock);
                 if (productID == -1) {
-                	inputMessage = "Product  Insert Failed.";
+                	inputMessage = "Product insert fFailed.";
+                }else{
+                	inputMessage = "Product inserted successfully";
                 }
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed
