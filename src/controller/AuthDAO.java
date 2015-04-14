@@ -334,13 +334,13 @@ public class AuthDAO {
         return true;
     }
 	
-	public static String InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock) {
-	   	 
+    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock) {
+	  	 
         Statement stmt;
         String sql;
         ResultSet rs;
         Connection conn = AuthDAO.createConn();
-        String productID="-1";
+        int productID=-1;
  
         //Execute query to insert seller details
         System.out.println("Creating statement...");
@@ -354,7 +354,7 @@ public class AuthDAO {
             rs = stmt.executeQuery(sql);
             while (rs.next()) { //Get newly created user ID,
                 //Retrieve by column name
-                productID = (rs.getString("productID"));
+                productID = (rs.getInt(productID));
             }
         } catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
@@ -362,8 +362,7 @@ public class AuthDAO {
         }
  
         return productID;
-    }
-    
+    }    
  
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection

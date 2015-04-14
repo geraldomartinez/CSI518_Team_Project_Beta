@@ -43,18 +43,20 @@ public class ProductServlet extends HttpServlet {
 
     	RequestDispatcher rd = request.getRequestDispatcher("add_product.jsp");
         
-		String productID, sellerID, name, description, specs, price, categoryid, numInStock, insertbt;
+		int productID;
+		 String sellerID, name, description, specs, price, numInStock, insertbt;
+		String categoryID;
 		String inputMessage = "";
 		boolean insertproduct=true;
 		name=request.getParameter("productname");
 		description=request.getParameter("description");
 		specs=request.getParameter("specs");
 		price=request.getParameter("price");
-		categoryid=request.getParameter("categoryid");
+		categoryID=request.getParameter("categoryID");
 		numInStock=request.getParameter("numinstock");
 		insertbt=request.getParameter("insertbt");
 		sellerID="4";
-		
+		System.out.println(categoryID);
 		if (name == null) {
         	name = "";
         }
@@ -67,9 +69,7 @@ public class ProductServlet extends HttpServlet {
         if (price == null) {
         	price = "";
         }
-        if (categoryid == null) {
-        	categoryid = "";
-        }
+        
        
         if (numInStock == null) {
         	numInStock = "";
@@ -81,13 +81,7 @@ public class ProductServlet extends HttpServlet {
         }
         
         if (insertbt.length() != 0) { //If the submit button was pressed
-            if (categoryid.equals("")) {
-                if (!inputMessage.equals("")) {
-                	inputMessage += "<br />";
-                }
-                inputMessage += "You did not enter  Category ID";
-                insertproduct = false;
-            }
+            
             if (name.equals("")) {
                 if (!inputMessage.equals("")) {
                 	inputMessage += "<br />";
@@ -123,10 +117,12 @@ public class ProductServlet extends HttpServlet {
                 inputMessage += "You did not enter the number of items in stock";
                 insertproduct = false;
             }            
+            
+            	
            
             if (insertproduct) {
-                productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryid, numInStock);
-                if (productID == "-1") {
+                productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock);
+                if (productID == -1) {
                 	inputMessage = "Product  Insert Failed.";
                 }
             }
