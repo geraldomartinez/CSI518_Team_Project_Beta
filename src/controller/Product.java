@@ -8,9 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Product {
-	private static String productID;
+	private static int productID;
 	private static int sellerID;
-	private static  String name;
+	private static String name;
 	private static String description;
 	private static String specs;
 	private static float price;
@@ -20,7 +20,7 @@ public class Product {
 	private static int categoryID;
 	
 	Product(){
-		productID = "-1";
+		productID = -1;
 		sellerID = -1;
 		name = "";
 		description = "";
@@ -32,11 +32,11 @@ public class Product {
 		numInStock = 0;
 	}	
 	
-	public String GetProductID(){
+	public int GetProductID(){
 		return productID;
 	}
 	
-	public void SetProductID(String x /*in, product ID*/){
+	public void SetProductID(int x /*in, product ID*/){
 		productID = x;
 	}
 	
@@ -102,5 +102,13 @@ public class Product {
 	
 	public void SetNumInStock(int x /*in, number of products in stock*/){
 		numInStock = x;
+	}
+	
+	public int GetCategoryID(){
+		return categoryID;
+	}
+	
+	public void SetCategoryID(int x /*in, category*/){
+		categoryID = x;
 	}
 }
