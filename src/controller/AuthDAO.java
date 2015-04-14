@@ -349,7 +349,7 @@ public class AuthDAO {
             sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`) VALUES ( '" + sellerID +"','" +categoryID+"','"+ name + "','"+price+"','"+numInStock+"','"+description+"','"+specs+"');";
             System.out.println(sql);
             stmt.executeUpdate(sql);
-            sql = "SELECT `productID` FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
+            sql = "SELECT max(`productID`) FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
             System.out.println(sql);
             rs = stmt.executeQuery(sql);
             while (rs.next()) { //Get newly created user ID,
