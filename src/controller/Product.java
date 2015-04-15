@@ -7,19 +7,22 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
+
 public class Product {
-	private static int productID;
-	private static int sellerID;
-	private static String name;
-	private static String description;
-	private static String specs;
-	private static float price;
-	private static float shippingCost;
-	private static float rating;
-	private static int numInStock;
-	private static int categoryID;
+	private int productID;
+	private int sellerID;
+	private String name;
+	private String description;
+	private String specs;
+	private float price;
+	private float shippingCost;
+	private float rating;
+	private int numInStock;
+	private int categoryID;
 	
-	Product(){
+	public Product(){
 		productID = -1;
 		sellerID = -1;
 		name = "";
@@ -30,6 +33,27 @@ public class Product {
 		//rating = 0.0f;
 		categoryID=0;
 		numInStock = 0;
+	}	
+	
+
+	public Product(int productID, 
+			int sellerID, 
+			String productName, 
+			String description, 
+			String specs, 
+			float unitPrice, 
+			int quantity, 
+			int categoryID){
+		this.productID = productID;
+		this.sellerID = sellerID;
+		this.name = productName;
+		this.description = description;
+		this.specs = specs;
+		this.price = unitPrice;
+		//shippingCost = 0.0f;
+		//rating = 0.0f;
+		this.numInStock = quantity;
+		this.categoryID=categoryID;
 	}	
 	
 	public int GetProductID(){
@@ -48,7 +72,11 @@ public class Product {
 		sellerID = x;
 	}
 	
-	public String GetName(){
+	public void SetProductName(String x /*in, seller ID*/){
+		name = x;
+	}
+	
+	public String GetProductName(){
 		return name;
 	}
 	
@@ -111,4 +139,7 @@ public class Product {
 	public void SetCategoryID(int x /*in, category*/){
 		categoryID = x;
 	}
+	
+	
 }
+

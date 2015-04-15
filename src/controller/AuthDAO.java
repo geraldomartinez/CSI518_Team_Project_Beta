@@ -363,6 +363,69 @@ public class AuthDAO {
  
         return productID;
     }    
+    
+    public static Product getProductById(int productID) {
+      	 
+        Statement stmt;
+        ResultSet prd_rs;
+        String prd_sql;
+        Product prd;
+        
+        int sellerID = 0;
+        int categoryID = 0;
+        String productName = null;
+        float unitPrice = (float) 0.00;
+        float rating = (float) 0.00;
+        float shippingCost = (float) 0.00;
+        int quantity= 0;
+        String description=null;
+        String specs = null;
+ 
+        Connection conn = createConn(); //Create DB connection
+ 
+        //Execute query to check for matching product
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            prd_sql = "SELECT * FROM `Products` WHERE `Products`.`productID`='" + productID + "';";
+            System.out.println(prd_sql);
+            prd_rs = stmt.executeQuery(prd_sql);
+ 
+            //Extract data from result set
+            while (prd_rs.next()) {
+                //Retrieve by column name
+                sellerID=prd_rs.getInt("sellerID");
+                categoryID=prd_rs.getInt("categoryID");
+                productName = prd_rs.getString("productName");
+                unitPrice = prd_rs.getFloat("unitPrice");
+               
+                //shippingCost = prd_rs.getString("lastName");
+                quantity=prd_rs.getInt("quantity");
+                description=prd_rs.getString("description");
+                specs=prd_rs.getString("specs");
+            }       
+            
+           
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get Product by ID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return new Product();
+        }
+ 
+        //Clean-up
+        try {
+            prd_rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+ 
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID);   
+        return prd;
+    }
  
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
