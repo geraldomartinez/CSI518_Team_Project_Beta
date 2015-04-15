@@ -16,14 +16,25 @@
         
         
         <%
-       // int productID = request.getParameter("productID");
-       		Product new_prd = AuthDAO.getProductById(11); //Hardcoded productID of the RazorBlade laptop
-	      String pName = new_prd.GetProductName();
-	      String pDescription = new_prd.GetDescription();
-	      String pSpecs = new_prd.GetSpecs();
-	      float pPrice = new_prd.GetPrice();
-	      int pQuantity = new_prd.GetNumInStock();
-	     
+        	String strProductID = request.getParameter("productID");
+        	if (strProductID == null){
+        		strProductID = "";
+        	}
+        	
+        	if (strProductID == ""){
+   		%>
+	        <div id="page_content_wrapper">
+	        	<h3 style="text-align: center;">No product ID given</h3>
+	        </div>
+   		<%
+        	}else{
+	       		int productID = Integer.parseInt(strProductID);
+	       		Product new_prd = AuthDAO.getProductById(productID);
+		      	String pName = new_prd.GetProductName();
+		      	String pDescription = new_prd.GetDescription();
+		      	String pSpecs = new_prd.GetSpecs();
+		      	float pPrice = new_prd.GetPrice();
+		      	int pQuantity = new_prd.GetNumInStock();
         %>
         
         <div id="page_content_wrapper">
@@ -34,5 +45,8 @@
         	Quantity Available: <%=pQuantity%>  <br/>
         	Price: <%=pPrice%>  <br/>
         </div>
+        <%
+        	}
+        %>
 	</body>
 </html>
