@@ -27,7 +27,7 @@
 				<a href="index.jsp">Home</a>
 			</td>
 			<td>
-				<a href="#">Browse</a>
+				<a href="browse.jsp">Browse</a>
 			</td>
 			<%
 			    if (navLoggedIn != "true") { //If the user is not logged in
