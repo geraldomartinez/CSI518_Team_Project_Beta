@@ -22,20 +22,25 @@
 			}
 			
 			#banner {
-			  position: relative;
-			  margin-left: -20px;
-			  text-align: center;
-			  padding: 10px;
-			  color: white;
-			  text-shadow: 2px 2px 0 black;
-			  width: 800px;
+			  	position: relative;
+			  	margin-left: -20px;
+			  	text-align: center;
+			  	padding: 10px;
+			  	color: white;
+			  	text-shadow: 2px 2px 0 black;
+			  	width: 800px;
+	
+				/*Box Shadow*/
+				-webkit-box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.42);
+				-moz-box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.42);
+				box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.42);
 			  
-			  background: repeating-linear-gradient(
-				  45deg,
-				  #EAAA00,
-				  #EAAA00 20px,
-				  #3B067D 20px,
-				  #3B067D 40px
+			  	background: repeating-linear-gradient(
+			  		45deg,
+			  		rgba(234,170,0,.55),
+			  		rgba(234,170,0,.55) 20px,
+			  		#3B067D 20px,
+			  		#3B067D 40px
 				);
 			}
 			

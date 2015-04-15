@@ -35,9 +35,9 @@ body{
 	margin-bottom: 10px;
 	
 	/*Box Shadow*/
-	-webkit-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.42);
-	-moz-box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.42);
-	box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.42);
+	-webkit-box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.30);
+	-moz-box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.30);
+	box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.30);
 }
 
 #menu_wrapper{
