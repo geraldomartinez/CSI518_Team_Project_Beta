@@ -66,7 +66,7 @@
 					
 				%>
 
-				<td <% if(Integer.parseInt(strCategoryID) == categoryID){ out.print("class='selected'"); } %>>
+				<td <% if(!strCategoryID.equals("") && Integer.parseInt(strCategoryID) == categoryID){ out.print("class='selected'"); } %>>
 					<a href="browse.jsp?categoryID=<%=Utilities.getMapKeyValue(list, list.get(categoryID)) %>"><%=list.get(categoryID)%></a>
 				</td>
 				<%
