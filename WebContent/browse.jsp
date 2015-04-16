@@ -78,7 +78,7 @@
 
 			try {
 				String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='" + categoryID + "';";
-				conn = AuthDAO.createConn();
+				//conn = AuthDAO.createConn();
 				HttpSession ss = request.getSession();
 
 				PreparedStatement pst = conn.prepareStatement(sql);
