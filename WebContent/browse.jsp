@@ -36,8 +36,8 @@
 							%>
 							
 							<a href="browse.jsp?categoryID=<%=Utilities.getMapKeyValue(list, list.get(categoryID)) %>" style="color: white;text-decoration: underline"><%=list.get(categoryID)%></a>
-							
-							</br>
+							||
+						
 							<%
 							
 								}
