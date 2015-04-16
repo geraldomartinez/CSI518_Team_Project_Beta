@@ -102,6 +102,7 @@
 				String pDescription = "";
 				String pSpecs = "";
 				float pPrice = 0;
+				int productID = 0;
 
 				try {
 					String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='"
@@ -116,8 +117,12 @@
 						pDescription = rs.getString("description");
 						pPrice = rs.getFloat("unitPrice");
 						pSpecs = rs.getString("specs");
+						productID = rs.getInt("productID");
+						
+						
 		%>
-		<h4><%=productName%></h4>
+		
+		<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
 		<ul>
 			<li>Description: <%=pDescription%></li>
 			<li>Price: <%=pPrice%></li>
