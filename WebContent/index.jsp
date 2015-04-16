@@ -61,6 +61,11 @@
 			    right: 0;
 			}
 			
+			#banner img {
+			    width: 780px;
+			}
+			
+			
 			#sales{
 				cursor: pointer;
 				width: 775px;
