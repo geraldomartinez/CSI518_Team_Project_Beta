@@ -2,6 +2,7 @@ package model;
 
 import controller.AuthDAO;
 import controller.User;
+import controller.Cart;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,7 +46,6 @@ public class LoginServlet extends HttpServlet {
 		String email;
 		String password;
 		int checkResponse;
-		boolean sellerIsVerified = false;
 
 		email = request.getParameter("email");
 		password = request.getParameter("password");

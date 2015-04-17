@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$("#sales img").click(function(){
-					alert($(this).data("productid"));
+					window.location.href = "view_product.jsp?productID="+$(this).data("productid");
 				});
 			});
 		</script>
@@ -22,29 +22,31 @@
 			}
 			
 			#banner {
-			  position: relative;
-			  margin-left: -20px;
-			  text-align: center;
-			  padding: 10px;
-			  color: white;
-			  text-shadow: 2px 2px 0 black;
-			  width: 800px;
+			  	position: relative;
+			  	margin-left: -20px;
+			  	text-align: center;
+			  	padding: 10px;
+			  	color: white;
+			  	text-shadow: 2px 2px 0 black;
+			  	width: 800px;
+	
+				/*Box Shadow*/
+				-webkit-box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.42);
+				-moz-box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.42);
+				box-shadow: 0px 0px 1px 2px rgba(0,0,0,0.42);
 			  
-			  background: -webkit-linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(42,0,71,1) 25%, rgba(42,0,71,1) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(42,0,71,1) 75%, rgba(42,0,71,1) 0), rgba(39,12,61,1);
-			  background: -moz-linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(42,0,71,1) 25%, rgba(42,0,71,1) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(42,0,71,1) 75%, rgba(42,0,71,1) 0), rgba(39,12,61,1);
-			  background: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, rgba(42,0,71,1) 25%, rgba(42,0,71,1) 50%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.2) 75%, rgba(42,0,71,1) 75%, rgba(42,0,71,1) 0), rgba(39,12,61,1);
-			  background-position: auto auto;
-			  -webkit-background-origin: padding-box;
-			  background-origin: padding-box;
-			  -webkit-background-clip: border-box;
-			  background-clip: border-box;
-			  -webkit-background-size: 50px 50px;
-			  background-size: 50px 50px;
+			  	background: repeating-linear-gradient(
+			  		45deg,
+			  		rgba(234,170,0,.55),
+			  		rgba(234,170,0,.55) 20px,
+			  		#3B067D 20px,
+			  		#3B067D 40px
+				);
 			}
 			
 			#banner:before, #banner:after {
 			  content: '';
-			  border-top: 10px solid #660000;
+			  border-top: 10px solid #2D0261;
 			  position: absolute;
 			  bottom: -10px;
 			}
@@ -57,6 +59,10 @@
 			#banner:after {
 			    border-right: 10px solid transparent;
 			    right: 0;
+			}
+			
+			#banner img {
+			    width: 780px;
 			}
 			
 			#sales{
@@ -84,10 +90,10 @@
         	<div id="index_message" class="message"><%=indexMessage%></div>
         	<h1>Great Danes Electronics</h1>
         	<div id="banner">
-	        	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide">
-				    <img src="img/specials/1.jpg" data-productid="1">
-				    <img src="img/specials/2.jpg" data-productid="2">
-				    <img src="img/specials/3.jpg" data-productid="3">
+	        	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide" data-cycle-pause-on-hover="true">
+				    <img src="img/specials/1.jpg" data-productid="11">
+				    <img src="img/specials/2.jpg" data-productid="33">
+				    <img src="img/specials/3.jpg" data-productid="34">
 				</div>
 			</div>
 			<br />

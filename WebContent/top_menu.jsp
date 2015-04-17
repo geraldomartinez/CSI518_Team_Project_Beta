@@ -1,7 +1,12 @@
+<%@ page import="java.util.*" %>
 <%@ page import="controller.User" %>
+<%@ page import="controller.CartItem" %>
+<%@ page import="controller.Cart" %>
 <%
 	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
 	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
+	Cart cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
+	
 	String acctType = "";
 	if (usr != null){
 		acctType = usr.getAccountType();
@@ -27,7 +32,7 @@
 				<a href="index.jsp">Home</a>
 			</td>
 			<td>
-				<a href="#">Browse</a>
+				<a href="browse.jsp">Browse</a>
 			</td>
 			<%
 			    if (navLoggedIn != "true") { //If the user is not logged in
@@ -53,17 +58,23 @@
 					</a>
 				</td>
 			<%
-					if (acctType.equals("B")){
+			    }
+					
+				if (navLoggedIn != "true" || (navLoggedIn == "true" && acctType.equals("B"))){
+					if (cart == null){
+						cart = new Cart();
+						session.setAttribute("cart",cart);
+					}
+					cart.UpdateCostAndShippingCost();
 			%>
 					<td>
-						<a href="#">
+						<a href="view_cart.jsp">
 							<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
 							&nbsp;
-							0 items ($0.00)
+							<%= cart.NumItemsInCart() %> item<%= (cart.NumItemsInCart() == 1) ? "" :"s" %> ($<%= String.format("%.2f", cart.GetCost()) %>)
 						</a>
 					</td>
 			<%
-					}
 			    }
 			%>
 		</tr>
