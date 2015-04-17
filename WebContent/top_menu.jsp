@@ -65,7 +65,7 @@
 						<a href="view_cart.jsp">
 							<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
 							&nbsp;
-							<%= cart.NumItemsInCart() %> items ($<%= String.format("%.2f", cart.GetCost()) %>)
+							<%= cart.NumItemsInCart() %> item<%= (cart.NumItemsInCart() == 1) ? "" :"s" %> ($<%= String.format("%.2f", cart.GetCost()) %>)
 						</a>
 					</td>
 			<%
