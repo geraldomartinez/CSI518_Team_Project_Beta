@@ -42,7 +42,6 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session;
 		RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 		User usr = new User();
-		Cart cart = new Cart();
 
 		String email;
 		String password;
@@ -72,9 +71,6 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("loggedIn", "true");
 				usr = AuthDAO.getUserById(checkResponse);
 				session.setAttribute("user", usr);
-				if (usr.getAccountType().equals("B")){
-					session.setAttribute("cart", cart);
-				}
 				rd = request.getRequestDispatcher("index.jsp");
 				request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
 			} else if (checkResponse == -2) {

@@ -52,8 +52,8 @@ public class RemoveAllItemsInCartServlet extends HttpServlet {
     	if (loggedIn == null){
     		loggedIn = "";
     	}
-    	if (loggedIn != "true" || !usr.getAccountType().equals("B")){
-	    	request.setAttribute("indexMessage","You must be logged in as a buyer to perform actions on the cart");
+    	if (loggedIn == "true" && !usr.getAccountType().equals("B")){
+	    	request.setAttribute("indexMessage","Only buyers and guests are allowed to access cart features");
     	}else{
     		session.setAttribute("cart",new Cart()); //Get the user object from the session	
 	    	request.setAttribute("cartMessage","All items removed successfully");

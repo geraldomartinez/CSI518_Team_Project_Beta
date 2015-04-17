@@ -56,7 +56,7 @@ public class Add2CartServlet extends HttpServlet {
 	    	if (loggedIn == null){
 	    		loggedIn = "";
 	    	}
-	    	if (loggedIn != "true" || !usr.getAccountType().equals("B")){
+	    	if (loggedIn == "true" && !usr.getAccountType().equals("B")){
 		    	request.setAttribute("indexMessage","You must be logged in as a buyer to add items to the cart");
 	    	}else{
 		    	rd = request.getRequestDispatcher("view_cart.jsp");

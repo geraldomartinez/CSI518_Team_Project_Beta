@@ -58,7 +58,13 @@
 					</a>
 				</td>
 			<%
-					if (acctType.equals("B")){
+			    }
+					
+				if (navLoggedIn != "true" || (navLoggedIn == "true" && acctType.equals("B"))){
+					if (cart == null){
+						cart = new Cart();
+						session.setAttribute("cart",cart);
+					}
 					cart.UpdateCostAndShippingCost();
 			%>
 					<td>
@@ -69,7 +75,6 @@
 						</a>
 					</td>
 			<%
-					}
 			    }
 			%>
 		</tr>

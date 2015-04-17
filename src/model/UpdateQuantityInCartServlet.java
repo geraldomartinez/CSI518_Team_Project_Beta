@@ -59,8 +59,8 @@ public class UpdateQuantityInCartServlet extends HttpServlet {
 	    	if (loggedIn == null){
 	    		loggedIn = "";
 	    	}
-	    	if (loggedIn != "true" || !usr.getAccountType().equals("B")){
-		    	request.setAttribute("indexMessage","You must be logged in as a buyer to add items to the cart");
+	    	if (loggedIn == "true" && !usr.getAccountType().equals("B")){
+		    	request.setAttribute("indexMessage","Only buyers and guests are allowed to access cart features");
 	    	}else{
 		    	rd = request.getRequestDispatcher("view_cart.jsp");
 	    		cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
