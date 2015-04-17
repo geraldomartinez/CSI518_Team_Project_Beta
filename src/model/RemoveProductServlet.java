@@ -59,7 +59,7 @@ public class RemoveProductServlet extends HttpServlet {
 		
 		if (loggedIn == "")
 		{
-			request.setAttribute("productListMessage", "You must be logged in to perform this request");
+			request.setAttribute("productListMessage", "You must logged in to perform this request");
 		}
 		else
 		{
