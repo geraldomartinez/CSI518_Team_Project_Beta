@@ -59,6 +59,7 @@
 				</td>
 			<%
 					if (acctType.equals("B")){
+					cart.UpdateCostAndShippingCost();
 			%>
 					<td>
 						<a href="view_cart.jsp">

@@ -88,42 +88,56 @@ public class ProductServlet extends HttpServlet {
                 }
                 inputMessage += "You did not enter the product name";
                 insertproduct = false;
-            }
+            }else{
+            	name = name.replace("'","\\'");
+            } 
+            
             if (description.equals("")) {
                 if (!inputMessage.equals("")) {
                 	inputMessage += "<br />";
                 }
                 inputMessage += "You did not enter the description";
                 insertproduct = false;
+            }else{
+            	description = description.replace("'","\\'");
             }
+            
             if (specs.equals("")) {
                 if (!inputMessage.equals("")) {
                 	inputMessage += "<br />";
                 }
                 inputMessage += "You did not enter specs";
                 insertproduct = false;
+            }else{
+            	specs = specs.replace("'","\\'");
             }
+            
             if (price.equals("")) {
                 if (!inputMessage.equals("")) {
                 	inputMessage += "<br />";
                 }
                 inputMessage += "You did not enter the price of product";
                 insertproduct = false;
+            }else{
+            	specs = specs.replace("'","\\'");
             }
+            
             if (numInStock.equals("")) {
                 if (!inputMessage.equals("")) {
                 	inputMessage += "<br />";
                 }
                 inputMessage += "You did not enter the number of items in stock";
                 insertproduct = false;
-            }            
+            }else{
+            	numInStock = numInStock.replace("'","\\'");
+            }           
             
             	
            
             if (insertproduct) {
                 productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock);
                 if (productID == -1) {
-                	inputMessage = "Product insert fFailed.";
+                	inputMessage = "Product insert failed.";
                 }else{
                 	inputMessage = "Product inserted successfully";
                 }

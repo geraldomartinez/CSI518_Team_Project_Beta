@@ -7,8 +7,11 @@ public class Cart {
 	
 	private final float TAX_PERCENTAGE = 0.07f;
 	protected List<CartItem> items;
+	private float cost, shippingCost;
 	
 	public Cart(){
+		this.cost = 0.0f;
+		this.shippingCost = 0.0f;
 		items = new ArrayList<CartItem>();
 	}
 	
@@ -75,40 +78,30 @@ public class Cart {
 		}
 	}
 	
-	public float GetCost(){
-		float cost = 0.0f;
-		Product prod = new Product(); //Prevent null exception
+	public void UpdateCostAndShippingCost(){
+		this.cost = 0.0f;
+		this.shippingCost = 0.0f;
+		int qty = 0;
+		Product prod; //Prevent null exception
 		
 		for (int i=0; i < this.items.size(); i++){
+			qty = this.items.get(i).GetQuantity();
 			prod = AuthDAO.getProductById(this.items.get(i).GetProductID());
-			if (prod.GetPrice() == -1.0f){
-				return -1.0f; //Return -1.0f to indicate error
-			}else{
-				cost += prod.GetPrice() * this.items.get(i).GetQuantity();
-			}
+			this.cost += prod.GetPrice() * qty;
+			this.shippingCost += prod.GetShippingCost() * qty;
 		}
-		
-		return cost;
 	}
 	
-	public float GetTax(){		
-		return (this.GetCost() * this.TAX_PERCENTAGE);
+	public float GetCost(){
+		return cost;
 	}
 	
 	public float GetShippingCost(){
-		float cost = 0.0f;
-		Product prod = new Product(); //Prevent null exception
-		
-		for (int i=0; i < this.items.size(); i++){
-			prod = AuthDAO.getProductById(this.items.get(i).GetProductID());
-			if (prod.GetShippingCost() == -1.0f){
-				return -1.0f; //Return -1.0f to indicate error
-			}else{
-				cost += prod.GetShippingCost() * this.items.get(i).GetQuantity();
-			}
-		}
-		
-		return cost;
+		return this.shippingCost;
+	}
+	
+	public float GetTax(){		
+		return ((this.GetCost() + this.GetShippingCost()) * this.TAX_PERCENTAGE);
 	}
 	
 	public float GetTotal(){

@@ -6,6 +6,7 @@
 package controller;
 
 import java.sql.*;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -354,7 +355,7 @@ public class AuthDAO {
             rs = stmt.executeQuery(sql);
             while (rs.next()) { //Get newly created user ID,
                 //Retrieve by column name
-                productID = (rs.getInt(productID));
+                productID = (rs.getInt("max(`productID`)"));
             }
         } catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
@@ -362,7 +363,7 @@ public class AuthDAO {
         }
  
         return productID;
-    }    
+    }   
     
     public static Product getProductById(int productID) {
       	 

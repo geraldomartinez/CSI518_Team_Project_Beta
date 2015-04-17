@@ -2,9 +2,6 @@ package model;
 
 import java.io.IOException;
 
-import controller.Cart;
-import controller.User;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,17 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controller.Cart;
+import controller.User;
+
 /**
- * Servlet implementation class Add2CartServlet
+ * Servlet implementation class UpdateQuantityInCartServlet
  */
-@WebServlet("/Add2CartServlet")
-public class Add2CartServlet extends HttpServlet {
+@WebServlet("/UpdateQuantityInCartServlet")
+public class UpdateQuantityInCartServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Add2CartServlet() {
+    public UpdateQuantityInCartServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -40,18 +40,21 @@ public class Add2CartServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-
+		
 		HttpSession session = request.getSession(true);
 		String loggedIn;
 		Cart cart;
 		int productID = -1;
+		int newQty = 0;
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 		String strProductID = request.getParameter("productID");
+		String strNewQty = request.getParameter("quantity");
 		User usr = (User) session.getAttribute("user"); //Get the user object from the session	
 		if (strProductID == null){
 	    	request.setAttribute("indexMessage","No product ID given");
 		}else{
 	    	productID = Integer.parseInt(strProductID);
+	    	newQty = Integer.parseInt(strNewQty);
 	    	loggedIn = (String) session.getAttribute("loggedIn");
 	    	if (loggedIn == null){
 	    		loggedIn = "";
@@ -61,13 +64,18 @@ public class Add2CartServlet extends HttpServlet {
 	    	}else{
 		    	rd = request.getRequestDispatcher("view_cart.jsp");
 	    		cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
-	    		cart.AddItem(productID);
+	    		cart.UpdateQuantity(productID,newQty);
 	    		session.setAttribute("cart",cart); //Set the cart in the session with the new item added
-		    	request.setAttribute("cartMessage","Item added successfully to cart");
+	    		if (newQty > 0){
+	    			request.setAttribute("cartMessage","Item quantity successfully updated");
+	    		}else{
+			    	request.setAttribute("cartMessage","Item successfully removed from cart");
+	    		}
 	    	}
 	    	
 		}    	
         rd.forward(request, response);
+		
 	}
 
 }
