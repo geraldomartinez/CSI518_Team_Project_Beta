@@ -57,7 +57,7 @@
 						HttpSession ss = request.getSession();
 
 						PreparedStatement pst = conn
-								.prepareStatement("SELECT * FROM `ProductCategories`");
+								.prepareStatement("SELECT * FROM `ProductCategories` ORDER BY `categoryName` ASC");
 						rs = pst.executeQuery();
 						while (rs.next()) {
 							categoryID = rs.getInt("categoryID");
@@ -128,7 +128,6 @@
 			<li>Price: <%=pPrice%></li>
 			<li>Specs: <%=pSpecs%></li>
 		</ul>
-		</br>
 		<%
 			}
 					conn.close();

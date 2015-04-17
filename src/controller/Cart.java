@@ -6,9 +6,9 @@ import controller.CartItem;
 public class Cart {
 	
 	private final float TAX_PERCENTAGE = 0.07f;
-	private List<CartItem> items;
+	protected List<CartItem> items;
 	
-	Cart(){
+	public Cart(){
 		items = new ArrayList<CartItem>();
 	}
 	
@@ -19,19 +19,18 @@ public class Cart {
 	public void AddItem(int productID, int qty){
 		//First check to see if the item already exists in the cart
 		CartItem tempItem;
-		Boolean itemFound = false;
+		Boolean itemAlreadyInCart = false;
 		
 		for (int i=0; i < this.items.size(); i++){
-			if (this.items.get(i).GetProductID() == productID){
-				tempItem = this.items.get(i);
-				tempItem.SetQuantity(this.items.get(i).GetQuantity() + qty);
-				this.items.set(i, tempItem);
-				itemFound = true;
-				break;
+			if (this.items.get(i).GetProductID() == productID){ //If the item already exists in the cart
+				tempItem = this.items.get(i); //Obtain the item object currently in the cart
+				this.UpdateQuantity(tempItem.GetProductID(), (tempItem.GetQuantity() + qty)); //Update the quantity of the item in the cart
+				itemAlreadyInCart = true; //Flag that indicates the item already existed in the cart
+				break; //Exit the loop
 			}
 		}
 		
-		if (!itemFound){ //If the item didn't already exist in the cart
+		if (!itemAlreadyInCart){ //If the item didn't already exist in the cart
 			tempItem = new CartItem(productID,qty); //Build the cart item object
 			this.items.add(tempItem); //Add the cart item object to the cart
 		}
