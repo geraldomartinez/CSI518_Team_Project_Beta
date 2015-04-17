@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$("#sales img").click(function(){
-					alert($(this).data("productid"));
+					window.location.href = "view_product.jsp?productID="+$(this).data("productid");
 				});
 			});
 		</script>
@@ -65,7 +65,6 @@
 			    width: 780px;
 			}
 			
-			
 			#sales{
 				cursor: pointer;
 				width: 775px;
@@ -92,9 +91,9 @@
         	<h1>Great Danes Electronics</h1>
         	<div id="banner">
 	        	<div class="cycle-slideshow" id="sales" data-cycle-fx="tileSlide" data-cycle-pause-on-hover="true">
-				    <img src="img/specials/1.jpg" data-productid="1">
-				    <img src="img/specials/2.jpg" data-productid="2">
-				    <img src="img/specials/3.jpg" data-productid="3">
+				    <img src="img/specials/1.jpg" data-productid="11">
+				    <img src="img/specials/2.jpg" data-productid="33">
+				    <img src="img/specials/3.jpg" data-productid="34">
 				</div>
 			</div>
 			<br />
