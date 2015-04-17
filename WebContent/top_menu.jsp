@@ -1,7 +1,10 @@
 <%@ page import="controller.User" %>
+<%@ page import="controller.Cart" %>
 <%
 	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
 	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
+	Cart cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
+	
 	String acctType = "";
 	if (usr != null){
 		acctType = usr.getAccountType();
@@ -56,10 +59,10 @@
 					if (acctType.equals("B")){
 			%>
 					<td>
-						<a href="#">
+						<a href="view_cart.jsp">
 							<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
 							&nbsp;
-							0 items ($0.00)
+							<%= cart.GetAllItems().size() %> items ($<%= String.format("%.2f", cart.GetCost()) %>)
 						</a>
 					</td>
 			<%
