@@ -1,4 +1,6 @@
+<%@ page import="java.util.*" %>
 <%@ page import="controller.User" %>
+<%@ page import="controller.CartItem" %>
 <%@ page import="controller.Cart" %>
 <%
 	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
@@ -62,7 +64,7 @@
 						<a href="view_cart.jsp">
 							<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
 							&nbsp;
-							<%= cart.GetAllItems().size() %> items ($<%= String.format("%.2f", cart.GetCost()) %>)
+							<%= cart.NumItemsInCart() %> items ($<%= String.format("%.2f", cart.GetCost()) %>)
 						</a>
 					</td>
 			<%

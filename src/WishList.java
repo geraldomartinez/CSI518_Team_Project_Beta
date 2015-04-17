@@ -45,7 +45,9 @@ public class WishList extends Cart{
 		CartItem tempItem;
 		for (int i=0; i < this.items.size(); i++){
 			tempItem = this.items.get(i);
-			c.AddItem(tempItem.GetProductID(), tempItem.GetQuantity());
+			for (int j = 0; j < tempItem.GetQuantity(); j++){
+				c.AddItem(tempItem.GetProductID());
+			}
 		}
 	}
 

@@ -44,6 +44,18 @@
         	Specs: <%=pSpecs%>  <br/>
         	Quantity Available: <%=pQuantity%>  <br/>
         	Price: <%=pPrice%>  <br/>
+        	<br />
+        	
+        	<%
+        	if (navLoggedIn.equals("true") && acctType.equals("B")){
+        	%>
+			<form id="add_2_cart_form" action="Add2CartServlet" method="POST">
+				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
+				<button type="submit">Add To Cart</button>
+			</form>
+			<%
+        	}
+			%>
         </div>
         <%
         	}
