@@ -106,7 +106,7 @@
 
 				try {
 					String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='"
-							+ categoryID + "';";
+							+ categoryID + "' order by productName;";
 					//conn = AuthDAO.createConn();
 					HttpSession ss = request.getSession();
 
