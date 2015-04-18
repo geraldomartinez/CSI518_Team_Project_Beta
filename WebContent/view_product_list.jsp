@@ -92,7 +92,7 @@
                     </td>
 	            	<td>
 		            	<form id="delete_product" action="RemoveProductServlet" method="POST">
-		            		<input name="productID" value="3" type="text" style="display: none;" />
+		            		<input name="productID" value="<%=productID %>" type="text" style="display: none;" />
 			            	<button type="submit" name="delete" value="delete"> Delete </button>
 		            	</form>
 	            	</td>
