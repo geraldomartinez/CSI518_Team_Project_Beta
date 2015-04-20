@@ -27,6 +27,8 @@
        	
 	</head>
 	<body>
+	<%@ page
+		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
         <%@include file="top_menu.jsp"%>
         <div id="page_content_wrapper">
 	        <%
@@ -34,33 +36,80 @@
 	            if (productListMessage == null) { //Prevent null pointer exception
 	            	productListMessage = "";
 	            }
+	            String sellerName = usr.GetFirstName();
+	           
 	        %>
         	<div id="product_list_message" class="message"><%=productListMessage%></div>
         	<br />
-        	<h2>Products Listing For [Seller Name]</h2>
+        	<h2>Products Listing For <%=sellerName %></h2>
         	<table id="product_list_table">
+        	<%
+        		int sellerID = usr.GetUserID(); //Page will error out if there is no seller logged in...
+	        	Connection conn = null;
+				ResultSet rs = null; //Handles the list of categories
+				ResultSet rs2 = null; //Handles the list of products
+				int categoryID =0;
+				int productID = 0;
+				String categoryName = "";
+				String productName = "";
+				
+				try {
+					String sql = "select distinct p.categoryName, p.categoryID from ProductCategories p WHERE categoryID IN (SELECT categoryID FROM `Products` WHERE sellerID='"+ sellerID + "') order by p.categoryName;";
+					
+					conn = AuthDAO.createConn();
+					HttpSession ss = request.getSession();
+	
+					PreparedStatement pst = conn.prepareStatement(sql);
+					rs = pst.executeQuery();
+					while (rs.next()) {
+						categoryID = rs.getInt("categoryID");
+						categoryName = rs.getString("categoryName");					
+        	
+        		%>
         		<tr>
         			<th colspan="4">
-        				[Product Category #1]
+        				<%=categoryName %>
         			</th>
         		</tr>
+        		<%
+        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "';";
+        			pst = conn.prepareStatement(sql2);
+					rs2 = pst.executeQuery();
+        			while(rs2.next()){
+        				productName = rs2.getString("productName");
+        				productID = rs2.getInt("productID");
+        				%>
         		<tr>
         			<td>
         				[Image]
         			</td>
         			<td>
-        				[Product #1]
+        				
+        				<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
         			</td>
         			<td>
 						<button type="submit" class="gold_button" name="edit">Edit</button>
                     </td>
 	            	<td>
 		            	<form id="delete_product" action="RemoveProductServlet" method="POST">
-		            		<input name="productID" value="3" type="text" style="display: none;" />
+		            		<input name="productID" value="<%=productID %>" type="text" style="display: none;" />
 			            	<button type="submit" name="delete" value="delete"> Delete </button>
 		            	</form>
 	            	</td>
         		</tr>
+        		
+        		<%
+        				}//inner while loop
+        			
+					}//Outer loop
+						conn.close();
+					} catch (Exception e) {
+						out.print(e);
+					}
+				%>
+        		
+        	
+        		
         	</table>
         </div>
 	</body>
