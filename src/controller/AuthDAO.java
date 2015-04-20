@@ -438,4 +438,25 @@ public class AuthDAO {
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-}
+   public static boolean addItem2Wishlist(int wishListID, int buyerID, String wishListName, Date lastModifiedTime, int itemsQuantity)
+   {
+	   Statement stmt;
+       String sql;
+       Connection conn = createConn();
+
+       //Execute query to insert seller details
+       try {
+           stmt = conn.createStatement();
+           sql = "INSERT INTO `WishListI` (`wishListID`,`buyerID`,`wishListName`,`lastModifiedTime`, `itemsQuantity`) VALUES ('" + wishListID + "','" +buyerID +"','" + wishListName +"','"+lastModifiedTime+"','"+itemsQuantity+"');";
+           System.out.println(sql);
+           stmt.executeUpdate(sql);
+       } catch (SQLException | NumberFormatException ex) { //An error occurred
+           //Log the exception
+           Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+           return false;
+       }
+
+       return true;
+   }
+   }
+
