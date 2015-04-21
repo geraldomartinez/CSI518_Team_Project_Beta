@@ -38,6 +38,13 @@
         %>
         
         <div id="page_content_wrapper">
+	        <%
+	            String productMessage = (String) request.getAttribute("productMessage"); //Obtain the message to be displayed for the product page (if there is one)
+	            if (productMessage == null) { //Prevent null pointer exception
+	            	productMessage = "";
+	            }
+	        %>
+        	<div id="product_mkessage" class="message"><%=productMessage%></div>
         	<h3>Product Page</h3> <br/>
         	Product: <%=pName%>  <br/>
         	Description: <%=pDescription%>  <br/>
@@ -52,6 +59,19 @@
 			<form id="add_2_cart_form" action="Add2CartServlet" method="POST">
 				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
 				<button type="submit">Add To Cart</button>
+			</form>
+			<%
+        	}
+			%>
+        	
+        	<%
+        	if (navLoggedIn.equals("true") && acctType.equals("B")){
+        	%>
+			<br />
+			<form id="add_2_cart_form" action="Add2WishlistServlet" method="POST">
+				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
+				<input type="hidden" name="quantity" value="1" />
+				<button type="submit" name="addToWishBtn">Add To Wish List</button>
 			</form>
 			<%
         	}

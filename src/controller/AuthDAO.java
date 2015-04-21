@@ -6,8 +6,6 @@
 package controller;
 
 import java.sql.*;
-import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,7 +121,6 @@ public class AuthDAO {
         String sql;
         User usr;
    
-        String username = null;
         String password = null;
         String accountType=null;
         String email=null;
@@ -376,8 +373,8 @@ public class AuthDAO {
         int categoryID = 0;
         String productName = null;
         float unitPrice = (float) 0.00;
-        float rating = (float) 0.00;
-        float shippingCost = (float) 0.00;
+        //float rating = (float) 0.00;
+        //float shippingCost = (float) 0.00;
         int quantity= 0;
         String description=null;
         String specs = null;
@@ -427,7 +424,91 @@ public class AuthDAO {
         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID);   
         return prd;
     }
- 
+
+    public static WishList ReturnUserWishlist(int userID)
+    {
+ 	   	Statement stmt;
+ 	   	ResultSet rs;
+        String sql;
+        Connection conn = createConn();
+        WishList wishlist = new WishList();
+
+        //Execute query to insert seller details
+        try {
+            stmt = conn.createStatement();            
+            sql = "SELECT * FROM `WishListItems` WHERE `userID` = '"+userID+"'";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            
+            //Extract data from result set
+            while (rs.next()) {
+                //Retrieve by column name
+            	wishlist.AddItem(rs.getInt("productID"));
+            	if (rs.getInt("quantity") > 1){
+                	wishlist.UpdateQuantity(rs.getInt("productID"), rs.getInt("quantity"));
+            	}
+            }    
+            
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return wishlist;
+    }   
+
+    public static boolean addItem2Wishlist(int userID, int productID, int quantity)
+    {
+ 	   	Statement stmt;
+        String sql;
+        Connection conn = createConn();
+
+        //Execute query to insert seller details
+        try {
+            stmt = conn.createStatement();
+            
+            sql = "DELETE IGNORE FROM `WishListItems` WHERE `userID`='"+userID+"' AND `productID`='"+productID+"'";
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+            
+            if (quantity > 0){
+	            sql = "INSERT INTO `WishListItems`(`userID`, `productID`, `quantity`) VALUES ('" + userID + "','" +productID +"','"+quantity+"');";
+	            System.out.println(sql);
+	            stmt.executeUpdate(sql);
+            }
+            
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+        return true;
+    }   
+    
+    //function to remove product
+    public static boolean ClearWishlist(int userID){
+    	Statement stmt;
+        String sql;
+        
+        Connection conn = createConn();
+        System.out.println("Creating Statement..");
+        try {
+            stmt = conn.createStatement();
+            //sql query to delete a product by matching productID and sellerID
+            sql = "DELETE FROM `WishListItems` WHERE `userID`='"+userID+"'";
+            System.out.println(sql);
+           //updating tables Products and ProductReviews
+            stmt.executeUpdate(sql);
+            return true;
+        } 
+        catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
             if (conn != null) { //If the connection object is set
@@ -438,25 +519,5 @@ public class AuthDAO {
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   public static boolean addItem2Wishlist(int wishListID, int productID,int productQuantity)
-   {
-	   Statement stmt;
-       String sql;
-       Connection conn = createConn();
-
-       //Execute query to insert seller details
-       try {
-           stmt = conn.createStatement();
-           sql = "INSERT INTO `WishListItems`(`wishListID`,`productID`,`e`, `productQuantity`) VALUES ('" + wishListID + "','" +productID +"','"+productQuantity+"');";
-           System.out.println(sql);
-           stmt.executeUpdate(sql);
-       } catch (SQLException | NumberFormatException ex) { //An error occurred
-           //Log the exception
-           Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-           return false;
-       }
-
-       return true;
-   }
    }
 

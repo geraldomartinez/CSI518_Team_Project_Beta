@@ -3,6 +3,7 @@ package model;
 import controller.AuthDAO;
 import controller.User;
 import controller.Cart;
+import controller.WishList;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -71,6 +72,7 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("loggedIn", "true");
 				usr = AuthDAO.getUserById(checkResponse);
 				session.setAttribute("user", usr);
+				session.setAttribute("wishlist", AuthDAO.ReturnUserWishlist(usr.GetUserID()));
 				rd = request.getRequestDispatcher("index.jsp");
 				request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
 			} else if (checkResponse == -2) {

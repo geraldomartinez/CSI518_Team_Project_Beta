@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-		<title>Home - Great Danes Electronics</title>
+		<title>View Cart - Great Danes Electronics</title>
 		
 		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 		<!-- jQuery Library -->

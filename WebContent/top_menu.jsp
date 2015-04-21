@@ -2,10 +2,12 @@
 <%@ page import="controller.User" %>
 <%@ page import="controller.CartItem" %>
 <%@ page import="controller.Cart" %>
+<%@ page import="controller.WishList" %>
 <%
 	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
 	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
 	Cart cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
+	WishList wishlist = (WishList) session.getAttribute("wishlist"); //Get the wishlist from the session
 	
 	String acctType = "";
 	if (usr != null){
@@ -57,7 +59,18 @@
 						My Account
 					</a>
 				</td>
-			<%
+			<%				
+					if (acctType.equals("B")){
+				%>
+					<td>
+						<a href="view_wishlist.jsp">
+							<img src="img/gold_star.png" alt="gold star" style="height: 20px; position: relative; top: -2px;" /> 
+							&nbsp;
+							My Wish List
+						</a>
+					</td>
+				<%
+			    	}
 			    }
 					
 				if (navLoggedIn != "true" || (navLoggedIn == "true" && acctType.equals("B"))){
@@ -71,7 +84,7 @@
 						<a href="view_cart.jsp">
 							<img src="img/cart.png" alt="cart" style="height: 20px; position: relative; top: -2px;" /> 
 							&nbsp;
-							<%= cart.NumItemsInCart() %> item<%= (cart.NumItemsInCart() == 1) ? "" :"s" %> ($<%= String.format("%.2f", cart.GetCost()) %>)
+							<%= cart.NumItems() %> item<%= (cart.NumItems() == 1) ? "" :"s" %> ($<%= String.format("%.2f", cart.GetCost()) %>)
 						</a>
 					</td>
 			<%

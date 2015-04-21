@@ -7,20 +7,10 @@ public class WishList extends Cart{
 	private String name;
 	private int wishlistID;
 	
-	WishList() {
+	public WishList() {
 		super(); //Call Cart's constructor
 		this.name = "";
 		this.wishlistID = -1;
-	}
-	
-	WishList(int id, String name) {
-		super(); //Call Cart's constructor
-		if (name == null){
-			name = "";
-		}
-		
-		this.name = name;
-		this.wishlistID = id;
 	}
 	
 	public String GetName(){

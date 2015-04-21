@@ -19,7 +19,7 @@ public class Cart {
 		return this.items;
 	}
 	
-	public int NumItemsInCart(){
+	public int NumItems(){
 		int numItemsInCart = 0;
 		
 		for (int i=0; i < this.items.size(); i++){
