@@ -94,7 +94,15 @@
 							out.print("<button type='submit'>Remove</button>");
 						out.print("</form>");
 					out.print("</td>");
+					out.print("<td>");
+					out.print("<form id='update_qty_form' action='Add2WishlistServlet' method='POST'>");
+					out.print("<input type='hidden' name='quantity' class='quantity' value='-1' />");
+					out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
+						out.print("<button type='submit' name=wish >Add to WishList</button>");
+					out.print("</form>");
+				out.print("</td>");
 					out.print("</tr>");
+					
 					}
 			%>
 				</table>
