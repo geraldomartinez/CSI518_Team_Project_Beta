@@ -43,12 +43,6 @@
         	<br />
 			<a href="#">Notifications</a>
 			<%
-			}else{
-			%>
-				<br />
-	        	<br />
-				<a href="#">Wishlists</a>
-			<%
 			}
 			%>
 			<br />
