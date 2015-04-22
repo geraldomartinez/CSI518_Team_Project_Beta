@@ -61,6 +61,7 @@
 				</td>
 			<%				
 					if (acctType.equals("B")){
+						wishlist.UpdateCostAndShippingCost();
 				%>
 					<td>
 						<a href="view_wishlist.jsp">

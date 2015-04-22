@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import controller.AuthDAO;
 import controller.User;
+import controller.Cart;
 import controller.WishList;
 import controller.CartItem;
 
@@ -50,14 +51,19 @@ public class Add2WishlistServlet extends HttpServlet {
 		User usr = (User) session.getAttribute("user"); // Obtain the user
 		String loggedIn = (String) session.getAttribute("loggedIn"); // Obtain the "logged in" attribute from the session
 		WishList wishlist = (WishList) session.getAttribute("wishlist"); // Obtain the wishlist object from the session
+		Cart cart = (Cart) session.getAttribute("cart"); // Obtain the cart object from the session
 		int productID = Integer.parseInt(request.getParameter("productID")); // Obtain the product ID from the page that called the servlet
 		int addQuantity = Integer.parseInt(request.getParameter("quantity")); // Obtain the item quantity from the page that called the servlet
+		String delFromCart = request.getParameter("delFromCart"); // Check if we need to delete the item from the user's cart afterwards
 		RequestDispatcher rd = request.getRequestDispatcher("view_product.jsp?productID="+productID);
 		List<CartItem> itemList;
 		int currItemQuantity = 0;
 
 		if (loggedIn == null) { // Prevent null pointer exception
 			loggedIn = "";
+		}
+		if (delFromCart == null) { // Prevent null pointer exception
+			delFromCart = "";
 		}
 
 		if (loggedIn != "true") {
@@ -82,7 +88,13 @@ public class Add2WishlistServlet extends HttpServlet {
 	                	wishlist.UpdateQuantity(productID, (currItemQuantity+addQuantity));
 	            	}
 	            	
-	            	session.setAttribute("wishlist", wishlist);	            	
+	            	session.setAttribute("wishlist", wishlist);
+
+	            	if (delFromCart.equals("true")){
+	            		cart.RemoveItem(productID);
+	            		session.setAttribute("cart",cart);
+	            	}
+	            	
 					request.setAttribute("wishListMessage", "Product with ID " + productID + " has been added");
 					rd = request.getRequestDispatcher("view_wishlist.jsp");
 				} else {
