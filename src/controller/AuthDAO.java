@@ -509,20 +509,13 @@ public class AuthDAO {
         return false;
     }
     
-    public static Product getProductByColor(String color) {
+    public static void getProductByColor(String color) {
      	 
         Statement stmt;
         ResultSet rs;
         String sql;
-        Product prd;
+        
         int productID=0;
-        int sellerID = 0;
-        int categoryID = 0;
-        String productName = null;
-        float unitPrice = (float) 0.00;
-        int quantity= 0;
-        String description=null;
-        String specs = null;
  
         Connection conn = createConn(); //Create DB connection
  
@@ -530,44 +523,21 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "SELECT * FROM `Products` WHERE `Products`.`color`='" + color + "';";
+            sql = "SELECT  productID FROM `Products` WHERE `Products`.`color`='" + color + "';";
             System.out.println(sql);
             rs = stmt.executeQuery(sql);
- 
-            //Extract data from result set
-            while (rs.next()) {
-                //Retrieve by column name
-            	productID=rs.getInt("productID");
-                sellerID=rs.getInt("sellerID");
-                categoryID=rs.getInt("categoryID");
-                productName = rs.getString("productName");
-                unitPrice = rs.getFloat("unitPrice");
-                quantity=rs.getInt("quantity");
-                description=rs.getString("description");
-                specs=rs.getString("specs");
-            }       
-            
+            productID = rs.getInt("productID");
+            AuthDAO.getProductById(productID);
            
+        }
             
-        } catch (Exception ex) { //An error occurred
-            //Log the exception
-        	System.out.println("Failed to get Product by color");
-            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return new Product();
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
         }
- 
-        //Clean-up
-        try {
-            rs.close(); //Close result set
-            stmt.close(); //Close statement object
-        } catch (Exception ex) { //An error occurred
-            //Log the exception
-            //If it fails to close, just leave it.
-        }
- 
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID);   
-        return prd;
-    }
+    
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
