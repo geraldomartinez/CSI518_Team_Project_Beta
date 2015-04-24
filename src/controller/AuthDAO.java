@@ -565,7 +565,185 @@ public class AuthDAO {
             }
             
         }
-    
+    public static void getProductByPrice(String priceRange) {
+   	 
+        Statement stmt;
+        ResultSet rs;
+        String sql;
+        double val1=0,val2=0,val=0;
+        
+        int productID=0;
+        switch(priceRange)//To select price range
+        {
+        case "1":
+        	val1=000.00;
+        	val2=100.00;
+        	break;
+        case "2":
+        	val1=100.00;
+        	val2=200.00;
+        	break;
+        case "3":
+        	val1=200.00;
+        	val2=300.00;
+        	break;
+        case "4":
+        	val1=300.00;
+        	val2=400.00;
+        	break;
+        case "5":
+        	val1=400.00;
+        	val2=500.00;
+        	break;
+        case "6":
+        	val1=500.00;
+        	val2=600.00;
+        	break;
+        case "7":
+        	val1=600.00;
+        	val2=700.00;
+        	break;
+        case "8":
+        	val1=700.00;
+        	val2=800.00;
+        	break;
+        case "9":
+        	val1=800.00;
+        	val2=900.00;
+        	break;
+        case "10":
+        	val1=900.00;
+        	val2=1000.00;
+        	break;
+        default:
+        	
+        	break;
+        	
+        }
+        
+ 
+        Connection conn = createConn(); //Create DB connection
+ 
+        //Execute query to check for matching product
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT productID FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            productID = rs.getInt("productID");
+            AuthDAO.getProductById(productID);
+           
+        }
+            
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    public static void getProductByManufacturer(String manufacturer) {
+    	 
+        Statement stmt;
+        ResultSet rs;
+        String sql;
+        
+        int productID=0;
+ 
+        Connection conn = createConn(); //Create DB connection
+ 
+        //Execute query to check for matching product
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT  productID FROM `Products` WHERE `Products`.`manufacturer`='" + manufacturer + "';";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            productID = rs.getInt("productID");
+            AuthDAO.getProductById(productID);
+           
+        }
+            
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+    public static void getProductByPurpose(int  use) {
+   	 
+        Statement stmt;
+        ResultSet rs;
+        String sql;
+        
+        int productID=0;
+        
+        if(use == 1)// if purpose of use is Student
+        {
+        	Connection conn = createConn(); //Create DB connection
+        	 
+            //Execute query to check for matching product
+            System.out.println("Creating statement...");
+            try {
+                stmt = conn.createStatement();
+                //Query to display all categories except televisions
+                sql = "SELECT  productID FROM `Products` WHERE `Products`.`categoryID`!= 5;";
+                System.out.println(sql);
+                rs = stmt.executeQuery(sql);
+                productID = rs.getInt("productID");
+                AuthDAO.getProductById(productID);
+               
+            }
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+ 
+        if(use == 2)// if purpose of use is Commercial
+        {
+        	Connection conn = createConn(); //Create DB connection
+        	 
+            //Execute query to check for matching product
+            System.out.println("Creating statement...");
+            try {
+                stmt = conn.createStatement();
+                //query to display Cellphones, Laptops and Tablets
+                sql = "SELECT productID FROM  `Products` WHERE  `Products`.`categoryID` =1OR  `Products`.`categoryID` =2OR  `Products`.`categoryID` =4";
+                System.out.println(sql);
+                rs = stmt.executeQuery(sql);
+                productID = rs.getInt("productID");
+                AuthDAO.getProductById(productID);
+               
+            }
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        if(use == 3)// if purpose of use is Personal
+        {
+        	Connection conn = createConn(); //Create DB connection
+        	 
+            //Execute query to check for matching product
+            System.out.println("Creating statement...");
+            try {
+                stmt = conn.createStatement();
+                sql = "SELECT  productID FROM `Products`";// display all categories of products
+                System.out.println(sql);
+                rs = stmt.executeQuery(sql);
+                productID = rs.getInt("productID");
+                AuthDAO.getProductById(productID);
+               
+            }
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        }
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
             if (conn != null) { //If the connection object is set

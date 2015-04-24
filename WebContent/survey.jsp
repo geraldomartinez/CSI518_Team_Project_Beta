@@ -7,8 +7,7 @@
 <title>Survey</title>
 </head>
 <body>
-<link rel="stylesheet" type="text/css" href="css/global.css" /> <!-- Global style sheet -->
-<form method="post" action="">
+<form id="Survey" action="SurveyServlet" method="POST">
 <p>What are your favorite color(s)?</p>
 <p>
 <input type="checkbox" name="color" value="1"/>Red<br/>
@@ -29,7 +28,8 @@
 </p>
 <p>What price range would you like it to be in?</p>
 <p>
-<select>
+<select name="price">
+<option value="" selected>- Select -</option> 
 <option  value="1">000.00 to 100.00</option>
 <option  value="2">100.00 to 200.00</option>
 <option  value="3">200.00 to 300.00</option>
@@ -40,7 +40,6 @@
 <option  value="8">700.00 to 800.00</option>
 <option  value="9">800.00 to 900.00</option>
 <option  value="10">900.00 to 1000.00</option>
-<option  value="11">above 1000.00</option>
 </select>
 </p>
 <p>Purpose of use?</p>
@@ -55,6 +54,7 @@
 <input type="checkbox" name="manufacturer" value="2"/>Apple<br/>
 <input type="checkbox" name="manufacturer" value="3"/>Dell<br/>
 </p>
+<button type="submit" name="submit" value="submit">Submit Survey</button>
 </form>
 
 </body>
