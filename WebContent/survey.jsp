@@ -23,18 +23,25 @@
 <p>
 <input type="checkbox" name="category" value="1"/>Cell Phones<br/>
 <input type="checkbox" name="category" value="2"/>Laptops<br/>
-<input type="checkbox" name="category" value="3"/>Tablets<br/>
-<input type="checkbox" name="category" value="4"/>Televisions<br/>
-<input type="checkbox" name="category" value="5"/>Video Games<br/>
+<input type="checkbox" name="category" value="4"/>Tablets<br/>
+<input type="checkbox" name="category" value="5"/>Televisions<br/>
+<input type="checkbox" name="category" value="6"/>Video Games<br/>
 </p>
 <p>What price range would you like it to be in?</p>
 <p>
-<input type="checkbox" name="price" value="1"/>000.00-200.00<br/>
-<input type="checkbox" name="price" value="2"/>200.00-400.00<br/>
-<input type="checkbox" name="price" value="3"/>400.00-600.00<br/>
-<input type="checkbox" name="price" value="4"/>600.00-800.00<br/>
-<input type="checkbox" name="price" value="5"/>800.00-1000.00<br/>
-<input type="checkbox" name="price" value="6"/>above 1000.00<br/>
+<select>
+<option  value="1">000.00 to 100.00</option>
+<option  value="2">100.00 to 200.00</option>
+<option  value="3">200.00 to 300.00</option>
+<option  value="4">300.00 to 400.00</option>
+<option  value="5">400.00 to 500.00</option>
+<option  value="6">500.00 to 600.00</option>
+<option  value="7">600.00 to 700.00</option>
+<option  value="8">700.00 to 800.00</option>
+<option  value="9">800.00 to 900.00</option>
+<option  value="10">900.00 to 1000.00</option>
+<option  value="11">above 1000.00</option>
+</select>
 </p>
 <p>Purpose of use?</p>
 <p>

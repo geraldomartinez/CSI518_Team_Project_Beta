@@ -537,7 +537,34 @@ public class AuthDAO {
             }
             
         }
-    
+    public static void getProductByCategory(int categoryVal) {
+    	 
+        Statement stmt;
+        ResultSet rs;
+        String sql;
+        
+        int productID=0;
+ 
+        Connection conn = createConn(); //Create DB connection
+ 
+        //Execute query to check for matching product
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT  productID FROM `Products` WHERE `Products`.`categoryID`='" + categoryVal + "';";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            productID = rs.getInt("productID");
+            AuthDAO.getProductById(productID);
+           
+        }
+            
+            catch (SQLException | NumberFormatException ex) { //An error occurred
+                //Log the exception
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
