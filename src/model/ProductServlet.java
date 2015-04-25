@@ -1,6 +1,8 @@
 package model;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import controller.Product;
 
@@ -10,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import controller.AuthDAO;
 
@@ -55,6 +58,12 @@ public class ProductServlet extends HttpServlet {
 		categoryID=request.getParameter("categoryID");
 		numInStock=request.getParameter("numinstock");
 		insertbt=request.getParameter("insertbt");
+		Part filePart=request.getPart("product_image");
+		String fileName=filePart.getSubmittedFileName();
+		InputStream filecontent=filePart.getInputStream();
+		
+		String extension="";
+		
 		sellerID="4";
 		System.out.println(categoryID);
 		if (name == null) {
@@ -141,6 +150,15 @@ public class ProductServlet extends HttpServlet {
                 }else{
                 	inputMessage = "Product inserted successfully";
                 }
+                
+                int i=fileName.lastIndexOf('.');
+        		if(i>0)
+        		{
+        			extension=fileName.substring(i+1);
+        		}
+        		filecontent.equals("/src/img/products/[productID].[extension]");
+        		FileOutputStream files= new FileOutputStream((productID)+"."+extension);
+        		
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed
             inputMessage += "An enexpected error has occured"; //There was an error in http request

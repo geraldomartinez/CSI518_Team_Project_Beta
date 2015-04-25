@@ -111,6 +111,9 @@
 					<td><input name="numinstock" type="number" ></td>
 				</tr>
 				<tr>
+				<td>Product Image</td>
+				<td><input type="file" name="product_image"></td>
+				<tr>
 					<td></td>
 					<td><input type="submit" value="Submit" name="insertbt"></td>
 				</tr>
