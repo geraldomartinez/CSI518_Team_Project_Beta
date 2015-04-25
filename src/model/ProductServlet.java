@@ -8,6 +8,7 @@ import controller.Product;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import controller.AuthDAO;
 /**
  * Servlet implementation class ProductServlet
  */
+@MultipartConfig(location="/", fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 @WebServlet("/ProductServlet")
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -60,9 +62,10 @@ public class ProductServlet extends HttpServlet {
 		insertbt=request.getParameter("insertbt");
 		Part filePart=request.getPart("product_image");
 		String fileName=filePart.getSubmittedFileName();
-		InputStream filecontent=filePart.getInputStream();
-		
+		InputStream fileInStream=filePart.getInputStream();
+		byte[] fileByte = new byte[1];
 		String extension="";
+		FileOutputStream outFile;
 		
 		sellerID="4";
 		System.out.println(categoryID);
@@ -156,9 +159,13 @@ public class ProductServlet extends HttpServlet {
         		{
         			extension=fileName.substring(i+1);
         		}
-        		filecontent.equals("/src/img/products/[productID].[extension]");
-        		FileOutputStream files= new FileOutputStream((productID)+"."+extension);
         		
+        		outFile = new FileOutputStream((productID)+"."+extension);
+        		while (fileInStream.read(fileByte) == 1){
+        			outFile.write(fileByte[0]);
+        		}
+        		fileInStream.close();
+        		outFile.close();
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed
             inputMessage += "An enexpected error has occured"; //There was an error in http request
