@@ -213,7 +213,7 @@ public class AuthDAO {
         return newUserID;
     }
     
-    public static boolean enterNewSellerDetails(int sellerID, String acctNum, String routingNum) {
+    public static boolean enterNewSellerDetails(int sellerID, String acctNum, String routingNum, String companyName) {
     	 
         Statement stmt;
         String sql;
@@ -223,7 +223,7 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO `SellerDetails` (`sellerID`,`isVerified`,`accountNumber`,`routingNumber`) VALUES ('" + sellerID + "', 0, '" + acctNum +"','" + routingNum + "');";
+            sql = "INSERT INTO `SellerDetails` (`sellerID`,`isVerified`,`accountNumber`,`routingNumber`, `companyName`) VALUES ('" + sellerID + "', 0, '" + acctNum +"','" + routingNum + "','" + companyName + "');";
             System.out.println(sql);
             stmt.executeUpdate(sql);
         } catch (SQLException | NumberFormatException ex) { //An error occurred

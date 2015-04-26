@@ -29,13 +29,12 @@ int productID;
 									HttpSession ss = request.getSession();
 
 									PreparedStatement pst = conn
-											.prepareStatement("SELECT * FROM `Products`");
+											.prepareStatement("SELECT DISTINCT `color` FROM `Products` WHERE `color` IS NOT NULL");
 									rs = pst.executeQuery();
 									while (rs.next()) {
-										productID = rs.getInt("productID");
 										color = rs.getString("color");
 							%>
-							<option value="<%=productID%>" selected><%=color%></option>
+							<option value="<%=color%>" selected><%=color%></option>
 							<%
 								}
 									conn.close();

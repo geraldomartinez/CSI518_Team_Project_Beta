@@ -19,9 +19,11 @@
                 	if ($(this).val() == "seller"){
                 		$("input[name=account_number]").fadeIn();
                 		$("input[name=routing_number]").fadeIn();
+                		$("input[name=company_name]").fadeIn();
                 	}else{
                 		$("input[name=account_number]").val('').fadeOut();
                 		$("input[name=routing_number]").val('').fadeOut();
+                		$("input[name=company_name]").val('').fadeOut();
                 	}
                 });
             });
@@ -87,6 +89,8 @@
                     <input name="state" type="text" maxlength="2" placeholder="State"/>
                     <br />
                     <input name="zip" type="text" placeholder="Zip"/>
+                    <br />
+                    <input name="company_name" type="text" style="display: none;" placeholder="Company Name"/>
                     <br />
                     <input name="account_number" type="text" style="display: none;" placeholder="Bank Account Number"/>
                     <br />

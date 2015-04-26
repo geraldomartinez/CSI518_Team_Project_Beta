@@ -31,7 +31,7 @@ public class SignupServlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("signup.jsp");
 
         String registerMessage = "";
-        String email, password, passwordConfirm, firstName, lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum;
+        String email, password, passwordConfirm, firstName, lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum,companyName;
         int newUserID;
         boolean insertNewUser = true;
         // String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -47,6 +47,7 @@ public class SignupServlet extends HttpServlet {
         city = request.getParameter("city");
         state = request.getParameter("state");
         zip = request.getParameter("zip");
+        companyName = request.getParameter("company_name");
         accountNum = request.getParameter("account_number");
         routingNum = request.getParameter("routing_number");
         String checkEmailBtn = request.getParameter("check_email");
@@ -88,6 +89,9 @@ public class SignupServlet extends HttpServlet {
         }
         if (zip == null) {
             zip = "";
+        }
+        if (companyName == null) {
+        	companyName = "";
         }
         
         
@@ -208,7 +212,7 @@ public class SignupServlet extends HttpServlet {
                     registerMessage = "New User Insert Failed.";
                 } else if (!AuthDAO.enterUserName(newUserID,firstName,middleName,lastName,phone,address,city,state,zip)) {
                     registerMessage = "Create Account Failed, Please Try Again.";
-                } else if (accountType == "S" && !AuthDAO.enterNewSellerDetails(newUserID, accountNum, routingNum)) {
+                } else if (accountType == "S" && !AuthDAO.enterNewSellerDetails(newUserID, accountNum, routingNum, companyName)) {
                     registerMessage = "Create Account Failed, Please Try Again.";
                 } else {
                     rd = request.getRequestDispatcher("index.jsp");
