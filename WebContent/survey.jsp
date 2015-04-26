@@ -19,7 +19,7 @@ int productID;
 					<td>What are your favorite color(s)?</td>
 					</tr>
 					<tr>
-					<td><select id=productID name=productID>
+					<td><select id=productID name=productID value="color">
 							<%
 								
 								String color = "";
@@ -46,12 +46,13 @@ int productID;
 					</select>
 				</tr>
 				</table>
+				
 	<table>
 				<tr>
 					<td>What type of electronic gadgets are you looking for?</td>
 					</tr>
 					<tr>
-					<td><select id=categoryID name=categoryID>
+					<td><select id=categoryID name=categoryID value="category">
 							<%
 								
 								int categoryID;
@@ -82,7 +83,7 @@ int productID;
 <p>What price range would you like it to be in?</p>
 <p>		
 <select name="price">
-<option value="" selected>- Select -</option> 
+<option value="price" selected>- Select -</option> 
 <option  value="1">000.00 to 100.00</option>
 <option  value="2">100.00 to 200.00</option>
 <option  value="3">200.00 to 300.00</option>
@@ -108,7 +109,7 @@ int productID;
 					<td>What manufacturers do you prefer?</td>
 					</tr>
 					<tr>
-					<td><select id=sellerID name=sellerID>
+					<td><select id=sellerID name=sellerID value="manufacturer">
 							<%
 								
 								int sellerID=0;
@@ -125,7 +126,7 @@ int productID;
 										sellerID = rs.getInt("sellerID");
 										companyName = rs.getString("companyName");
 							%>
-							<option value="<%=sellerID%>" selected><%=sellerID%></option>
+							<option value="<%=sellerID%>" selected><%=companyName%></option>
 							<%
 								}
 									conn.close();
