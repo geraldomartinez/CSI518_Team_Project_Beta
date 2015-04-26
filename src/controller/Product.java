@@ -21,7 +21,17 @@ public class Product {
 	private float rating;
 	private int numInStock;
 	private int categoryID;
-	
+	private String picture;
+	public String getPicture() {
+		return picture;
+	}
+
+
+	public void setPicture(String picture) {
+		this.picture = picture;
+	}
+
+
 	public Product(){
 		productID = -1;
 		sellerID = -1;
@@ -43,7 +53,7 @@ public class Product {
 			String specs, 
 			float unitPrice, 
 			int quantity, 
-			int categoryID){
+			int categoryID,String picture){
 		this.productID = productID;
 		this.sellerID = sellerID;
 		this.name = productName;
@@ -54,6 +64,7 @@ public class Product {
 		//rating = 0.0f;
 		this.numInStock = quantity;
 		this.categoryID=categoryID;
+		this.picture=picture;
 	}	
 	
 	public int GetProductID(){

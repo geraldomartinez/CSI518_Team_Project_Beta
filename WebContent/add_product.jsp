@@ -1,12 +1,12 @@
 
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1" import='java.sql.*'
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8" import='java.sql.*'
 	import='controller.AuthDAO'%>
 
 
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Add Product - Great Danes Electronics</title>
 
 <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
@@ -57,8 +57,7 @@
 		<div id="add_product_message" class="message"><%=addProductMessage%></div>
 		<br />
 		<h1 id="header">Add A Product</h1>
-		<form id="add_product" name="add_product" action="ProductServlet"
-			method="POST" enctype="multipart/form-data">
+		<form id="add_product" name="add_product" action="ProductServlet" method="POST">
 			<table>
 				<tr>
 					<td>Product Category:</td>
@@ -112,7 +111,7 @@
 				</tr>
 				<tr>
 				<td>Product Image</td>
-				<td><input type="file" name="product_image"></td>
+				<td><input type="file" id="productImage" name="productImage"></td>
 				<tr>
 					<td></td>
 					<td><input type="submit" value="Submit" name="insertbt"></td>
