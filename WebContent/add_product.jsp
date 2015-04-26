@@ -58,7 +58,7 @@
 		<br />
 		<h1 id="header">Add A Product</h1>
 		<form id="add_product" name="add_product" action="ProductServlet"
-			method="POST">
+			method="POST" enctype="multipart/form-data">
 			<table>
 				<tr>
 					<td>Product Category:</td>

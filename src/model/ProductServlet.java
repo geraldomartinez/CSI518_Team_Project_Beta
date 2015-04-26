@@ -48,7 +48,7 @@ public class ProductServlet extends HttpServlet {
 
     	RequestDispatcher rd = request.getRequestDispatcher("add_product.jsp");
         
-		int productID;
+		int productID = -1;
 		 String sellerID, name, description, specs, price, numInStock, insertbt;
 		String categoryID;
 		String inputMessage = "";
@@ -64,6 +64,8 @@ public class ProductServlet extends HttpServlet {
 		String fileName=filePart.getSubmittedFileName();
 		InputStream fileInStream=filePart.getInputStream();
 		byte[] fileByte = new byte[1];
+		int fileSize = 0;
+		byte[] fileBytes;
 		String extension="";
 		FileOutputStream outFile;
 		
@@ -147,12 +149,6 @@ public class ProductServlet extends HttpServlet {
             	
            
             if (insertproduct) {
-                productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock);
-                if (productID == -1) {
-                	inputMessage = "Product insert failed.";
-                }else{
-                	inputMessage = "Product inserted successfully";
-                }
                 
                 int i=fileName.lastIndexOf('.');
         		if(i>0)
@@ -160,12 +156,30 @@ public class ProductServlet extends HttpServlet {
         			extension=fileName.substring(i+1);
         		}
         		
-        		outFile = new FileOutputStream((productID)+"."+extension);
+        		outFile = new FileOutputStream(Integer.toString(productID)+"."+extension);
         		while (fileInStream.read(fileByte) == 1){
-        			outFile.write(fileByte[0]);
+        			fileSize++;
         		}
+        		System.out.println("filesize: "+Integer.toString(fileSize));
+        		fileInStream.reset();
+        		fileBytes = new byte[fileSize];
+        		for (i=0;  i < fileSize; i++){
+        			fileInStream.read(fileByte);
+        			fileBytes[i] = fileByte[0];
+        		}
+        		System.out.println("size of fileBytes: "+Integer.toString(fileBytes.length));
+        		System.out.println("fileBytes: ");
+        		System.out.println(fileBytes.toString());
+        		
         		fileInStream.close();
         		outFile.close();
+        		
+                productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock, fileBytes);
+                if (productID == -1) {
+                	inputMessage = "Product insert failed.";
+                }else{
+                	inputMessage = "Product inserted successfully";
+                }
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed
             inputMessage += "An enexpected error has occured"; //There was an error in http request

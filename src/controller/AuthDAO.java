@@ -332,7 +332,7 @@ public class AuthDAO {
         return true;
     }
 	
-    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock) {
+    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, byte[] picture) {
 	  	 
         Statement stmt;
         String sql;
