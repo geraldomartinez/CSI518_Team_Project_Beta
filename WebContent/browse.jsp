@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -103,13 +103,14 @@
 				String pSpecs = "";
 				float pPrice = 0;
 				int productID = 0;
+				String picture="";
 
-				try {
+				try {			
 					String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='"
 							+ categoryID + "' order by productName;";
 					//conn = AuthDAO.createConn();
 					HttpSession ss = request.getSession();
-
+					
 					PreparedStatement pst = conn.prepareStatement(sql);
 					rs = pst.executeQuery();
 					while (rs.next()) {
@@ -118,16 +119,26 @@
 						pPrice = rs.getFloat("unitPrice");
 						pSpecs = rs.getString("specs");
 						productID = rs.getInt("productID");
-						
+					    picture=rs.getString("picture");
+					     
+					     //String x=new String(picture);
+						/* InputStream input = rs.getBinaryStream("picture");
+						OutputStream output = response.getOutputStream();
+						response.setContentType("image/gif");
+						InputStream photoStream = rs.getBytes("picture");  */
 						
 		%>
 		
 		<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
+		<br>
+		<br>
+		<div ><img src="img/<%=picture%>" height=200 width=200></div>
 		<ul>
 			<li>Description: <%=pDescription%></li>
 			<li>Price: <%=pPrice%></li>
 			<li>Specs: <%=pSpecs%></li>
 		</ul>
+		
 		<%
 			}
 					conn.close();

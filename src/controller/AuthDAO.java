@@ -5,6 +5,9 @@
  */
 package controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -332,7 +335,7 @@ public class AuthDAO {
         return true;
     }
 	
-    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, byte[] picture) {
+    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock,String picture) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;
         String sql;
@@ -344,7 +347,10 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`) VALUES ( '" + sellerID +"','" +categoryID+"','"+ name + "','"+price+"','"+numInStock+"','"+description+"','"+specs+"');";
+          
+            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`,`picture`) "
+            		+ "VALUES ('" + sellerID + "','" + categoryID + "','" + name + "','"+ price + "','"+numInStock+"','"+description+"','"+specs+"','"+picture+"');";
+            
             System.out.println(sql);
             stmt.executeUpdate(sql);
             sql = "SELECT max(`productID`) FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
@@ -354,6 +360,17 @@ public class AuthDAO {
                 //Retrieve by column name
                 productID = (rs.getInt("max(`productID`)"));
             }
+            
+           /* System.out.println("SELECT `picture` FROM `Products` where `productID`='"+productID+"'");
+            
+            ResultSet rs1 = stmt.executeQuery("SELECT `picture` FROM `Products` where `productID`='"+productID+"'");
+            while (rs1.next()) {
+              byte[] st = (byte[]) rs1.getObject(1);
+              ByteArrayInputStream baip = new ByteArrayInputStream(st);
+              ObjectInputStream ois = new ObjectInputStream(baip);
+             Product product = (Product) ois.readObject();
+             System.out.println(product);
+            }*/
         } catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -378,6 +395,7 @@ public class AuthDAO {
         int quantity= 0;
         String description=null;
         String specs = null;
+        String picture=null;
  
         Connection conn = createConn(); //Create DB connection
  
@@ -401,6 +419,7 @@ public class AuthDAO {
                 quantity=prd_rs.getInt("quantity");
                 description=prd_rs.getString("description");
                 specs=prd_rs.getString("specs");
+                picture=prd_rs.getString("picture");
             }       
             
            
@@ -421,7 +440,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
         return prd;
     }
 

@@ -38,12 +38,16 @@ public class ProductServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+		
+		
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
     	RequestDispatcher rd = request.getRequestDispatcher("add_product.jsp");
@@ -60,14 +64,16 @@ public class ProductServlet extends HttpServlet {
 		categoryID=request.getParameter("categoryID");
 		numInStock=request.getParameter("numinstock");
 		insertbt=request.getParameter("insertbt");
-		Part filePart=request.getPart("product_image");
+		String image=request.getParameter("productImage");
+		System.out.println("Aditi"+image);
+		/*Part filePart=request.getPart("product_image");
 		String fileName=filePart.getSubmittedFileName();
 		InputStream fileInStream=filePart.getInputStream();
 		byte[] fileByte = new byte[1];
 		int fileSize = 0;
 		byte[] fileBytes;
 		String extension="";
-		FileOutputStream outFile;
+		FileOutputStream outFile;*/
 		
 		sellerID="4";
 		System.out.println(categoryID);
@@ -150,7 +156,7 @@ public class ProductServlet extends HttpServlet {
            
             if (insertproduct) {
                 
-                int i=fileName.lastIndexOf('.');
+             /*   int i=fileName.lastIndexOf('.');
         		if(i>0)
         		{
         			extension=fileName.substring(i+1);
@@ -172,9 +178,14 @@ public class ProductServlet extends HttpServlet {
         		System.out.println(fileBytes.toString());
         		
         		fileInStream.close();
-        		outFile.close();
+        		outFile.close();*/
         		
-                productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock, fileBytes);
+                try {
+					productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock, image);
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 if (productID == -1) {
                 	inputMessage = "Product insert failed.";
                 }else{

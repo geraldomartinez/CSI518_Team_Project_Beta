@@ -35,6 +35,9 @@
 		      	String pSpecs = new_prd.GetSpecs();
 		      	float pPrice = new_prd.GetPrice();
 		      	int pQuantity = new_prd.GetNumInStock();
+		      	String picture=new_prd.getPicture();
+		      	System.out.println(picture+"i am ");
+		      	
         %>
         
         <div id="page_content_wrapper">
@@ -47,10 +50,13 @@
         	<div id="product_mkessage" class="message"><%=productMessage%></div>
         	<h3>Product Page</h3> <br/>
         	Product: <%=pName%>  <br/>
+        	<div ><img src="img/<%=picture%>" height=200 width=200></div>
         	Description: <%=pDescription%>  <br/>
         	Specs: <%=pSpecs%>  <br/>
         	Quantity Available: <%=pQuantity%>  <br/>
         	Price: <%=pPrice%>  <br/>
+        	
+        	
         	<br />
         	
         	<%
