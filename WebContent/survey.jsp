@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1" import='java.sql.*'
+	import='controller.AuthDAO'%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,27 +9,78 @@
 <title>Survey</title>
 </head>
 <body>
+<%Connection conn = null;
+ResultSet rs = null;
+int productID;
+%>
 <form id="Survey" action="SurveyServlet" method="POST">
-<p>What are your favorite color(s)?</p>
-<p>
-<input type="checkbox" name="color" value="1"/>Red<br/>
-<input type="checkbox" name="color" value="2"/>Black<br/>
-<input type="checkbox" name="color" value="3"/>Blue<br/>
-<input type="checkbox" name="color" value="4"/>Green<br/>
-<input type="checkbox" name="color" value="5"/>White<br/>
-<input type="checkbox" name="color" value="6"/>Gold<br/>
-<input type="checkbox" name="color" value="7"/>Silver<br/>
-</p>
-<p>What type of electronic gadgets are you looking for?</p>
-<p>
-<input type="checkbox" name="category" value="1"/>Cell Phones<br/>
-<input type="checkbox" name="category" value="2"/>Laptops<br/>
-<input type="checkbox" name="category" value="4"/>Tablets<br/>
-<input type="checkbox" name="category" value="5"/>Televisions<br/>
-<input type="checkbox" name="category" value="6"/>Video Games<br/>
-</p>
+<table>
+				<tr>
+					<td>What are your favorite color(s)?</td>
+					</tr>
+					<tr>
+					<td><select id=productID name=productID>
+							<%
+								
+								String color = "";
+
+								try {
+									conn = AuthDAO.createConn();
+									HttpSession ss = request.getSession();
+
+									PreparedStatement pst = conn
+											.prepareStatement("SELECT * FROM `Products`");
+									rs = pst.executeQuery();
+									while (rs.next()) {
+										productID = rs.getInt("productID");
+										color = rs.getString("color");
+							%>
+							<option value="<%=productID%>" selected><%=color%></option>
+							<%
+								}
+									conn.close();
+								} catch (Exception e) {
+									out.print(e);
+								}
+							%>
+					</select>
+				</tr>
+				</table>
+	<table>
+				<tr>
+					<td>What type of electronic gadgets are you looking for?</td>
+					</tr>
+					<tr>
+					<td><select id=categoryID name=categoryID>
+							<%
+								
+								int categoryID;
+								String categoryName = "";
+
+								try {
+									conn = AuthDAO.createConn();
+									HttpSession ss = request.getSession();
+
+									PreparedStatement pst = conn
+											.prepareStatement("SELECT * FROM `ProductCategories`");
+									rs = pst.executeQuery();
+									while (rs.next()) {
+										categoryID = rs.getInt("categoryID");
+										categoryName = rs.getString("categoryName");
+							%>
+							<option value="<%=categoryID%>" selected><%=categoryName%></option>
+							<%
+								}
+									conn.close();
+								} catch (Exception e) {
+									out.print(e);
+								}
+							%>
+					</select>
+				</tr>
+				</table>
 <p>What price range would you like it to be in?</p>
-<p>
+<p>		
 <select name="price">
 <option value="" selected>- Select -</option> 
 <option  value="1">000.00 to 100.00</option>
@@ -40,6 +93,8 @@
 <option  value="8">700.00 to 800.00</option>
 <option  value="9">800.00 to 900.00</option>
 <option  value="10">900.00 to 1000.00</option>
+<option  value="10">900.00 to 1000.00</option>
+<option  value="11">above 1000.00</option>
 </select>
 </p>
 <p>Purpose of use?</p>
@@ -48,12 +103,40 @@
 <input type="checkbox" name="use" value="2"/>Commercial<br/>
 <input type="checkbox" name="use" value="3"/>Personal<br/>
 </p>
-<p>What manufacturers do you prefer?</p>
-<p>
-<input type="checkbox" name="manufacturer" value="1"/>Microsoft<br/>
-<input type="checkbox" name="manufacturer" value="2"/>Apple<br/>
-<input type="checkbox" name="manufacturer" value="3"/>Dell<br/>
-</p>
+<table>
+				<tr>
+					<td>What manufacturers do you prefer?</td>
+					</tr>
+					<tr>
+					<td><select id=sellerID name=sellerID>
+							<%
+								
+								int sellerID=0;
+								String companyName = "";
+
+								try {
+									conn = AuthDAO.createConn();
+									HttpSession ss = request.getSession();
+
+									PreparedStatement pst = conn
+											.prepareStatement("SELECT * FROM `SellerDetails`");
+									rs = pst.executeQuery();
+									while (rs.next()) {
+										sellerID = rs.getInt("sellerID");
+										companyName = rs.getString("companyName");
+							%>
+							<option value="<%=sellerID%>" selected><%=sellerID%></option>
+							<%
+								}
+									conn.close();
+								} catch (Exception e) {
+									out.print(e);
+								}
+							%>
+					</select>
+				</tr>
+				</table>
+
 <button type="submit" name="submit" value="submit">Submit Survey</button>
 </form>
 
