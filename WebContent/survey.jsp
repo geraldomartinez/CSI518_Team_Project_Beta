@@ -9,17 +9,31 @@
 <title>Survey</title>
 </head>
 <body>
+	<%@include file="top_menu.jsp"%>
+	<br />
+	<div id="page_content_wrapper">
+		
 <%Connection conn = null;
 ResultSet rs = null;
 int productID;
+
+String SurveyMessage = (String) request
+		.getAttribute("SurveyMessage"); //Obtain the message from the session (if there is one)
+if (SurveyMessage == null) { //Prevent null pointer exception
+	SurveyMessage = "";
+}
+
 %>
-<form id="Survey" action="SurveyServlet" method="POST">
+<div id="survey_message" class="message"><%=SurveyMessage%></div>
+		<br />
+		<h1 id="header">Survey</h1>
+<form id="survey" name="survey" action="SurveyServlet" method="POST">
 <table>
 				<tr>
 					<td>What are your favorite color(s)?</td>
 					</tr>
 					<tr>
-					<td><select id=productID name=productID value="color">
+					<td><select id=color name=color>
 							<%
 								
 								String color = "";
@@ -45,13 +59,12 @@ int productID;
 					</select>
 				</tr>
 				</table>
-				
-	<table>
+				<table>
 				<tr>
 					<td>What type of electronic gadgets are you looking for?</td>
 					</tr>
 					<tr>
-					<td><select id=categoryID name=categoryID value="category">
+					<td><select id=categoryID name=categoryID >
 							<%
 								
 								int categoryID;
@@ -82,7 +95,6 @@ int productID;
 <p>What price range would you like it to be in?</p>
 <p>		
 <select name="price">
-<option value="price" selected>- Select -</option> 
 <option  value="1">000.00 to 100.00</option>
 <option  value="2">100.00 to 200.00</option>
 <option  value="3">200.00 to 300.00</option>
@@ -108,7 +120,7 @@ int productID;
 					<td>What manufacturers do you prefer?</td>
 					</tr>
 					<tr>
-					<td><select id=sellerID name=sellerID value="manufacturer">
+					<td><select id=sellerID name=sellerID>
 							<%
 								
 								int sellerID=0;
@@ -135,10 +147,9 @@ int productID;
 							%>
 					</select>
 				</tr>
-				</table>
-
-<button type="submit" name="submit" value="submit">Submit Survey</button>
+				</table>	
+<button type="submit" name="SubmitSurveyBtn" value="submit">Submit Survey</button>
 </form>
-
+</div>
 </body>
 </html>

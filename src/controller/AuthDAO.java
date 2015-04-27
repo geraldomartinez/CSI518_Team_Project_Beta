@@ -527,71 +527,158 @@ public class AuthDAO {
         }
         return false;
     }
-    
-    public static void getProductByColor(String color) {
+   
+    public static Product getProductByColor(String color) {
      	 
-        Statement stmt;
-        ResultSet rs;
-        String sql;
-        
+    	 Statement stmt;
+         ResultSet prd_rs;
+         String prd_sql;
+         Product prd;
+         int productID=0;
+         int sellerID = 0;
+         int categoryID = 0;
+         String productName = null;
+         float unitPrice = (float) 0.00;
+         //float rating = (float) 0.00;
+         //float shippingCost = (float) 0.00;
+         int quantity= 0;
+         String description=null;
+         String specs = null;
+         String picture=null;
+         Connection conn = createConn(); //Create DB connection
+         
+         //Execute query to check for matching product
+         System.out.println("Creating statement...");
+         try {
+             stmt = conn.createStatement();
+             prd_sql = "SELECT * FROM `Products` WHERE `Products`.`color`='" + color + "';";
+             System.out.println(prd_sql);
+             prd_rs = stmt.executeQuery(prd_sql);
+  
+             //Extract data from result set
+             while (prd_rs.next()) {
+                 //Retrieve by column name
+            	 productID=prd_rs.getInt("productID");
+                 sellerID=prd_rs.getInt("sellerID");
+                 categoryID=prd_rs.getInt("categoryID");
+                 productName = prd_rs.getString("productName");
+                 unitPrice = prd_rs.getFloat("unitPrice");
+                
+                 //shippingCost = prd_rs.getString("lastName");
+                 quantity=prd_rs.getInt("quantity");
+                 description=prd_rs.getString("description");
+                 specs=prd_rs.getString("specs");
+                 picture=prd_rs.getString("picture");
+             }       
+             
+            
+             
+         } catch (Exception ex) { //An error occurred
+             //Log the exception
+         	System.out.println("Failed to get Product by ID");
+             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+             return new Product();
+         }
+  
+         //Clean-up
+         try {
+             prd_rs.close(); //Close result set
+             stmt.close(); //Close statement object
+         } catch (Exception ex) { //An error occurred
+             //Log the exception
+             //If it fails to close, just leave it.
+         }
+  
+         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+         return prd;
+     }
+    	
+    public static Product getProductByCategory(int categoryID) {
+    	
+    	Statement stmt;
+        ResultSet prd_rs;
+        String prd_sql;
+        Product prd;
         int productID=0;
- 
+        int sellerID = 0;
+      
+        String productName = null;
+        float unitPrice = (float) 0.00;
+        //float rating = (float) 0.00;
+        //float shippingCost = (float) 0.00;
+        int quantity= 0;
+        String description=null;
+        String specs = null;
+        String picture=null;
         Connection conn = createConn(); //Create DB connection
- 
+        
         //Execute query to check for matching product
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "SELECT  productID FROM `Products` WHERE `Products`.`color`='" + color + "';";
-            System.out.println(sql);
-            rs = stmt.executeQuery(sql);
-            productID = rs.getInt("productID");
-            AuthDAO.getProductById(productID);
+            prd_sql = "SELECT  productID FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "';";
+            System.out.println(prd_sql);
+            prd_rs = stmt.executeQuery(prd_sql);
+ 
+            //Extract data from result set
+            while (prd_rs.next()) {
+                //Retrieve by column name
+           	 productID=prd_rs.getInt("productID");
+                sellerID=prd_rs.getInt("sellerID");
+                productName = prd_rs.getString("productName");
+                unitPrice = prd_rs.getFloat("unitPrice");
+                
+                //shippingCost = prd_rs.getString("lastName");
+                quantity=prd_rs.getInt("quantity");
+                description=prd_rs.getString("description");
+                specs=prd_rs.getString("specs");
+                picture=prd_rs.getString("picture");
+            }       
+            
            
-        }
             
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get Product by ID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return new Product();
         }
-    public static void getProductByCategory(int categoryVal) {
-    	 
-        Statement stmt;
-        ResultSet rs;
-        String sql;
-        
-        int productID=0;
  
-        Connection conn = createConn(); //Create DB connection
- 
-        //Execute query to check for matching product
-        System.out.println("Creating statement...");
+        //Clean-up
         try {
-            stmt = conn.createStatement();
-            sql = "SELECT  productID FROM `Products` WHERE `Products`.`categoryID`='" + categoryVal + "';";
-            System.out.println(sql);
-            rs = stmt.executeQuery(sql);
-            productID = rs.getInt("productID");
-            AuthDAO.getProductById(productID);
-           
+            prd_rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
         }
-            
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-    public static void getProductByPrice(String priceRange) {
+ 
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+        return prd;
+    }
+   
+    public static Product getProductByPrice(String priceRange) {
    	 
         Statement stmt;
         ResultSet rs;
         String sql;
-        double val1=0,val2=0,val=0;
-        
+        double val1=0,val2=0;
+       
+        ResultSet prd_rs;
+        String prd_sql;
+        Product prd;
         int productID=0;
+        int sellerID = 0;
+        int categoryID=0;
+        String productName = null;
+        float unitPrice = (float) 0.00;
+        //float rating = (float) 0.00;
+        //float shippingCost = (float) 0.00;
+        int quantity= 0;
+        String description=null;
+        String specs = null;
+        String picture=null;
+       
         switch(priceRange)//To select price range
         {
         case "1":
@@ -639,61 +726,123 @@ public class AuthDAO {
         	break;
         	
         }
+Connection conn = createConn(); //Create DB connection
         
- 
-        Connection conn = createConn(); //Create DB connection
- 
         //Execute query to check for matching product
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "SELECT productID FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
-            System.out.println(sql);
-            rs = stmt.executeQuery(sql);
-            productID = rs.getInt("productID");
-            AuthDAO.getProductById(productID);
+            prd_sql = "SELECT productID FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
+            System.out.println(prd_sql);
+            prd_rs = stmt.executeQuery(prd_sql);
+ 
+            //Extract data from result set
+            while (prd_rs.next()) {
+                //Retrieve by column name
+           	 productID=prd_rs.getInt("productID");
+                sellerID=prd_rs.getInt("sellerID");
+                productName = prd_rs.getString("productName");
+                unitPrice = prd_rs.getFloat("unitPrice");
+                categoryID=prd_rs.getInt("categoryID");
+                //shippingCost = prd_rs.getString("lastName");
+                quantity=prd_rs.getInt("quantity");
+                description=prd_rs.getString("description");
+                specs=prd_rs.getString("specs");
+                picture=prd_rs.getString("picture");
+            }       
+            
            
-        }
             
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get Product by ID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return new Product();
         }
-    public static void getProductByManufacturer(String manufacturer) {
-    	 
-        Statement stmt;
-        ResultSet rs;
-        String sql;
-        
-        int productID=0;
  
-        Connection conn = createConn(); //Create DB connection
- 
-        //Execute query to check for matching product
-        System.out.println("Creating statement...");
+        //Clean-up
         try {
-            stmt = conn.createStatement();
-            sql = "SELECT  productID FROM `Products` WHERE `Products`.`manufacturer`='" + manufacturer + "';";
-            System.out.println(sql);
-            rs = stmt.executeQuery(sql);
-            productID = rs.getInt("productID");
-            AuthDAO.getProductById(productID);
-           
+            prd_rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
         }
+ 
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+        return prd;
+    }
+
+    public static Product getProductByManufacturer(int sellerID) {
+   	 Statement stmt;
+     ResultSet prd_rs;
+     String prd_sql;
+     Product prd;
+     int productID=0;
+    
+     int categoryID = 0;
+     String productName = null;
+     float unitPrice = (float) 0.00;
+     //float rating = (float) 0.00;
+     //float shippingCost = (float) 0.00;
+     int quantity= 0;
+     String description=null;
+     String specs = null;
+     String picture=null;
+     Connection conn = createConn(); //Create DB connection
+     
+     //Execute query to check for matching product
+     System.out.println("Creating statement...");
+     try {
+         stmt = conn.createStatement();
+         prd_sql = "SELECT  productID FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "';";
+         System.out.println(prd_sql);
+         prd_rs = stmt.executeQuery(prd_sql);
+
+         //Extract data from result set
+         while (prd_rs.next()) {
+             //Retrieve by column name
+        	 productID=prd_rs.getInt("productID");
+        
+             categoryID=prd_rs.getInt("categoryID");
+             productName = prd_rs.getString("productName");
+             unitPrice = prd_rs.getFloat("unitPrice");
             
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
-    public static void getProductByPurpose(int  use) {
+             //shippingCost = prd_rs.getString("lastName");
+             quantity=prd_rs.getInt("quantity");
+             description=prd_rs.getString("description");
+             specs=prd_rs.getString("specs");
+             picture=prd_rs.getString("picture");
+         }       
+         
+        
+         
+     } catch (Exception ex) { //An error occurred
+         //Log the exception
+     	System.out.println("Failed to get Product by ID");
+         Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+         return new Product();
+     }
+
+     //Clean-up
+     try {
+         prd_rs.close(); //Close result set
+         stmt.close(); //Close statement object
+     } catch (Exception ex) { //An error occurred
+         //Log the exception
+         //If it fails to close, just leave it.
+     }
+
+     prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+     return prd;
+    }
+     
+    public static Product getProductByPurpose(int  use) {
    	 
         Statement stmt;
         ResultSet rs;
         String sql;
+        Product prd = null;
         
         int productID=0;
         
@@ -710,7 +859,7 @@ public class AuthDAO {
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
-                AuthDAO.getProductById(productID);
+                prd=AuthDAO.getProductById(productID);
                
             }
             catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -729,11 +878,11 @@ public class AuthDAO {
             try {
                 stmt = conn.createStatement();
                 //query to display Cellphones, Laptops and Tablets
-                sql = "SELECT productID FROM  `Products` WHERE  `Products`.`categoryID` =1OR  `Products`.`categoryID` =2OR  `Products`.`categoryID` =4";
+                sql = "SELECT productID FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4";
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
-                AuthDAO.getProductById(productID);
+                prd=AuthDAO.getProductById(productID);
                
             }
             catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -754,7 +903,7 @@ public class AuthDAO {
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
-                AuthDAO.getProductById(productID);
+               prd= AuthDAO.getProductById(productID);
                
             }
             catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -762,6 +911,7 @@ public class AuthDAO {
                 Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return prd;
         }
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection

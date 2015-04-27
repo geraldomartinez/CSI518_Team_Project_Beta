@@ -46,33 +46,36 @@ public class SurveyServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 	RequestDispatcher rd = request.getRequestDispatcher("survey.jsp");
         
-		int productID;
-		 String color,price="", category="", manufacturer;
-		 String SubmitSurveyBtn = request.getParameter("submit");
-	
+		int  productID;
+		 String color,priceRange;
+		int categoryID,sellerID;
+		 String SubmitSurveyBtn = request.getParameter("SubmitSurveyBtn");
+
 		color=request.getParameter("color");
-		String priceRange = request.getParameter( "price" );
-		int categoryVal =Integer.parseInt( request.getParameter( "category" ) );
+		priceRange = request.getParameter( "price" );
+		categoryID= Integer.parseInt(request.getParameter( "categoryID" ) );
 		int use= Integer.parseInt(request.getParameter("use"));
-		manufacturer=request.getParameter("manufacturer");
+		 sellerID=Integer.parseInt(request.getParameter("sellerID"));
+		
+		System.out.println(priceRange);
+		System.out.println(categoryID);
+		System.out.println(sellerID);
+		System.out.println(color);
+		System.out.println(use);
+		
 		
 		if (SubmitSurveyBtn.length() != 0){
-		if(color== null)
-			color="";
-		else AuthDAO.getProductByColor(color);
-		if(category== null)
-			category="";
-		else AuthDAO.getProductByCategory(categoryVal);
-		if(price == null)
-			price="";
-		else AuthDAO.getProductByPrice(priceRange);
-		if(use==0)
-			use=0;
-		else AuthDAO.getProductByPurpose(use);
+	if(color==null)
+		color="";
+	else  AuthDAO.getProductByColor(color);
+	AuthDAO.getProductByCategory(categoryID);
 		
-		if(manufacturer== null)
-			manufacturer="";
-		else AuthDAO.getProductByManufacturer(manufacturer);
+	 AuthDAO.getProductByPrice(priceRange);
+		 AuthDAO.getProductByPurpose(use);
+		 AuthDAO.getProductByManufacturer(sellerID);
+	 request.setAttribute("SurveyMessage", "Thank you for taking our survey!");
+     rd.forward(request, response);
+
 			
 		}
 	}
