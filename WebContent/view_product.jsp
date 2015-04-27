@@ -11,6 +11,8 @@
 	<body>
 		<%@ page import="controller.Product" %>
 		<%@ page import="controller.AuthDAO" %>
+		<%@ page
+		import="java.util.*, java.sql.*"%>
         <%@include file="top_menu.jsp"%>
         <br />
         
@@ -36,7 +38,7 @@
 		      	float pPrice = new_prd.GetPrice();
 		      	int pQuantity = new_prd.GetNumInStock();
 		      	String picture=new_prd.getPicture();
-		      	System.out.println(picture+"i am ");
+		      	System.out.println(picture+" i am ");
 		      	
         %>
         
@@ -82,6 +84,68 @@
 			<%
         	}
 			%>
+			
+			<h3>Customer Reviews</h3>
+			__________________________________________________________________________
+			<br />
+			<table>
+			<tr>
+			<%
+					Connection conn = null;
+					ResultSet rs = null;
+					int categoryID;
+					//String categoryName = "";
+					String datetime = null;
+					String review = null;
+					int rating = 0;
+					int reviewerID = 0;
+					String reviewerFirstName = null;
+					String reviewerLastName = null;
+					
+					try {
+						conn = AuthDAO.createConn();
+						HttpSession ss = request.getSession();
+
+						PreparedStatement pst = conn
+								.prepareStatement("SELECT * FROM `ProductReviews` where productID = '" + productID + "' ORDER BY time ASC");
+						rs = pst.executeQuery();
+						while (rs.next()) {
+							//categoryID = rs.getInt("categoryID");
+							//categoryName = rs.getString("categoryName");
+							datetime = rs.getDate("time").toString();
+							//list.put(categoryID, categoryName);
+							rating = rs.getInt("ranking");
+							review = rs.getString("review");
+							reviewerID = rs.getInt("userID");
+						}
+						
+						pst=conn.prepareStatement("SELECT * FROM UserProfile where userID = '" + reviewerID + "'");
+						rs = pst.executeQuery();
+						while(rs.next()){
+							reviewerFirstName = rs.getString("firstName");
+							reviewerLastName = rs.getString("lastName");
+				%>
+				<td><%=reviewerFirstName + " " + reviewerLastName %></td>
+				<td>
+					<%=datetime%>
+				</td>
+					<%=rating %>
+				<td>
+				</td>
+				<td>
+				 	<%=review %>
+				</td>
+				
+				<%
+					}
+						//conn.close();
+					} catch (Exception e) {
+						out.print(e);
+					}
+				%>
+					</tr>
+		</table>
+			
         </div>
         <%
         	}
