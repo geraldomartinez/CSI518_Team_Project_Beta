@@ -30,7 +30,7 @@ if (SurveyMessage == null) { //Prevent null pointer exception
 <form id="survey" name="survey" action="SurveyServlet" method="POST">
 <table>
 				<tr>
-					<td>What are your favorite color(s)?</td>
+					<td>What is your favorite color?</td>
 					</tr>
 					<tr>
 					<td><select id=color name=color>
@@ -66,7 +66,7 @@ if (SurveyMessage == null) { //Prevent null pointer exception
 					<tr>
 					<td><select id=categoryID name=categoryID >
 							<%
-								
+							
 								int categoryID;
 								String categoryName = "";
 

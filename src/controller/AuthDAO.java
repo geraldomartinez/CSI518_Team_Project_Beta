@@ -529,9 +529,10 @@ public class AuthDAO {
     }
    
     public static Product getProductByColor(String color) {
-     	 
-    	 Statement stmt;
-         ResultSet prd_rs;
+     	 int questionID=1;
+     	 String sql;
+    	 Statement stmt = null;
+         ResultSet prd_rs = null;
          String prd_sql;
          Product prd;
          int productID=0;
@@ -570,7 +571,11 @@ public class AuthDAO {
                  specs=prd_rs.getString("specs");
                  picture=prd_rs.getString("picture");
              }       
+             sql = "INSERT INTO `SurveyResponses` (`questionID`) "
+             		+ "VALUES ('" + questionID + "');";
              
+             System.out.println(sql);
+             stmt.executeUpdate(sql);
             
              
          } catch (Exception ex) { //An error occurred
@@ -591,6 +596,8 @@ public class AuthDAO {
   
          prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
          return prd;
+        
+         
      }
     	
     public static Product getProductByCategory(int categoryID) {
@@ -624,7 +631,7 @@ public class AuthDAO {
             while (prd_rs.next()) {
                 //Retrieve by column name
            	 productID=prd_rs.getInt("productID");
-                sellerID=prd_rs.getInt("sellerID");
+                //sellerID=prd_rs.getInt("sellerID");
                 productName = prd_rs.getString("productName");
                 unitPrice = prd_rs.getFloat("unitPrice");
                 
@@ -913,6 +920,41 @@ Connection conn = createConn(); //Create DB connection
         }
         return prd;
         }
+    public static int InsertSurveyResponses(int responseID, String responseText) throws IOException, ClassNotFoundException {
+	  	 
+        Statement stmt;
+        String sql;
+        ResultSet rs;
+        Connection conn = AuthDAO.createConn();
+        
+ 
+        //Execute query to insert seller details
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+          
+            sql = "INSERT INTO `SurveyResponses` (`responseID`,`responseText`) "
+            		+ "VALUES ('" + responseID + "','"  + responseText + "');";
+            
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+            //sql = "SELECT max(`responseID`) FROM `SurveyResponses` WHERE `questionID`='" + questionID + "' ";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) { //Get newly created user ID,
+                //Retrieve by column name
+                responseID = (rs.getInt("max(`responseID`)"));
+            }
+            
+          
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return responseID;
+    }   
+    
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
             if (conn != null) { //If the connection object is set

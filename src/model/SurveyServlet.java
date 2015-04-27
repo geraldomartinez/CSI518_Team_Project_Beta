@@ -46,33 +46,52 @@ public class SurveyServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 	RequestDispatcher rd = request.getRequestDispatcher("survey.jsp");
         
-		int  productID;
-		 String color,priceRange;
+		int  productID,responseID = 1, questionID ;
+		 String color,priceRange, SurveyMessage="";
 		int categoryID,sellerID;
 		 String SubmitSurveyBtn = request.getParameter("SubmitSurveyBtn");
-
+		 String responseText="";
 		color=request.getParameter("color");
 		priceRange = request.getParameter( "price" );
 		categoryID= Integer.parseInt(request.getParameter( "categoryID" ) );
 		int use= Integer.parseInt(request.getParameter("use"));
 		 sellerID=Integer.parseInt(request.getParameter("sellerID"));
-		
+		responseText="user entered color:"+color+",priceRange:"+priceRange+",purpose of use option is:"+use+",and manufacturer with sellerID:"+sellerID;
 		System.out.println(priceRange);
 		System.out.println(categoryID);
 		System.out.println(sellerID);
 		System.out.println(color);
 		System.out.println(use);
-		
+		System.out.println(responseText);
 		
 		if (SubmitSurveyBtn.length() != 0){
 	if(color==null)
 		color="";
 	else  AuthDAO.getProductByColor(color);
 	AuthDAO.getProductByCategory(categoryID);
-		
-	 AuthDAO.getProductByPrice(priceRange);
+		if(priceRange==null)
+			priceRange="";
+		else AuthDAO.getProductByPrice(priceRange);
 		 AuthDAO.getProductByPurpose(use);
 		 AuthDAO.getProductByManufacturer(sellerID);
+		 try {
+				productID = AuthDAO.InsertSurveyResponses(responseID,responseText);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+         if (responseID == -1) {
+         	SurveyMessage = "Product insert failed.";
+         }else{
+        	 SurveyMessage = "Product inserted successfully";
+         }
+     }
+  else  { //If the check username button was not pressed
+	 SurveyMessage += "An enexpected error has occured"; //There was an error in http request
+ }
+
+ 
+ 
 	 request.setAttribute("SurveyMessage", "Thank you for taking our survey!");
      rd.forward(request, response);
 
@@ -80,6 +99,6 @@ public class SurveyServlet extends HttpServlet {
 		}
 	}
 
-}
+
 
     
