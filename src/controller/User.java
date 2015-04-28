@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String email;
     private  String accountType;
     private String password; //User's password to the website
-    private int userID; //User's unique ID
+    private static int userID; //User's unique ID
 
     public User() {
         //If no information is given, just initialize everything to default [empty] values
@@ -69,7 +69,7 @@ public class User implements Serializable {
     }
 
     /*Return the user's unique ID*/
-    public int GetUserID() {
+    public static int GetUserID() {
         return userID; //Return the user's unique ID
     }
 

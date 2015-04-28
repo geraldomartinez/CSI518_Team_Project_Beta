@@ -529,7 +529,7 @@ public class AuthDAO {
     }
    
     public static Product getProductByColor(String color) {
-     	 int questionID=1;
+     	 
      	 String sql;
     	 Statement stmt = null;
          ResultSet prd_rs = null;
@@ -571,16 +571,12 @@ public class AuthDAO {
                  specs=prd_rs.getString("specs");
                  picture=prd_rs.getString("picture");
              }       
-             sql = "INSERT INTO `SurveyResponses` (`questionID`) "
-             		+ "VALUES ('" + questionID + "');";
-             
-             System.out.println(sql);
-             stmt.executeUpdate(sql);
+            
             
              
          } catch (Exception ex) { //An error occurred
              //Log the exception
-         	System.out.println("Failed to get Product by ID");
+         	System.out.println("Failed to get Product by color");
              Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
              return new Product();
          }
@@ -623,7 +619,7 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT  productID FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "';";
+            prd_sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "';";
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
@@ -739,7 +735,7 @@ Connection conn = createConn(); //Create DB connection
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT productID FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
+            prd_sql = "SELECT * FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
@@ -802,7 +798,7 @@ Connection conn = createConn(); //Create DB connection
      System.out.println("Creating statement...");
      try {
          stmt = conn.createStatement();
-         prd_sql = "SELECT  productID FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "';";
+         prd_sql = "SELECT * FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "';";
          System.out.println(prd_sql);
          prd_rs = stmt.executeQuery(prd_sql);
 
@@ -862,7 +858,7 @@ Connection conn = createConn(); //Create DB connection
             try {
                 stmt = conn.createStatement();
                 //Query to display all categories except televisions
-                sql = "SELECT  productID FROM `Products` WHERE `Products`.`categoryID`!= 5;";
+                sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`!= 5;";
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
@@ -885,7 +881,7 @@ Connection conn = createConn(); //Create DB connection
             try {
                 stmt = conn.createStatement();
                 //query to display Cellphones, Laptops and Tablets
-                sql = "SELECT productID FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4";
+                sql = "SELECT * FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4";
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
@@ -906,7 +902,7 @@ Connection conn = createConn(); //Create DB connection
             System.out.println("Creating statement...");
             try {
                 stmt = conn.createStatement();
-                sql = "SELECT  productID FROM `Products`";// display all categories of products
+                sql = "SELECT  * FROM `Products`";// display all categories of products
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
@@ -920,7 +916,7 @@ Connection conn = createConn(); //Create DB connection
         }
         return prd;
         }
-    public static int InsertSurveyResponses(int responseID, String responseText) throws IOException, ClassNotFoundException {
+    public static void InsertSurveyResponses(int userID, int questionID,  String responseText) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;
         String sql;
@@ -933,18 +929,11 @@ Connection conn = createConn(); //Create DB connection
         try {
             stmt = conn.createStatement();
           
-            sql = "INSERT INTO `SurveyResponses` (`responseID`,`responseText`) "
-            		+ "VALUES ('" + responseID + "','"  + responseText + "');";
+            sql = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`) "
+            		+ "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "');";
             
             System.out.println(sql);
             stmt.executeUpdate(sql);
-            //sql = "SELECT max(`responseID`) FROM `SurveyResponses` WHERE `questionID`='" + questionID + "' ";
-            System.out.println(sql);
-            rs = stmt.executeQuery(sql);
-            while (rs.next()) { //Get newly created user ID,
-                //Retrieve by column name
-                responseID = (rs.getInt("max(`responseID`)"));
-            }
             
           
         } catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -952,7 +941,7 @@ Connection conn = createConn(); //Create DB connection
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
  
-        return responseID;
+        //return responseID;
     }   
     
     public static void DB_Close() throws Throwable {
