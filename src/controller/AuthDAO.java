@@ -916,7 +916,7 @@ Connection conn = createConn(); //Create DB connection
         }
         return prd;
         }
-    public static void InsertSurveyResponses(int userID, int questionID,  String responseText) throws IOException, ClassNotFoundException {
+    public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;
         String sql;
@@ -929,8 +929,8 @@ Connection conn = createConn(); //Create DB connection
         try {
             stmt = conn.createStatement();
           
-            sql = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`) "
-            		+ "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "');";
+            sql = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
+            		+ "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "','"  + questionText +"');";
             
             System.out.println(sql);
             stmt.executeUpdate(sql);

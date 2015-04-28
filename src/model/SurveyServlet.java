@@ -54,14 +54,15 @@ public class SurveyServlet extends HttpServlet {
 	 int userID= User.GetUserID();
 		
 		 String color,priceRange, SurveyMessage="";
-		int categoryID,sellerID;
+		int categoryID=0,sellerID=0;
 		 String SubmitSurveyBtn = request.getParameter("SubmitSurveyBtn");
 		 String responseText="";
-			
+		 String questionText="";
+			int use=0;
 		color=request.getParameter("color");
 		priceRange = request.getParameter( "price" );
 		categoryID= Integer.parseInt(request.getParameter( "categoryID" ) );
-		int use= Integer.parseInt(request.getParameter("use"));
+		 use= Integer.parseInt(request.getParameter("use"));
 		 sellerID=Integer.parseInt(request.getParameter("sellerID"));
 	
 		System.out.println(priceRange);
@@ -75,14 +76,22 @@ public class SurveyServlet extends HttpServlet {
 	if(color==null)
 	{
 		color="";
+		if(color.equals(""))
+		{
+			if (!SurveyMessage.equals("")) {
+            	SurveyMessage += "<br />";
+            }
+            SurveyMessage += "You did not select a color ";
+		}
 	}
 	else  
 		{
 		int questionID=1;
-		responseText="user entered color:"+color+"";
+		questionText="(color)";
+		responseText=color;
 		AuthDAO.getProductByColor(color);
 		try {
-			AuthDAO.InsertSurveyResponses(userID,questionID,responseText);
+			AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,9 +101,10 @@ public class SurveyServlet extends HttpServlet {
 		{ 
 		int questionID=2;
 		AuthDAO.getProductByCategory(categoryID);
-		responseText="user entered categoryID:"+categoryID+"";
+		questionText=" (category with categoryID)";
+		responseText=""+categoryID+"";
 		try {
-		AuthDAO.InsertSurveyResponses(userID,questionID,responseText);
+		AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,37 +112,63 @@ public class SurveyServlet extends HttpServlet {
 		}
 		if(priceRange==null)
 			priceRange="";
+		if(priceRange.equals(""))
+		{
+			if (!SurveyMessage.equals("")) {
+            	SurveyMessage += "<br />";
+            }
+            SurveyMessage += "You did not select a price range ";
+		}
 		else 
 			{
 			int questionID=3;
 			AuthDAO.getProductByPrice(priceRange);
-			responseText="user entered priceRange:"+priceRange+"";
+			questionText="(priceRange  value)";
+			responseText=""+priceRange+"";
 			try {
-				AuthDAO.InsertSurveyResponses(userID,questionID,responseText);
+				AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			}
-			if(use!=0)
+		if(use==0)
+			
+		{
+			if (!SurveyMessage.equals("")) {
+            	SurveyMessage += "<br />";
+            }
+            SurveyMessage += "You did not select a urpose of use ";
+		}
+		else
 			{
 				int questionID=4;
 		 AuthDAO.getProductByPurpose(use);
-		 responseText="user entered purpose of use with value:"+use+"";
+		 questionText="(Purpose of Use value)";
+		 responseText=""+use+"";
 			try {
-				AuthDAO.InsertSurveyResponses(userID,questionID,responseText);
+				AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			}
-			if(sellerID!=0)
+			
+			if(sellerID==0)
+			{
+				if (!SurveyMessage.equals("")) {
+	            	SurveyMessage += "<br />";
+	            }
+	            SurveyMessage += "You did not select a Manufacturer ";
+			}
+			else
 			{
 				int questionID=5;
+				questionText="(manufacturer with sellerID)";
 		 AuthDAO.getProductByManufacturer(sellerID);
-		 responseText="user entered manufacturer with sellerID:"+sellerID+"";
+		 responseText=""+sellerID+"";
 		 try {
-			 AuthDAO.InsertSurveyResponses(userID,questionID,responseText);
+			 AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 				
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -144,9 +180,6 @@ public class SurveyServlet extends HttpServlet {
         	 SurveyMessage = "Thank you for taking our survey!";
          }
      }
-  else  { //If the check username button was not pressed
-	 SurveyMessage += "An enexpected error has occured"; //There was an error in http request
- }
  
  
 	 request.setAttribute("SurveyMessage",SurveyMessage);

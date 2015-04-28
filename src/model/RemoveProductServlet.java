@@ -44,6 +44,7 @@ public class RemoveProductServlet extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		RequestDispatcher rd = request.getRequestDispatcher("view_product_list.jsp");
 		User usr = (User) session.getAttribute("user"); //Obtain the user object from the session (if there is one)
+		
 		String loggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
 		int productID = Integer.parseInt(request.getParameter("productID"));
 		String delBtn = request.getParameter("delete");
