@@ -72,7 +72,7 @@
         			</th>
         		</tr>
         		<%
-        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "';";
+        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "' order by productName;";
         			pst = conn.prepareStatement(sql2);
 					rs2 = pst.executeQuery();
         			while(rs2.next()){
