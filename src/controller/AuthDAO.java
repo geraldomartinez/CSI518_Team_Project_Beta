@@ -379,6 +379,34 @@ public class AuthDAO {
         return productID;
     }   
     
+    public static boolean deactivateaccount( String accounttype, int username) throws IOException, ClassNotFoundException {
+	  	 
+        Statement stmt;
+        String sql;
+       // ResultSet rs;
+        Connection conn = AuthDAO.createConn();
+        //int productID=-1;
+ 
+        //Execute query to insert seller details
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+          
+            sql = "update  `Users` set `active`=0 where `userID`= '" + username + "' and  accounttype='" + accounttype + "';";
+            		
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+            System.out.println(sql);
+           
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+ 
+        return true;
+    }
+    
     public static Product getProductById(int productID) {
       	 
         Statement stmt;

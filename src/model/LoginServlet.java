@@ -25,8 +25,7 @@ import javax.servlet.http.HttpSession;
 public class LoginServlet extends HttpServlet {
 
 	/**
-	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-	 * methods.
+	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
 	 *
 	 * @param request
 	 *            servlet request
@@ -38,18 +37,19 @@ public class LoginServlet extends HttpServlet {
 	 *             if an I/O error occurs
 	 */
 
-	protected void processRequest(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session;
 		RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
 		User usr = new User();
 
 		String email;
 		String password;
+		int active;
 		int checkResponse;
 
 		email = request.getParameter("email");
 		password = request.getParameter("password");
+		active = usr.getActive();
 
 		// Prevent null pointer exception
 		if (email == null) {
@@ -66,31 +66,32 @@ public class LoginServlet extends HttpServlet {
 		} else if (password.equals("")) {
 			request.setAttribute("loginMessage", "No password given");
 		} else {
-			checkResponse = AuthDAO.checkEmailPass(email, password);			
-			if (checkResponse > -1) {
-				session = request.getSession(true);
-				session.setAttribute("loggedIn", "true");
-				usr = AuthDAO.getUserById(checkResponse);
-				session.setAttribute("user", usr);
-				session.setAttribute("wishlist", AuthDAO.ReturnUserWishlist(usr.GetUserID()));
-				rd = request.getRequestDispatcher("index.jsp");
-				request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
-			} else if (checkResponse == -2) {
-				request.setAttribute("loginMessage", "Database Connection Error");
-			} else if (checkResponse == -3) {
-				request.setAttribute("loginMessage", "Your seller account has not been verified yet. You will receive an email when an admin has verified your account.");
-			} else { // Invalid email or password
-				request.setAttribute("loginMessage", "Invalid email or password");
+			if (active == 1) {
+				checkResponse = AuthDAO.checkEmailPass(email, password);
+				if (checkResponse > -1) {
+					session = request.getSession(true);
+					session.setAttribute("loggedIn", "true");
+					usr = AuthDAO.getUserById(checkResponse);
+					session.setAttribute("user", usr);
+					session.setAttribute("wishlist", AuthDAO.ReturnUserWishlist(usr.GetUserID()));
+					rd = request.getRequestDispatcher("index.jsp");
+					request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
+				} else if (checkResponse == -2) {
+					request.setAttribute("loginMessage", "Database Connection Error");
+				} else if (checkResponse == -3) {
+					request.setAttribute("loginMessage", "Your seller account has not been verified yet. You will receive an email when an admin has verified your account.");
+				} else { // Invalid email or password
+					request.setAttribute("loginMessage", "Invalid email or password");
+				}
+			} else {
+				request.setAttribute("loginMessage", "Account has been deactivated cannot login");
 			}
 		}
 
 		try {
 			AuthDAO.DB_Close();
 		} catch (Throwable e) {
-			request.setAttribute(
-					"loginMessage",
-					request.getAttribute("loginMessage") + "<br />"
-							+ e.toString());
+			request.setAttribute("loginMessage", request.getAttribute("loginMessage") + "<br />" + e.toString());
 		}
 
 		rd.forward(request, response);
@@ -111,8 +112,7 @@ public class LoginServlet extends HttpServlet {
 	 *             if an I/O error occurs
 	 */
 	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		processRequest(request, response);
 	}
 
@@ -129,13 +129,9 @@ public class LoginServlet extends HttpServlet {
 	 *             if an I/O error occurs
 	 */
 	@Override
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		/*
-		 * • Start Session • Add Code to get form parameter values • Validate
-		 * form • Check values against stored data (“hard coded for now in a
-		 * variable”) • Set values to session attributes • Forward (request,
-		 * response) • *Handle for errors within all of these steps
+		 * • Start Session • Add Code to get form parameter values • Validate form • Check values against stored data (“hard coded for now in a variable”) • Set values to session attributes • Forward (request, response) • *Handle for errors within all of these steps
 		 */
 		processRequest(request, response);
 	}
