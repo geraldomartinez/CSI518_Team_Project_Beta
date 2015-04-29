@@ -27,10 +27,16 @@ public class LogoutServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	logout(request, response, false);
+    }
+
+    public static void logout(HttpServletRequest request, HttpServletResponse response, boolean deactivateFlag) throws ServletException, IOException{
         HttpSession session = request.getSession(true);
         RequestDispatcher rd = request.getRequestDispatcher("login.jsp");
         session.invalidate();
-        request.setAttribute("loginMessage", "<span style='color:green;'>You have been logged out successfully</span>");
+        if (!deactivateFlag){
+        	request.setAttribute("loginMessage", "<span>You have been logged out successfully</span>");
+        }
         rd.forward(request, response);
     }
 

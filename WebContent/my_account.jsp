@@ -48,6 +48,19 @@
 			<br />
         	<br />
 			<a href="#">Orders</a>
+			<br />
+			<br />
+			<br />
+			<br />	
+			<%		
+			if (acctType.equals("S") || acctType.equals("B")){
+			%>
+			<br />
+        	<br />
+			<a style="color: #F23A5C;" href="deactivate.jsp">Deactivate Account</a>
+			<%
+			}
+			%>
         </div>
 	</body>
 </html>

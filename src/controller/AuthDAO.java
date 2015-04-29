@@ -60,13 +60,14 @@ public class AuthDAO {
         int id = -1; //User's unique ID in database 
         String accountType = "";
         boolean isVerified = false;
+        boolean isActive = false;
         Connection conn = createConn(); //Create DB connection
 
         //Execute query to check email and password
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "SELECT `userID`,`accountType` FROM `Users` WHERE `email`='" + email + "' AND `password`='" + password + "' LIMIT 1";
+            sql = "SELECT `userID`,`accountType`,`active` FROM `Users` WHERE `email`='" + email + "' AND `password`='" + password + "' LIMIT 1";
             System.out.println("SQL Statement:");
             System.out.println(sql);
             rs = stmt.executeQuery(sql);
@@ -76,13 +77,18 @@ public class AuthDAO {
                 //Retrieve by column name
                 id = rs.getInt("userID");
                 accountType = rs.getString("accountType");
+                isActive = rs.getBoolean("active");
+                System.out.print("isActive: ");
+                System.out.print(isActive);
             }
         } catch (Exception ex) { //An error occurred
             //Log the exception
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        if (id != -1 && accountType.toUpperCase().equals("S")){ //If the account credentials are valid, and it is a seller account
+        if (!isActive){ //If the account has been deactivated
+        	id = -4; //Return -4, indicating that the user may not log in because their account is deactivated
+        }else if (id != -1 && accountType.toUpperCase().equals("S")){ //If the account credentials are valid, and it is a seller account
             System.out.println("Creating statement...");
             try {
                 stmt = conn.createStatement();

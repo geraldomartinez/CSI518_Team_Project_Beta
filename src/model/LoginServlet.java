@@ -44,12 +44,11 @@ public class LoginServlet extends HttpServlet {
 
 		String email;
 		String password;
-		int active;
+		boolean active;
 		int checkResponse;
 
 		email = request.getParameter("email");
 		password = request.getParameter("password");
-		active = usr.getActive();
 
 		// Prevent null pointer exception
 		if (email == null) {
@@ -66,25 +65,23 @@ public class LoginServlet extends HttpServlet {
 		} else if (password.equals("")) {
 			request.setAttribute("loginMessage", "No password given");
 		} else {
-			if (active == 1) {
-				checkResponse = AuthDAO.checkEmailPass(email, password);
-				if (checkResponse > -1) {
-					session = request.getSession(true);
-					session.setAttribute("loggedIn", "true");
-					usr = AuthDAO.getUserById(checkResponse);
-					session.setAttribute("user", usr);
-					session.setAttribute("wishlist", AuthDAO.ReturnUserWishlist(usr.GetUserID()));
-					rd = request.getRequestDispatcher("index.jsp");
-					request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
-				} else if (checkResponse == -2) {
-					request.setAttribute("loginMessage", "Database Connection Error");
-				} else if (checkResponse == -3) {
-					request.setAttribute("loginMessage", "Your seller account has not been verified yet. You will receive an email when an admin has verified your account.");
-				} else { // Invalid email or password
-					request.setAttribute("loginMessage", "Invalid email or password");
-				}
-			} else {
-				request.setAttribute("loginMessage", "Account has been deactivated cannot login");
+			checkResponse = AuthDAO.checkEmailPass(email, password);
+			if (checkResponse > -1) {
+				session = request.getSession(true);
+				session.setAttribute("loggedIn", "true");
+				usr = AuthDAO.getUserById(checkResponse);
+				session.setAttribute("user", usr);
+				session.setAttribute("wishlist", AuthDAO.ReturnUserWishlist(usr.GetUserID()));
+				rd = request.getRequestDispatcher("index.jsp");
+				request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
+			} else if (checkResponse == -2) {
+				request.setAttribute("loginMessage", "Database Connection Error");
+			} else if (checkResponse == -3) {
+				request.setAttribute("loginMessage", "Your seller account has not been verified yet. You will receive an email when an admin has verified your account.");
+			} else if (checkResponse == -4) {
+				request.setAttribute("loginMessage", "Account has been deactivated. You may not login. Please contact the store to reactivate your account.");
+			} else { // Invalid email or password
+				request.setAttribute("loginMessage", "Invalid email or password");
 			}
 		}
 

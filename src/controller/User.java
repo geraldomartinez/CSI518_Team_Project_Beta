@@ -20,7 +20,6 @@ public class User implements Serializable {
     private  String accountType;
     private String password; //User's password to the website
     private static int userID; //User's unique ID
-    private int active;
 
     public User() {
         //If no information is given, just initialize everything to default [empty] values
@@ -166,13 +165,5 @@ public class User implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-    public int getActive() {
-		return active;
-	}
-
-	public void setActive(int active) {
-		this.active = active;
 	}
 }
