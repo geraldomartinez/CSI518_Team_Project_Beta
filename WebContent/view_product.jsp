@@ -122,16 +122,16 @@
 				%>
 			<!--	<tr> -->
 			<!--	<td nowrap> -->
-			</br>
+			<br>
 				Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=newDate%>
-				</br></br>
+				<br><br>
 				<%=rating %>
-				</br>
+				<br>
 				<%=review %>
 				__________________________________________________________________________________
 		<!--		</td> -->
 		<!--		</tr> -->
-				</br>
+				<br>
 				<%
 					}
 						conn.close();

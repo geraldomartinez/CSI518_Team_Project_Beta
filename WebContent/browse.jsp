@@ -79,6 +79,10 @@
 			</tr>
 		</table>
 		<br />
+		<form action="search.jsp" method="get">
+		<input type="text" placeholder="Search Great Danes Electronics" name="results" />
+		<input type="submit" value="submit" />
+		</form>
 		<hr />
 		<br />
 		<%
