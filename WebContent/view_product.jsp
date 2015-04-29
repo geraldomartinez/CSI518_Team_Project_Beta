@@ -90,13 +90,18 @@
         	<br />
         	
         	<%
-        	if (!navLoggedIn.equals("true") || (navLoggedIn.equals("true") && acctType.equals("B"))){
+        	if ((!navLoggedIn.equals("true") || (navLoggedIn.equals("true") && acctType.equals("B"))) && pQuantity > 0){
         	%>
 			<form id="add_2_cart_form" action="Add2CartServlet" method="POST">
 				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
 				<button type="submit">Add To Cart</button>
 			</form>
 			<%
+        	}else{
+        		%>
+        		<h5>OUT OF STOCK!</h5>
+        		<%
+        		
         	}
 			%>
         	
