@@ -39,9 +39,9 @@
 				//(note, this will only happen if the user deliberately accesses wishlist.jsp while logged in via the browser's address bar.)
 				RequestDispatcher rd = request.getRequestDispatcher("login.jsp"); //Setup the request dispatcher for the login page
 	
-				if (navLoggedIn == "true" && !acctType.equals("B")) {
+				if (navLoggedIn != "true" || !acctType.equals("B")) {
 					rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
-					request.setAttribute("indexMessage", "Only buyers and guests are allowed to access wishlist features");
+					request.setAttribute("indexMessage", "Only buyers are allowed to access wishlist features");
 					rd.forward(request, response); //Forward the user with the response above
 				}
 			%>
