@@ -100,8 +100,9 @@
 					int reviewerID = 0;
 					String reviewerFirstName = null;
 					String reviewerLastName = null;
-					
-					
+					SimpleDateFormat fromDatabase = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+					SimpleDateFormat myFormat = new SimpleDateFormat("MM/dd/yyyy 'at' hh:mm a");
+					String newDate = "";
 					try {
 						conn = AuthDAO.createConn();
 						HttpSession ss = request.getSession();
@@ -117,11 +118,12 @@
 							reviewerFirstName = rs.getString("firstName");
 							reviewerLastName = rs.getString("lastName");
 							
+							newDate = myFormat.format(fromDatabase.parse(datetime));
 				%>
 			<!--	<tr> -->
 			<!--	<td nowrap> -->
 			</br>
-				Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=datetime%>
+				Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=newDate%>
 				</br></br>
 				<%=rating %>
 				</br>
