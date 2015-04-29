@@ -12,7 +12,7 @@
 		<%@ page import="controller.Product" %>
 		<%@ page import="controller.AuthDAO" %>
 		<%@ page
-		import="java.util.*, java.sql.*"%>
+		import="java.util.*, java.sql.*, java.util.Date, java.text.SimpleDateFormat"%>
         <%@include file="top_menu.jsp"%>
         <br />
         
@@ -88,13 +88,12 @@
 			<h3>Customer Reviews</h3>
 			__________________________________________________________________________
 			<br />
-			<table>
-			<tr>
+		<!--	<table> -->
+			
 			<%
 					Connection conn = null;
 					ResultSet rs = null;
 					int categoryID;
-					//String categoryName = "";
 					String datetime = null;
 					String review = null;
 					int rating = 0;
@@ -102,49 +101,44 @@
 					String reviewerFirstName = null;
 					String reviewerLastName = null;
 					
+					
 					try {
 						conn = AuthDAO.createConn();
 						HttpSession ss = request.getSession();
 
 						PreparedStatement pst = conn
-								.prepareStatement("SELECT * FROM `ProductReviews` where productID = '" + productID + "' ORDER BY time ASC");
+								.prepareStatement("SELECT p.*, u.firstName, u.lastName FROM ProductReviews p JOIN UserProfile u ON u.userID = p.userID WHERE p.productID ="+productID+ "");
 						rs = pst.executeQuery();
 						while (rs.next()) {
-							//categoryID = rs.getInt("categoryID");
-							//categoryName = rs.getString("categoryName");
-							datetime = rs.getDate("time").toString();
-							//list.put(categoryID, categoryName);
+							datetime = rs.getTimestamp("time").toString();
 							rating = rs.getInt("ranking");
 							review = rs.getString("review");
 							reviewerID = rs.getInt("userID");
-						}
-						
-						pst=conn.prepareStatement("SELECT * FROM UserProfile where userID = '" + reviewerID + "'");
-						rs = pst.executeQuery();
-						while(rs.next()){
 							reviewerFirstName = rs.getString("firstName");
 							reviewerLastName = rs.getString("lastName");
+							
 				%>
-				<td><%=reviewerFirstName + " " + reviewerLastName %></td>
-				<td>
-					<%=datetime%>
-				</td>
-					<%=rating %>
-				<td>
-				</td>
-				<td>
-				 	<%=review %>
-				</td>
-				
+			<!--	<tr> -->
+			<!--	<td nowrap> -->
+			</br>
+				Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=datetime%>
+				</br></br>
+				<%=rating %>
+				</br>
+				<%=review %>
+				__________________________________________________________________________________
+		<!--		</td> -->
+		<!--		</tr> -->
+				</br>
 				<%
 					}
-						//conn.close();
+						conn.close();
 					} catch (Exception e) {
 						out.print(e);
 					}
 				%>
-					</tr>
-		</table>
+					
+<!--		</table> -->
 			
         </div>
         <%
