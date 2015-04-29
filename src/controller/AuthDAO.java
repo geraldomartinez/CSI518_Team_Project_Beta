@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -950,6 +951,7 @@ Connection conn = createConn(); //Create DB connection
         }
         return prd;
         }
+    
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;
@@ -977,6 +979,52 @@ Connection conn = createConn(); //Create DB connection
  
         //return responseID;
     }   
+    
+    public static ArrayList<Integer> getProductAverageRating(int productID){
+    	float rating = 0;
+    	int avgRating = 0;
+    	//int count = 0;
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+        ArrayList<Integer> RatingAndCount = new ArrayList<Integer>();
+         
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT productID, AVG( ranking ) AS avg_rating, COUNT( * ) AS count FROM ProductReviews WHERE productID='" + productID + "' group by productID;";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+                //Retrieve by column name
+           	 rating=rs.getFloat("avg_rating");
+           	RatingAndCount.add(rs.getInt("count"));
+           	avgRating = Math.round(rating);
+            RatingAndCount.add(avgRating);
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get Rating average by productID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            //return new Product();
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+        
+    	return RatingAndCount;
+    	
+    }
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection

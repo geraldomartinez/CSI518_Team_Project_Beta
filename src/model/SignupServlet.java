@@ -120,13 +120,13 @@ public class SignupServlet extends HttpServlet {
                 registerMessage += "You did not enter a first name";
                 insertNewUser = false;
             }
-            if (middleName.equals("")) {
+        /*    if (middleName.equals("")) {
                 if (!registerMessage.equals("")) {
                     registerMessage += "<br />";
                 }
                 registerMessage += "You did not enter  middle name";
                 insertNewUser = false;
-            }
+            }*/
             if (lastName.equals("")) {
                 if (!registerMessage.equals("")) {
                     registerMessage += "<br />";

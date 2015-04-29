@@ -102,6 +102,7 @@
 		<br />
 
 		<%
+			
 			String productName = "";
 				String pDescription = "";
 				String pSpecs = "";
@@ -131,12 +132,37 @@
 						response.setContentType("image/gif");
 						InputStream photoStream = rs.getBytes("picture");  */
 						
+						
 		%>
 		
 		<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
 		<br>
 		<br>
 		<div ><img src="img/<%=picture%>" height=200 width=200></div>
+		<%
+        	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
+        	if(!RatingAndCount.isEmpty()){
+	      	int avgRating = RatingAndCount.get(1);
+	      	int numberOfReviewers = RatingAndCount.get(0);
+				for(int i = 1; i<=avgRating; i++){
+					%>
+					<span style="color: yellow;">&#9733;</span> 
+					<%
+				}
+				
+				 %>
+				(<%=numberOfReviewers %> Reviews) <%} 
+        	else{
+        		for(int i = 1; i<=5; i++){
+					%>
+					<span style="color: yellow;">&#9734;</span> 
+					<%
+				}
+        		%>(No Reviews)<%
+        	}
+				
+				
+				%>
 		<ul>
 			<li>Description: <%=pDescription%></li>
 			<li>Price: <%=pPrice%></li>
