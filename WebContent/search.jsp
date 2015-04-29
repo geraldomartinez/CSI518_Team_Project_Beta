@@ -42,7 +42,7 @@ __________________________________________
 				ResultSet rs = null;
 
 				try {			
-					String sql = "SELECT * FROM Products WHERE productName LIKE '%" +results+"%' OR specs LIKE '%" +results+"%' OR description LIKE '%" +results+"%';";
+					String sql = "SELECT * FROM Products WHERE removed = 0 AND (productName LIKE '%" +results+"%' OR specs LIKE '%" +results+"%' OR description LIKE '%" +results+"%');";
 					conn = AuthDAO.createConn();
 					HttpSession ss = request.getSession();
 					

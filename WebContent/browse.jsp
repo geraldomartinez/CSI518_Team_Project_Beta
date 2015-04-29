@@ -112,7 +112,7 @@
 
 				try {			
 					String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='"
-							+ categoryID + "' order by productName;";
+							+ categoryID + "' AND removed = 0 order by productName;";
 					//conn = AuthDAO.createConn();
 					HttpSession ss = request.getSession();
 					
