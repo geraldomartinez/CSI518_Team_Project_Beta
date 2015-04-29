@@ -146,6 +146,11 @@
 				</table>
 				<br />
 				<br />
+				<form id="checkout_form" action="checkout.jsp" method="POST">
+					<button type="submit">Checkout</button>
+				</form>
+				<br />
+				<br />
 				<form id="remove_all_form" action="RemoveAllItemsInCartServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your cart?')">
 					<button type="submit">Remove All Items</button>
 				</form>
