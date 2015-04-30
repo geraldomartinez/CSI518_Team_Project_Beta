@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import controller.Cart;
 import controller.User;
+import controller.WishList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,7 +48,10 @@ public class Add2CartServlet extends HttpServlet {
 		int productID = -1;
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 		String strProductID = request.getParameter("productID");
-		User usr = (User) session.getAttribute("user"); //Get the user object from the session	
+		User usr = (User) session.getAttribute("user"); //Get the user object from the session
+		WishList WishList = (WishList) session.getAttribute("WishList");
+		
+		String quantity=request.getParameter("quantity");
 		if (strProductID == null){
 	    	request.setAttribute("indexMessage","No product ID given");
 		}else{
@@ -56,13 +60,23 @@ public class Add2CartServlet extends HttpServlet {
 	    	if (loggedIn == null){
 	    		loggedIn = "";
 	    	}
+	    	
+	    	
+	    	if(quantity==null)
+	    	{
+	    		quantity="";
+	    	}
 	    	if (loggedIn == "true" && !usr.getAccountType().equals("B")){
 		    	request.setAttribute("indexMessage","You must be logged in as a buyer to add items to the cart");
 	    	}else{
+	    		
+	    		
+            	
 		    	rd = request.getRequestDispatcher("view_cart.jsp");
 	    		cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
 	    		cart.AddItem(productID);
 	    		session.setAttribute("cart",cart); //Set the cart in the session with the new item added
+	    		
 		    	request.setAttribute("cartMessage","Item added successfully to cart");
 	    	}
 	    	

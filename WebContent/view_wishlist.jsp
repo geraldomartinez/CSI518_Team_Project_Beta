@@ -8,7 +8,19 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 		<title>View Wish List - Great Danes Electronics</title>
 		
-		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+		<script type="text/javascript" src="js/jquery-2.1.3.min.js">
+		
+		
+		function OnButtonLogin()
+		{
+			document.
+		    document.Form1.action = "UpdateQuantityInWishListServlet";
+		    document.Form1.target = "_blank";    
+		    document.Form1.submit();             
+		    return true;
+		}
+         
+		</script>
 		<!-- jQuery Library -->
 		<style type="text/css">
 		#page_content_wrapper {
@@ -129,6 +141,13 @@
 							out.print("<button type='submit'>Remove</button>");
 						out.print("</form>");
 					out.print("</td>");
+					out.print("<td>");
+					out.print("<form id='update_qty_form'  action='UpdateQuantityInWishListServlet' method='POST'>");
+					out.print("<input type='hidden' name='quantity' class='quantity' value='-1' />");
+// 					out.print("<input type='hidden' name='quantity' class='quantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
+					out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
+					out.print("<input type='hidden' name='delFromWish' value='true' />");
+					out.print("<button type='submit'>Add to cart</button>");
 					out.print("</tr>");
 					}
 			%>
