@@ -48,16 +48,28 @@
 	<br />
 	<div id="page_content_wrapper">
 		<%
-			String addProductMessage = (String) request
-					.getAttribute("addProductMessage"); //Obtain the message from the session (if there is one)
+			RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
+	        String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
+			String addProductMessage = (String) request.getAttribute("addProductMessage"); //Obtain the message from the session (if there is one)
+			
 			if (addProductMessage == null) { //Prevent null pointer exception
 				addProductMessage = "";
 			}
+			
+	        if (loggedIn == null) { //Prevent null pointer exception
+	            loggedIn = "false";
+	        }
+	
+	        if (loggedIn != "true") { //If the user is logged in
+	            //Alert the user that they are already logged in
+	            request.setAttribute("indexMessage", "Please log into your seller account before attempting to add a product");
+	            rd.forward(request, response); //Forward the user with the response above
+	        }
 		%>
 		<div id="add_product_message" class="message"><%=addProductMessage%></div>
 		<br />
 		<h1 id="header">Add A Product</h1>
-		<form id="add_product" name="add_product" action="ProductServlet" method="POST">
+		<form id="add_product" name="add_product" action="ProductServlet" method="POST" enctype="multipart/form-data">
 			<table>
 				<tr>
 					<td>Product Category:</td>
@@ -111,7 +123,7 @@
 				</tr>
 				<tr>
 				<td>Product Image</td>
-				<td><input type="file" id="productImage" name="productImage"></td>
+				<td><input type="file" id="product_image" name="product_image"></td>
 				<tr>
 					<td></td>
 					<td><input type="submit" value="Submit" name="insertbt"></td>

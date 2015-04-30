@@ -1,14 +1,5 @@
 package controller;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-
-
+import java.util.Base64;
 
 public class Product {
 	private int productID;
@@ -21,28 +12,20 @@ public class Product {
 	private float rating;
 	private int numInStock;
 	private int categoryID;
-	private String picture;
-	public String getPicture() {
-		return picture;
-	}
-
-
-	public void setPicture(String picture) {
-		this.picture = picture;
-	}
+	private byte[] pictureBlob;
 
 
 	public Product(){
-		productID = -1;
-		sellerID = -1;
-		name = "";
-		description = "";
-		specs = "";
-		price = 0.0f;
-		//shippingCost = 0.0f;
-		//rating = 0.0f;
-		categoryID=0;
-		numInStock = 0;
+		this.productID = -1;
+		this.sellerID = -1;
+		this.name = "";
+		this.description = "";
+		this.specs = "";
+		this.price = 0.0f;
+		//this.shippingCost = 0.0f;
+		//this.rating = 0.0f;
+		this.categoryID=0;
+		this.numInStock = 0;
 	}	
 	
 
@@ -53,7 +36,8 @@ public class Product {
 			String specs, 
 			float unitPrice, 
 			int quantity, 
-			int categoryID,String picture){
+			int categoryID,
+			byte[] pictureBlob){
 		this.productID = productID;
 		this.sellerID = sellerID;
 		this.name = productName;
@@ -64,91 +48,102 @@ public class Product {
 		//rating = 0.0f;
 		this.numInStock = quantity;
 		this.categoryID=categoryID;
-		this.picture=picture;
+		this.pictureBlob=pictureBlob;
 	}	
 	
 	public int GetProductID(){
-		return productID;
+		return this.productID;
 	}
 	
 	public void SetProductID(int x /*in, product ID*/){
-		productID = x;
+		this.productID = x;
 	}
 	
 	public int GetSellerID(){
-		return sellerID;
+		return this.sellerID;
 	}
 	
 	public void SetSellerID(int x /*in, seller ID*/){
-		sellerID = x;
+		this.sellerID = x;
 	}
 	
 	public void SetProductName(String x /*in, seller ID*/){
-		name = x;
+		this.name = x;
 	}
 	
 	public String GetProductName(){
-		return name;
+		return this.name;
 	}
 	
 	public void SetSellerID(String x /*in, product name*/){
-		name = x;
+		this.name = x;
 	}
 	
 	public String GetDescription(){
-		return description;
+		return this.description;
 	}
 	
 	public void SetDescription(String x /*in, product description*/){
-		description = x;
+		this.description = x;
 	}
 	
 	public String GetSpecs(){
-		return specs;
+		return this.specs;
 	}
 	
 	public void SetSpecs(String x /*in, product specs*/){
-		specs = x;
+		this.specs = x;
 	}
 	
 	public float GetPrice(){
-		return price;
+		return this.price;
 	}
 	
 	public void SetPrice(float x /*in, product price*/){
-		price = x;
+		this.price = x;
 	}
 	
 	public float GetShippingCost(){
-		return shippingCost;
+		return this.shippingCost;
 	}
 	
 	public void SetShippingCost(float x /*in, product shipping cost*/){
-		shippingCost = x;
+		this.shippingCost = x;
 	}
 	
 	public float GetRating(){
-		return rating;
+		return this.rating;
 	}
 	
 	public void SetRating(float x /*in, product rating*/){
-		rating = x;
+		this.rating = x;
 	}
 	
 	public int GetNumInStock(){
-		return numInStock;
+		return this.numInStock;
 	}
 	
 	public void SetNumInStock(int x /*in, number of products in stock*/){
-		numInStock = x;
+		this.numInStock = x;
 	}
 	
 	public int GetCategoryID(){
-		return categoryID;
+		return this.categoryID;
 	}
 	
 	public void SetCategoryID(int x /*in, category*/){
-		categoryID = x;
+		this.categoryID = x;
+	}
+	
+	public String getPicture() {
+		if (this.pictureBlob.length > 0)
+			return Base64.getEncoder().encodeToString(this.pictureBlob);
+		else
+			return "";
+	}
+
+	public void setPicture(byte[] picture) {
+		this.pictureBlob = picture;
 	}
 	
 	

@@ -3,8 +3,10 @@ package model;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.File;
 
 import controller.Product;
+import controller.User;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import controller.AuthDAO;
@@ -48,12 +51,13 @@ public class ProductServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
+		HttpSession session = request.getSession(true);
     	RequestDispatcher rd = request.getRequestDispatcher("add_product.jsp");
-        
+    	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
+    	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
 		int productID = -1;
-		 String sellerID, name, description, specs, price, numInStock, insertbt;
+		int sellerID;
+		String name, description, specs, price, numInStock, insertbt, filePath;
 		String categoryID;
 		String inputMessage = "";
 		boolean insertproduct=true;
@@ -64,33 +68,28 @@ public class ProductServlet extends HttpServlet {
 		categoryID=request.getParameter("categoryID");
 		numInStock=request.getParameter("numinstock");
 		insertbt=request.getParameter("insertbt");
-		String image=request.getParameter("productImage");
-		System.out.println("Aditi"+image);
-		/*Part filePart=request.getPart("product_image");
-		String fileName=filePart.getSubmittedFileName();
-		InputStream fileInStream=filePart.getInputStream();
-		byte[] fileByte = new byte[1];
-		int fileSize = 0;
-		byte[] fileBytes;
-		String extension="";
-		FileOutputStream outFile;*/
-		
-		sellerID="4";
+		sellerID = usr.GetUserID();
+
+		//Image
+		Part filePart=request.getPart("product_image");
+
 		System.out.println(categoryID);
 		if (name == null) {
         	name = "";
         }
+		
         if (description == null) {
         	description = "";
         }
+        
         if (specs == null) {
         	specs = "";
         }
+        
         if (price == null) {
         	price = "";
         }
         
-       
         if (numInStock == null) {
         	numInStock = "";
         }
@@ -154,34 +153,9 @@ public class ProductServlet extends HttpServlet {
             
             	
            
-            if (insertproduct) {
-                
-             /*   int i=fileName.lastIndexOf('.');
-        		if(i>0)
-        		{
-        			extension=fileName.substring(i+1);
-        		}
-        		
-        		outFile = new FileOutputStream(Integer.toString(productID)+"."+extension);
-        		while (fileInStream.read(fileByte) == 1){
-        			fileSize++;
-        		}
-        		System.out.println("filesize: "+Integer.toString(fileSize));
-        		fileInStream.reset();
-        		fileBytes = new byte[fileSize];
-        		for (i=0;  i < fileSize; i++){
-        			fileInStream.read(fileByte);
-        			fileBytes[i] = fileByte[0];
-        		}
-        		System.out.println("size of fileBytes: "+Integer.toString(fileBytes.length));
-        		System.out.println("fileBytes: ");
-        		System.out.println(fileBytes.toString());
-        		
-        		fileInStream.close();
-        		outFile.close();*/
-        		
+            if (insertproduct) {        		
                 try {
-					productID = AuthDAO.InsertProductDetails(sellerID, name, description, specs, price, categoryID, numInStock, image);
+					productID = AuthDAO.InsertProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
