@@ -11,23 +11,54 @@
 		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 		<!-- jQuery Library -->
 		<style type="text/css">
-		#page_content_wrapper {
-			text-align: center;
-		}
-		#cart_table{
-			width: 100%;
-			border-collapse: collapse;
-		}
-		#cart_table td{
-			border: 1px solid white;
-		}
-		#cart_table td a{
-			color: white;
-		}
-		.quantity{
-			width: 50px;
-			text-align: right;
-		}
+			#page_content_wrapper {
+				text-align: center;
+			}
+			h3{
+        		background: #2C193B;
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+			#cart_table{
+				width: 100%;
+				border-collapse: collapse;
+			}
+			#cart_table th{
+				border-bottom: 1px solid white;
+				padding-bottom: 5px;
+			}
+			#cart_table td{
+				padding-top: 5px;
+			}
+			#cart_table td a{
+				color: white;
+			}
+			.quantity{
+				width: 50px;
+				text-align: right;
+			}
+			#remove_all_form button{
+				font-size: 16px;
+				vertical-align: middle;
+				cursor: pointer;
+			}
+			#remove_all_form button:hover{
+				color: red;
+			}
+			#remove_all_form button img{
+				height: 16px;
+				vertical-align: middle;
+			}
+			#total_table{
+				display: inline-block;
+				border-collapse: collapse;
+			}
+			#total_table td:nth-child(1){
+				text-align: left;
+			}
+			#total_table td:nth-child(2){
+				text-align: right;
+			}
 		</style>
 	</head>
 	<body>
@@ -54,6 +85,7 @@
 			%>
 			<div id="cart_message" class="message"><%=cartMessage%></div>
 			<br />
+			<h3>Cart Items</h3>
 			<%
 				CartItem tempItem;
 				Product prod;
@@ -66,6 +98,8 @@
 					<th>Price</th>
 					<th>Shipping Cost</th>
 					<th>Quantity</th>
+					<th>Remove Item</th>
+					<th>Move To Wish List</th>
 				</tr>
 			<%
 				for (int i = 0; i < itemList.size(); i++) {
@@ -99,7 +133,7 @@
 						out.print("<input type='hidden' name='quantity' class='quantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
 						out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
 						out.print("<input type='hidden' name='delFromCart' value='true' />");
-						out.print("<button type='submit' name=wish >Add to WishList</button>");
+						out.print("<button type='submit' name=wish >Move to Wish List</button>");
 					out.print("</form>");
 				out.print("</td>");
 					out.print("</tr>");
@@ -109,8 +143,13 @@
 				</table>
 				<br />
 				<br />
+				<form id="remove_all_form" action="RemoveAllItemsInCartServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your cart?')">
+					<button type="submit"><img src="img/trash.png" alt="trashcan"/> Remove All Items</button>
+				</form>
 				<br />
-				<table>
+				<h3>Cost</h3>
+				<br />
+				<table id="total_table">
 					<tr>
 						<td>
 							Cost:
@@ -147,12 +186,6 @@
 				<br />
 				<br />
 				<a href="checkout.jsp"><img src="img/paypal_button.gif" alt="Checkout with PayPal" /></a>
-				<br />
-				<br />
-				<form id="remove_all_form" action="RemoveAllItemsInCartServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your cart?')">
-					<button type="submit">Remove All Items</button>
-				</form>
-				
 			<%
 				}else{
 					out.print("<h3>No items in cart</h3>");
