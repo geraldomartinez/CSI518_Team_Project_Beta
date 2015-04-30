@@ -147,7 +147,7 @@
 				out.print("<input type='hidden' name='newquantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
 					out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
 					out.print("<input type='hidden' name='delFromWish' value='true' />");
-					out.print("<button type='submit'>Add to cart</button>");
+					out.print("<button type='submit'>Move to cart</button>");
 					out.print("</tr>");
 					}
 			%>

@@ -56,7 +56,7 @@
 			<a href="view_sellers.jsp">View Sellers</a>
 			<br/>
 			<br/>
-			<a href="vie_buyers.jsp">View Buyers</a>
+			<a href="view_buyers.jsp">View Buyers</a>
 			<br/>
 			<br/>
 			<%
