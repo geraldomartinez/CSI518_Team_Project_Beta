@@ -992,26 +992,24 @@ public class AuthDAO {
         }
     
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
-	  	 
-        Statement stmt;
-        String sql;
-        ResultSet rs;
-        Connection conn = AuthDAO.createConn();
-        String sql2;
-        
- 
-        //Execute query to insert seller details
-        System.out.println("Creating statement...");
-        try {
-            stmt = conn.createStatement();
-          	sql2 = "DELETE IGNORE FROM `SurveyResponses` WHERE `userID`='"+userID+"'";
-			stmt.executeUpdate(sql2);
-            System.out.println(sql2);
-            sql = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
-            		+ "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "','"  + questionText +"');";
-            
-            System.out.println(sql);
-            stmt.executeUpdate(sql);
+            Statement stmt;
+            String sql1,sql2;
+            ResultSet rs;
+            Connection conn = AuthDAO.createConn();
+		    //Execute query to insert seller details
+            System.out.println("Creating statement...");
+		
+		    try {
+		    stmt = conn.createStatement();
+		    sql2 = "DELETE IGNORE FROM `SurveyResponses` WHERE `userID`='"+userID+"'";
+		    stmt.executeUpdate(sql2);
+		                System.out.println(sql2);
+		    sql1 = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
+		    + "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "','"  + questionText +"');";
+		                System.out.println(sql1);
+		    stmt.executeUpdate(sql1);
+		    //System.out.println(sql2);
+		    //stmt.executeUpdate(sql2);
             
           
         } catch (SQLException | NumberFormatException ex) { //An error occurred
