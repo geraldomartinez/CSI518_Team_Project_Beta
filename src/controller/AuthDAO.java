@@ -563,11 +563,11 @@ public class AuthDAO {
         return false;
     }
    
-    public static Product getProductByColor(String color) {
+    public static Product getProductByColor(String color, int userID) {
      	 
      	 String sql;
-    	 Statement stmt = null;
-         ResultSet prd_rs = null;
+    	 Statement stmt,st ;
+         ResultSet prd_rs,rs;
          String prd_sql;
          Product prd;
          int productID=0;
@@ -590,7 +590,7 @@ public class AuthDAO {
              prd_sql = "SELECT * FROM `Products` WHERE `Products`.`color`='" + color + "';";
              System.out.println(prd_sql);
              prd_rs = stmt.executeQuery(prd_sql);
-  
+             
              //Extract data from result set
              while (prd_rs.next()) {
                  //Retrieve by column name
@@ -605,10 +605,10 @@ public class AuthDAO {
                  description=prd_rs.getString("description");
                  specs=prd_rs.getString("specs");
                  picture=prd_rs.getString("picture");
-             }       
+             }    
             
-            
-             
+        
+              
          } catch (Exception ex) { //An error occurred
              //Log the exception
          	System.out.println("Failed to get Product by color");
@@ -627,15 +627,16 @@ public class AuthDAO {
   
          prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
          return prd;
-        
+    
+    }
          
-     }
+     
     	
-    public static Product getProductByCategory(int categoryID) {
+    public static Product getProductByCategory(int categoryID, int userID) {
     	
-    	Statement stmt;
-        ResultSet prd_rs;
-        String prd_sql;
+    	Statement stmt,st;
+        ResultSet prd_rs,rs;
+        String prd_sql,sql;
         Product prd;
         int productID=0;
         int sellerID = 0;
@@ -657,7 +658,7 @@ public class AuthDAO {
             prd_sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "';";
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
- 
+            
             //Extract data from result set
             while (prd_rs.next()) {
                 //Retrieve by column name
@@ -672,8 +673,8 @@ public class AuthDAO {
                 specs=prd_rs.getString("specs");
                 picture=prd_rs.getString("picture");
             }       
+          
             
-           
             
         } catch (Exception ex) { //An error occurred
             //Log the exception
@@ -695,7 +696,7 @@ public class AuthDAO {
         return prd;
     }
    
-    public static Product getProductByPrice(String priceRange) {
+    public static Product getProductByPrice(String priceRange, int userID) {
    	 
         Statement stmt;
         ResultSet rs;
@@ -773,7 +774,7 @@ Connection conn = createConn(); //Create DB connection
             prd_sql = "SELECT * FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
- 
+            
             //Extract data from result set
             while (prd_rs.next()) {
                 //Retrieve by column name
@@ -789,7 +790,7 @@ Connection conn = createConn(); //Create DB connection
                 picture=prd_rs.getString("picture");
             }       
             
-           
+          
             
         } catch (Exception ex) { //An error occurred
             //Log the exception
@@ -811,10 +812,10 @@ Connection conn = createConn(); //Create DB connection
         return prd;
     }
 
-    public static Product getProductByManufacturer(int sellerID) {
+    public static Product getProductByManufacturer(int sellerID, int userID) {
    	 Statement stmt;
      ResultSet prd_rs;
-     String prd_sql;
+     String prd_sql,sql;
      Product prd;
      int productID=0;
     
@@ -836,7 +837,7 @@ Connection conn = createConn(); //Create DB connection
          prd_sql = "SELECT * FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "';";
          System.out.println(prd_sql);
          prd_rs = stmt.executeQuery(prd_sql);
-
+         
          //Extract data from result set
          while (prd_rs.next()) {
              //Retrieve by column name
@@ -852,7 +853,7 @@ Connection conn = createConn(); //Create DB connection
              specs=prd_rs.getString("specs");
              picture=prd_rs.getString("picture");
          }       
-         
+        
         
          
      } catch (Exception ex) { //An error occurred
@@ -875,7 +876,7 @@ Connection conn = createConn(); //Create DB connection
      return prd;
     }
      
-    public static Product getProductByPurpose(int  use) {
+    public static Product getProductByPurpose(int  use, int userID) {
    	 
         Statement stmt;
         ResultSet rs;
@@ -898,6 +899,7 @@ Connection conn = createConn(); //Create DB connection
                 rs = stmt.executeQuery(sql);
                 productID = rs.getInt("productID");
                 prd=AuthDAO.getProductById(productID);
+                
                
             }
             catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -940,6 +942,7 @@ Connection conn = createConn(); //Create DB connection
                 sql = "SELECT  * FROM `Products`";// display all categories of products
                 System.out.println(sql);
                 rs = stmt.executeQuery(sql);
+               
                 productID = rs.getInt("productID");
                prd= AuthDAO.getProductById(productID);
                
@@ -955,21 +958,28 @@ Connection conn = createConn(); //Create DB connection
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;
-        String sql;
+        String sql1,sql2;
         ResultSet rs;
         Connection conn = AuthDAO.createConn();
         
  
         //Execute query to insert seller details
         System.out.println("Creating statement...");
+        
+
         try {
+        	
             stmt = conn.createStatement();
-          
-            sql = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
+            sql2 = "DELETE IGNORE FROM `SurveyResponses` WHERE `userID`='"+userID+"'";
+            stmt.executeUpdate(sql2);
+            System.out.println(sql2);
+            sql1 = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
             		+ "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "','"  + questionText +"');";
             
-            System.out.println(sql);
-            stmt.executeUpdate(sql);
+            System.out.println(sql1);
+            stmt.executeUpdate(sql1);
+            //System.out.println(sql2);
+            //stmt.executeUpdate(sql2);
             
           
         } catch (SQLException | NumberFormatException ex) { //An error occurred
