@@ -89,7 +89,7 @@ public class SurveyServlet extends HttpServlet {
 		int questionID=1;
 		questionText="(color)";
 		responseText=color;
-		AuthDAO.getProductByColor(color,userID);
+		AuthDAO.getProductByColor(color);
 		try {
 			AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 		} catch (ClassNotFoundException e) {
@@ -100,7 +100,7 @@ public class SurveyServlet extends HttpServlet {
 	if(categoryID!=0)
 		{ 
 		int questionID=2;
-		AuthDAO.getProductByCategory(categoryID,userID);
+		AuthDAO.getProductByCategory(categoryID);
 		questionText=" (category with categoryID)";
 		responseText=""+categoryID+"";
 		try {
@@ -122,7 +122,7 @@ public class SurveyServlet extends HttpServlet {
 		else 
 			{
 			int questionID=3;
-			AuthDAO.getProductByPrice(priceRange,userID);
+			AuthDAO.getProductByPrice(priceRange);
 			questionText="(priceRange  value)";
 			responseText=""+priceRange+"";
 			try {
@@ -143,7 +143,7 @@ public class SurveyServlet extends HttpServlet {
 		else
 			{
 				int questionID=4;
-		 AuthDAO.getProductByPurpose(use,userID);
+		 AuthDAO.getProductByPurpose(use);
 		 questionText="(Purpose of Use value)";
 		 responseText=""+use+"";
 			try {
@@ -165,7 +165,7 @@ public class SurveyServlet extends HttpServlet {
 			{
 				int questionID=5;
 				questionText="(manufacturer with sellerID)";
-		 AuthDAO.getProductByManufacturer(sellerID,userID);
+		 AuthDAO.getProductByManufacturer(sellerID);
 		 responseText=""+sellerID+"";
 		 try {
 			 AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
