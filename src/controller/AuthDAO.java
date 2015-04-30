@@ -997,6 +997,7 @@ public class AuthDAO {
         String sql;
         ResultSet rs;
         Connection conn = AuthDAO.createConn();
+        String sql2;
         
  
         //Execute query to insert seller details
