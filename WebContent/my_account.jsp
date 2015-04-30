@@ -29,6 +29,16 @@
 	            int userID = usr.GetUserID();
 	        %>
         	<div id="account_message" class="message"><%=accountMessage%></div>
+        	<%
+        	 String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
+            if (loggedIn == null) { //Prevent null pointer exception
+                loggedIn = "false";
+            }
+
+            if (loggedIn == "false") { //If the user is logged in
+                //Alert the user that they are already logged in
+            	out.println("<font color=red>You must log in to view your account!</font>");
+            }else {%>
         	<br />
         	<h1>My Account</h1>
         	<br />
@@ -62,6 +72,7 @@
 			<a style="color: #F23A5C;" href="deactivate.jsp">Deactivate Account</a>
 			<%
 			}
+            }
 			%>
         </div>
 	</body>
