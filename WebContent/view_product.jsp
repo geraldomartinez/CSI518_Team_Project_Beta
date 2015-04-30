@@ -7,6 +7,27 @@
 		<title>View Product - Great Danes Electronics</title>
 		
        	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
+       	
+       	<style type="text/css">
+			h3{
+	       		background: #2C193B;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				text-align: center;
+			}
+			h4{
+	       		background: rgba(44,25,59,0.5);
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+			.product_image{
+				text-align: center;
+				margin-bottom: 10px;
+			}
+			form{
+				display: inline-block;
+			}
+       	</style>
 	</head>
 	<body>
 		<%@ page import="controller.Product" %>
@@ -48,9 +69,8 @@
 	            }
 	        %>
         	<div id="product_mkessage" class="message"><%=productMessage%></div>
-        	<h3>Product Page</h3> <br/>
-        	Product: <%=pName%>  <br/>
-        	<div ><img src="<%=picture%>" style="max-width: 500px; max-height: 500px;"></div>
+        	<h3><%=pName%></h3>
+        	<div class="product_image"><img src="<%=picture%>" style="max-width: 500px; max-height: 500px;"></div>
         	
         	<%
         	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
@@ -86,11 +106,23 @@
         	<br />
         	
         	<%
+        	if (navLoggedIn.equals("true") && acctType.equals("B")){
+        	%>
+			<form id="add_2_cart_form" action="Add2WishlistServlet" method="POST">
+				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
+				<input type="hidden" name="quantity" value="1" />
+				<button type="submit" class="gold_btn"><img src="img/gold_star.png" alt="golden star" style="height: 20px;" /> Add To Wish List</button>
+			</form>
+			<%
+        	}
+			%>
+        	
+        	<%
         	if ((!navLoggedIn.equals("true") || (navLoggedIn.equals("true") && acctType.equals("B"))) && pQuantity > 0){
         	%>
 			<form id="add_2_cart_form" action="Add2CartServlet" method="POST">
 				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
-				<button type="submit">Add To Cart</button>
+				<button type="submit" class="gold_btn"><img src="img/cart.png" alt="cart icon" style="height: 20px;" /> Add To Cart</button>
 			</form>
 			<%
         	}else{
@@ -100,23 +132,8 @@
         		
         	}
 			%>
-        	
-        	<%
-        	if (navLoggedIn.equals("true") && acctType.equals("B")){
-        	%>
-			<br />
-			<form id="add_2_cart_form" action="Add2WishlistServlet" method="POST">
-				<input type="hidden" name="productID" value="<%= Integer.toString(productID) %>" />
-				<input type="hidden" name="quantity" value="1" />
-				<button type="submit" name="addToWishBtn">Add To Wish List</button>
-			</form>
-			<%
-        	}
-			%>
 			
 			<h3>Customer Reviews</h3>
-			__________________________________________________________________________
-			<br />
 		<!--	<table> -->
 			
 			<%
@@ -146,14 +163,13 @@
 							reviewerID = rs.getInt("userID");
 							reviewerFirstName = rs.getString("firstName");
 							reviewerLastName = rs.getString("lastName");
+							reviewerLastName = reviewerLastName.substring(0, 1).toUpperCase() + ".";
 							
 							newDate = myFormat.format(fromDatabase.parse(datetime));
 				%>
 			<!--	<tr> -->
 			<!--	<td nowrap> -->
-			<br>
-				Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=newDate%>
-				<br><br>
+				<h4>Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=newDate%></h4>
 				<%
 				for(int i = 1; i<=rating; i++){
 					%>
@@ -164,7 +180,6 @@
 				 %>
 				<br>
 				<%=review %>
-				__________________________________________________________________________________
 		<!--		</td> -->
 		<!--		</tr> -->
 				<br>

@@ -13,11 +13,11 @@
 		}
 		#categoryMenu td{
 			text-align: center;
-			background: #000;
+			background: #FFF;
 			height: 30px;
 		}
 		#categoryMenu td a{
-			color: white;
+			color: #513D6D;
 		}
 		#categoryMenu td.selected{
 			background: #CCC;
@@ -25,6 +25,16 @@
 		#categoryMenu td.selected a{
 			color: black;
 			text-decoration: none;
+		}
+		h3{
+	       	background: rgba(44,25,59,0.5);
+			padding-top: 5px;
+			padding-bottom: 5px;
+			text-align: center;
+		}
+		h4{
+       		background: #2C193B;
+			padding: 5px;
 		}
 	</style>
 </head>
@@ -79,11 +89,12 @@
 			</tr>
 		</table>
 		<br />
-		<form action="search.jsp" method="get">
-		<input type="text" placeholder="Search Great Danes Electronics" name="results" />
-		<input type="submit" value="submit" />
+		<form action="search.jsp" method="get" style="text-align: center;">
+			<input type="text" placeholder="Search Great Danes Electronics" name="results" style="width: 200px; padding: 5px 10px;" />
+			&nbsp;
+			<input type="submit" value="Search" class="gold_btn" style="padding: 5px 10px;" />
 		</form>
-		<hr />
+		<br />
 		<br />
 		<%
 			if (strCategoryID == "") {
@@ -129,13 +140,11 @@
 						pSpecs = rs.getString("specs");
 						picture = prod.getPicture();
 						
-						
 		%>
 		
-		<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
-		<br>
-		<br>
+		<h4><a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a></h4>
 		<div ><a href="view_product.jsp?productID=<%=productID %>"><img src="<%=picture%>" style="max-width: 300px; max-height: 300px;"></a></div>
+		<br />
 		<%
         	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
         	if(!RatingAndCount.isEmpty()){
@@ -162,12 +171,9 @@
 				%>
 		<ul>
 			<li>Description: <%=pDescription%></li>
-			<li>Price: <%=pPrice%></li>
+			<li>Price: $<%=pPrice%></li>
 			<li>Specs: <%=pSpecs%></li>
 		</ul>
-		<br>
-		<br>
-		<br>
 		<br>
 		
 		<%

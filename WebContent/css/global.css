@@ -88,4 +88,27 @@ body{
 	display: none;
 }
 
+.gold_btn {
+	-webkit-border-radius: 28;
+	-moz-border-radius: 28;
+	border-radius: 28px;
+	border: none;
+	font-family: Arial;
+	color: #ffffff;
+	font-size: 16px;
+	background: #EAAA00;
+	padding: 10px 15px;
+	text-decoration: none;
+	cursor: pointer;
+	vertical-align: middle;
+}
 
+.gold_btn img{
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.gold_btn:hover {
+	background: #ffb803;
+	text-decoration: none;
+}
