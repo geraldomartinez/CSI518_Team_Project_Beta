@@ -170,9 +170,9 @@
 				
 				%>
 		<ul>
-			<li>Description: <%=pDescription%></li>
-			<li>Price: $<%=pPrice%></li>
-			<li>Specs: <%=pSpecs%></li>
+			<li><strong>Description:</strong> <%=pDescription%></li>
+			<li><strong>Price:</strong> $<%=pPrice%></li>
+			<li><strong>Specs:</strong> <%=pSpecs%></li>
 		</ul>
 		<br>
 		

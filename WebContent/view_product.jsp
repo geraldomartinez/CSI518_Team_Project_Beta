@@ -97,10 +97,10 @@
 				
 				%>
         	<br>
-        	Description: <%=pDescription%>  <br/>
-        	Specs: <%=pSpecs%>  <br/>
-        	Quantity Available: <%=pQuantity%>  <br/>
-        	Price: <%=pPrice%>  <br/>
+        	<strong>Description:</strong> <%=pDescription%>  <br/>
+        	<strong>Specs:</strong> <%=pSpecs%>  <br/>
+        	<strong>Quantity Available:</strong> <%=pQuantity%>  <br/>
+        	<strong>Price:</strong> <%=pPrice%>  <br/>
         	
         	
         	<br />

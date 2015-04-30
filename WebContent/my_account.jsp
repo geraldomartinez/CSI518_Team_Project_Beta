@@ -26,6 +26,7 @@
 	            if (accountMessage == null) { //Prevent null pointer exception
 	            	accountMessage = "";
 	            }
+	            int userID = usr.GetUserID();
 	        %>
         	<div id="account_message" class="message"><%=accountMessage%></div>
         	<br />
@@ -41,10 +42,11 @@
 			<a href="add_product.jsp">Add Product</a>
 			<br />
         	<br />
-			<a href="#">Notifications</a>
+			
 			<%
 			}
 			%>
+			<a href="notifications.jsp?userID=<%=userID%>">Notifications</a>
 			<br />
         	<br />
 			<a href="#">Orders</a>
