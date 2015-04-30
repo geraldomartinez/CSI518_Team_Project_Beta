@@ -1017,6 +1017,31 @@ public class AuthDAO {
         //return responseID;
     }   
     
+    public static void DeleteOldSurveyResponses(int userID) throws IOException, ClassNotFoundException {		
+   	 Statement stmt;		
+        String sql;		
+       		
+        Connection conn = AuthDAO.createConn();		
+		    //Execute query to insert seller details		
+        System.out.println("Creating statement...");		
+				
+		    try {		
+		    stmt = conn.createStatement();		
+		   		
+		               		
+		    sql="DELETE IGNORE FROM `SurveyResponses` WHERE `userID`='"+userID+"'";		
+		                System.out.println(sql);		
+		    stmt.executeUpdate(sql);		
+		    		
+        		
+      		
+    } catch (SQLException | NumberFormatException ex) { //An error occurred		
+        //Log the exception		
+        Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);		
+    }		
+   		
+} 
+    
     public static ArrayList<Integer> getProductAverageRating(int productID){
     	float rating = 0;
     	int avgRating = 0;
