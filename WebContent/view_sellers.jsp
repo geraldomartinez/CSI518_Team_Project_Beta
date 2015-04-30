@@ -39,7 +39,7 @@
 					<th>City</th>
 					<th>State</th>
 					<th>Zip</th>
-					<th>Status><th>
+					<th>Status<th>
 				</tr>
 				
 				<%
