@@ -23,12 +23,17 @@
         		padding-left: 10px;
         	}
         	
+        	#product_list_table td{
+        		padding-top: 5px;
+        		padding-bottom: 5px;
+        	}
+        	
         </style>
        	
 	</head>
 	<body>
 	<%@ page
-		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
+		import="controller.AuthDAO,controller.Product,controller.Utilities,java.util.*, java.sql.*"%>
         <%@include file="top_menu.jsp"%>
         <div id="page_content_wrapper">
 	        <%
@@ -52,6 +57,7 @@
 				int productID = 0;
 				String categoryName = "";
 				String productName = "";
+				Product prd;
 				
 				try {
 					String sql = "select distinct p.categoryName, p.categoryID from ProductCategories p WHERE categoryID IN (SELECT categoryID FROM `Products` WHERE sellerID='"+ sellerID + "') order by p.categoryName;";
@@ -76,23 +82,23 @@
         			pst = conn.prepareStatement(sql2);
 					rs2 = pst.executeQuery();
         			while(rs2.next()){
-        				productName = rs2.getString("productName");
         				productID = rs2.getInt("productID");
+        				prd = AuthDAO.getProductById(productID);
         				%>
         		<tr>
         			<td>
-        				[Image]
+        				<img src="<%=prd.getPicture()%>" style="max-width: 50px; max-height: 50px;"/>
         			</td>
         			<td>
         				
-        				<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
+        				<a href="view_product.jsp?productID=<%=prd.GetProductID()%>" style="color: white;"><%=prd.GetProductName()%></a>
         			</td>
         			<td>
 						<button type="submit" class="gold_button" name="edit">Edit</button>
                     </td>
 	            	<td>
 		            	<form id="delete_product" action="RemoveProductServlet" method="POST">
-		            		<input name="productID" value="<%=productID %>" type="text" style="display: none;" />
+		            		<input name="productID" value="<%=prd.GetProductID()%>" type="text" style="display: none;" />
 			            	<button type="submit" name="delete" value="delete"> Delete </button>
 		            	</form>
 	            	</td>
