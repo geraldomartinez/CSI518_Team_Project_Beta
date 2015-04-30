@@ -52,7 +52,10 @@ public class UpdateQuantityInWishListServlet extends HttpServlet {
 		int productID = Integer.parseInt(request.getParameter("productID")); // Obtain the product ID from the page that called the servlet
 		String delFromWish = request.getParameter("delFromWish");
 		Cart cart = (Cart) session.getAttribute("cart"); 
+		CartItem carts = (CartItem) session.getAttribute("CartItem"); 
 		int newQuantity = Integer.parseInt(request.getParameter("quantity")); // Obtain the item quantity from the page that called the servlet
+		
+		//System.out.println("value"+oldquantity);
 		RequestDispatcher rd = request.getRequestDispatcher("index.jsp");
 
 		if (loggedIn == null) { // Prevent null pointer exception
@@ -62,6 +65,9 @@ public class UpdateQuantityInWishListServlet extends HttpServlet {
     	{
     		delFromWish="";
     	}
+		
+		
+		
 		if (loggedIn != "true") {
 			request.setAttribute("indexMessage", "You must logged in to perform this request");
 		} else {
@@ -76,7 +82,11 @@ public class UpdateQuantityInWishListServlet extends HttpServlet {
 	            	
 	            	session.setAttribute("wishlist", wishlist);	 
 	            	if (delFromWish.equals("true")){
+	            	 //  carts.SetQuantity(oldquantity);
+	            		int oldquantity=Integer.parseInt(request.getParameter("newquantity")); 
 	            		cart.AddItem(productID);
+	            		cart.UpdateQuantity(productID, oldquantity);
+	            		//cart.UpdateQuantity(productID, wishlist.getQuantity());
 	            		session.setAttribute("cart",cart);
 	            		rd = request.getRequestDispatcher("view_cart.jsp");
 	            		request.setAttribute("cartMessage", "Product with ID " + productID + " has been added to cart");

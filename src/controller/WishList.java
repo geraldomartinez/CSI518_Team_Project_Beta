@@ -3,7 +3,16 @@ import controller.CartItem;
 import controller.Cart;
 
 public class WishList extends Cart{
+	int quantity=0;
 	
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 	public WishList() {
 		super(); //Call Cart's constructor
 	}
@@ -17,11 +26,5 @@ public class WishList extends Cart{
 			}
 		}
 	}
-	public void RemoveItem(int productID){
-		for (int i=0; i < this.items.size(); i++){
-			if (this.items.get(i).GetProductID() == productID){
-				this.items.remove(i);
-			}
-		}
-	}
+	
 }

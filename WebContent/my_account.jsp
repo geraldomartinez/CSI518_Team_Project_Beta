@@ -50,9 +50,15 @@
 			<br />
         	<br />
 			<a href="add_product.jsp">Add Product</a>
+			
 			<br />
         	<br />
-			
+			<a href="view_sellers.jsp">View Sellers</a>
+			<br/>
+			<br/>
+			<a href="vie_buyers.jsp">View Buyers</a>
+			<br/>
+			<br/>
 			<%
 			}
 			%>
