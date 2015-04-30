@@ -6,12 +6,17 @@
 package controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.servlet.http.Part;
 
 /**
  *
@@ -342,42 +347,42 @@ public class AuthDAO {
         return true;
     }
 	
-    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock,String picture) throws IOException, ClassNotFoundException {
+    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, Part filePart) throws IOException, ClassNotFoundException {
 	  	 
-        Statement stmt;
+    	PreparedStatement ps = null;
         String sql;
         ResultSet rs;
         Connection conn = AuthDAO.createConn();
         int productID=-1;
+        int fileSize = (int)filePart.getSize();
+        InputStream inputStream = filePart.getInputStream();
+        System.out.println("Filesize: "+Integer.toString(fileSize)+" bytes");
  
         //Execute query to insert seller details
         System.out.println("Creating statement...");
         try {
-            stmt = conn.createStatement();
           
-            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`,`picture`) "
-            		+ "VALUES ('" + sellerID + "','" + categoryID + "','" + name + "','"+ price + "','"+numInStock+"','"+description+"','"+specs+"','"+picture+"');";
+        	//Insert the new product
+            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`,`pictureBlob`) "
+            		+ "VALUES ('" + sellerID + "','" + categoryID + "','" + name + "','"+ price + "','"+numInStock+"','"+description+"','"+specs+"', ? );";
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(sql);  //Prepare the statement
+            ps.setBinaryStream(1, inputStream, fileSize); //Add the binary stream to the statement
+            System.out.println(ps);
+            ps.executeUpdate(); //Execute the insert query
+            conn.commit();
+            inputStream.close();
             
-            System.out.println(sql);
-            stmt.executeUpdate(sql);
             sql = "SELECT max(`productID`) FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
             System.out.println(sql);
-            rs = stmt.executeQuery(sql);
+            rs = ps.executeQuery(sql);
+            
             while (rs.next()) { //Get newly created user ID,
                 //Retrieve by column name
                 productID = (rs.getInt("max(`productID`)"));
             }
+            ps.close();
             
-           /* System.out.println("SELECT `picture` FROM `Products` where `productID`='"+productID+"'");
-            
-            ResultSet rs1 = stmt.executeQuery("SELECT `picture` FROM `Products` where `productID`='"+productID+"'");
-            while (rs1.next()) {
-              byte[] st = (byte[]) rs1.getObject(1);
-              ByteArrayInputStream baip = new ByteArrayInputStream(st);
-              ObjectInputStream ois = new ObjectInputStream(baip);
-             Product product = (Product) ois.readObject();
-             System.out.println(product);
-            }*/
         } catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -430,7 +435,8 @@ public class AuthDAO {
         int quantity= 0;
         String description=null;
         String specs = null;
-        String picture=null;
+        Blob pictureBlob = null;
+        byte[] blobAsBytes = null;
  
         Connection conn = createConn(); //Create DB connection
  
@@ -454,7 +460,12 @@ public class AuthDAO {
                 quantity=prd_rs.getInt("quantity");
                 description=prd_rs.getString("description");
                 specs=prd_rs.getString("specs");
-                picture=prd_rs.getString("picture");
+                pictureBlob = prd_rs.getBlob("pictureBlob");
+                if (pictureBlob != null){
+                	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                }else{
+                	blobAsBytes = new byte[0];
+                }
             }       
             
            
@@ -475,7 +486,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
         return prd;
     }
 
@@ -582,6 +593,8 @@ public class AuthDAO {
          String specs = null;
          String picture=null;
          Connection conn = createConn(); //Create DB connection
+         Blob pictureBlob = null;
+         byte[] blobAsBytes = null;
          
          //Execute query to check for matching product
          System.out.println("Creating statement...");
@@ -604,7 +617,12 @@ public class AuthDAO {
                  quantity=prd_rs.getInt("quantity");
                  description=prd_rs.getString("description");
                  specs=prd_rs.getString("specs");
-                 picture=prd_rs.getString("picture");
+                 pictureBlob = prd_rs.getBlob("pictureBlob");
+                 if (pictureBlob != null){
+                 	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                 }else{
+                 	blobAsBytes = new byte[0];
+                 }
              }       
             
             
@@ -625,7 +643,7 @@ public class AuthDAO {
              //If it fails to close, just leave it.
          }
   
-         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
          return prd;
         
          
@@ -649,6 +667,8 @@ public class AuthDAO {
         String specs = null;
         String picture=null;
         Connection conn = createConn(); //Create DB connection
+        Blob pictureBlob = null;
+        byte[] blobAsBytes = null;
         
         //Execute query to check for matching product
         System.out.println("Creating statement...");
@@ -670,7 +690,12 @@ public class AuthDAO {
                 quantity=prd_rs.getInt("quantity");
                 description=prd_rs.getString("description");
                 specs=prd_rs.getString("specs");
-                picture=prd_rs.getString("picture");
+                pictureBlob = prd_rs.getBlob("pictureBlob");
+                if (pictureBlob != null){
+                	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                }else{
+                	blobAsBytes = new byte[0];
+                }
             }       
             
            
@@ -691,7 +716,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
         return prd;
     }
    
@@ -715,56 +740,57 @@ public class AuthDAO {
         int quantity= 0;
         String description=null;
         String specs = null;
-        String picture=null;
+        Blob pictureBlob = null;
+        byte[] blobAsBytes = null;
        
         switch(priceRange)//To select price range
         {
-        case "1":
-        	val1=000.00;
-        	val2=100.00;
-        	break;
-        case "2":
-        	val1=100.00;
-        	val2=200.00;
-        	break;
-        case "3":
-        	val1=200.00;
-        	val2=300.00;
-        	break;
-        case "4":
-        	val1=300.00;
-        	val2=400.00;
-        	break;
-        case "5":
-        	val1=400.00;
-        	val2=500.00;
-        	break;
-        case "6":
-        	val1=500.00;
-        	val2=600.00;
-        	break;
-        case "7":
-        	val1=600.00;
-        	val2=700.00;
-        	break;
-        case "8":
-        	val1=700.00;
-        	val2=800.00;
-        	break;
-        case "9":
-        	val1=800.00;
-        	val2=900.00;
-        	break;
-        case "10":
-        	val1=900.00;
-        	val2=1000.00;
-        	break;
-        default:
-        	
-        	break;
+	        case "1":
+	        	val1=000.00;
+	        	val2=100.00;
+	        	break;
+	        case "2":
+	        	val1=100.00;
+	        	val2=200.00;
+	        	break;
+	        case "3":
+	        	val1=200.00;
+	        	val2=300.00;
+	        	break;
+	        case "4":
+	        	val1=300.00;
+	        	val2=400.00;
+	        	break;
+	        case "5":
+	        	val1=400.00;
+	        	val2=500.00;
+	        	break;
+	        case "6":
+	        	val1=500.00;
+	        	val2=600.00;
+	        	break;
+	        case "7":
+	        	val1=600.00;
+	        	val2=700.00;
+	        	break;
+	        case "8":
+	        	val1=700.00;
+	        	val2=800.00;
+	        	break;
+	        case "9":
+	        	val1=800.00;
+	        	val2=900.00;
+	        	break;
+	        case "10":
+	        	val1=900.00;
+	        	val2=1000.00;
+	        	break;
+	        default:
+	        	
+	        	break;
         	
         }
-Connection conn = createConn(); //Create DB connection
+    	Connection conn = createConn(); //Create DB connection
         
         //Execute query to check for matching product
         System.out.println("Creating statement...");
@@ -786,7 +812,12 @@ Connection conn = createConn(); //Create DB connection
                 quantity=prd_rs.getInt("quantity");
                 description=prd_rs.getString("description");
                 specs=prd_rs.getString("specs");
-                picture=prd_rs.getString("picture");
+                pictureBlob = prd_rs.getBlob("pictureBlob");
+                if (pictureBlob != null){
+                	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                }else{
+                	blobAsBytes = new byte[0];
+                }
             }       
             
            
@@ -807,7 +838,7 @@ Connection conn = createConn(); //Create DB connection
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
         return prd;
     }
 
@@ -827,6 +858,9 @@ Connection conn = createConn(); //Create DB connection
      String description=null;
      String specs = null;
      String picture=null;
+     Blob pictureBlob = null;
+     byte[] blobAsBytes = null;
+     
      Connection conn = createConn(); //Create DB connection
      
      //Execute query to check for matching product
@@ -850,7 +884,12 @@ Connection conn = createConn(); //Create DB connection
              quantity=prd_rs.getInt("quantity");
              description=prd_rs.getString("description");
              specs=prd_rs.getString("specs");
-             picture=prd_rs.getString("picture");
+             pictureBlob = prd_rs.getBlob("pictureBlob");
+             if (pictureBlob != null){
+             	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+             }else{
+             	blobAsBytes = new byte[0];
+             }
          }       
          
         
@@ -871,7 +910,7 @@ Connection conn = createConn(); //Create DB connection
          //If it fails to close, just leave it.
      }
 
-     prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID,picture);   
+     prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
      return prd;
     }
      
@@ -964,7 +1003,9 @@ Connection conn = createConn(); //Create DB connection
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-          
+          	sql2 = "DELETE IGNORE FROM `SurveyResponses` WHERE `userID`='"+userID+"'";
+			stmt.executeUpdate(sql2);
+            System.out.println(sql2);
             sql = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
             		+ "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "','"  + questionText +"');";
             
