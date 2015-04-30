@@ -175,10 +175,10 @@
 						</td>
 					</tr>
 					<tr>
-						<td style="border-top: 1px solid white;">
+						<td style="font-weight: bold; border-top: 1px solid white;">
 							Total:
 						</td>
-						<td style="border-top: 1px solid white;">
+						<td style="font-weight: bold; border-top: 1px solid white;">
 							<%= "$"+String.format("%.2f", cart.GetTotal()) %>
 						</td>
 					</tr>
