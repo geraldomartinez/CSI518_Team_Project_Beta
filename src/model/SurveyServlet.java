@@ -89,7 +89,7 @@ public class SurveyServlet extends HttpServlet {
 		int questionID=1;
 		questionText="(color)";
 		responseText=color;
-		AuthDAO.getProductByColor(color);
+		AuthDAO.getProductByColor(color,userID);
 		try {
 			AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
 		} catch (ClassNotFoundException e) {
@@ -100,7 +100,7 @@ public class SurveyServlet extends HttpServlet {
 	if(categoryID!=0)
 		{ 
 		int questionID=2;
-		AuthDAO.getProductByCategory(categoryID);
+		AuthDAO.getProductByCategory(categoryID,userID);
 		questionText=" (category with categoryID)";
 		responseText=""+categoryID+"";
 		try {
@@ -122,7 +122,7 @@ public class SurveyServlet extends HttpServlet {
 		else 
 			{
 			int questionID=3;
-			AuthDAO.getProductByPrice(priceRange);
+			AuthDAO.getProductByPrice(priceRange,userID);
 			questionText="(priceRange  value)";
 			responseText=""+priceRange+"";
 			try {
@@ -138,12 +138,12 @@ public class SurveyServlet extends HttpServlet {
 			if (!SurveyMessage.equals("")) {
             	SurveyMessage += "<br />";
             }
-            SurveyMessage += "You did not select a urpose of use ";
+            SurveyMessage += "You did not select a purpose of use ";
 		}
 		else
 			{
 				int questionID=4;
-		 AuthDAO.getProductByPurpose(use);
+		 AuthDAO.getProductByPurpose(use,userID);
 		 questionText="(Purpose of Use value)";
 		 responseText=""+use+"";
 			try {
@@ -165,7 +165,7 @@ public class SurveyServlet extends HttpServlet {
 			{
 				int questionID=5;
 				questionText="(manufacturer with sellerID)";
-		 AuthDAO.getProductByManufacturer(sellerID);
+		 AuthDAO.getProductByManufacturer(sellerID,userID);
 		 responseText=""+sellerID+"";
 		 try {
 			 AuthDAO.InsertSurveyResponses(userID,questionID,responseText,questionText);
@@ -174,12 +174,13 @@ public class SurveyServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			}
          if (userID ==0) {
-         	SurveyMessage = "Response insert failed.";
+         	SurveyMessage = "Please ensure you are logged in to take a survey";
          }else{
         	 SurveyMessage = "Thank you for taking our survey!";
          }
-     }
+     
  
  
 	 request.setAttribute("SurveyMessage",SurveyMessage);
