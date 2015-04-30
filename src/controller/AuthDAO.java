@@ -1077,7 +1077,16 @@ public class AuthDAO {
       
                   
         }
-    
+    public static Product getRecommendedProducts(String color,int categoryID, String priceRange,int use, int sellerID)
+    {
+    	Product prd1=getProductByColor(color);
+    	Product prd2=getProductByCategory(categoryID);
+    	Product prd3=getProductByPrice(priceRange);
+    	Product prd4=getProductByPurpose(use);
+    	Product prd5=getProductByManufacturer(sellerID);
+    	return prd1;
+    	
+    }
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
             Statement stmt;
             String sql1,sql2;
