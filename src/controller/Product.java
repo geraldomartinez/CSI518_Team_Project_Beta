@@ -26,6 +26,7 @@ public class Product {
 		//this.rating = 0.0f;
 		this.categoryID=0;
 		this.numInStock = 0;
+		this.pictureBlob=null;
 	}	
 	
 
@@ -136,7 +137,7 @@ public class Product {
 	}
 	
 	public String getPicture() {
-		if (this.pictureBlob.length > 0)
+		if (this.pictureBlob != null)
 			return "data:image/jpeg;base64, " + Base64.getEncoder().encodeToString(this.pictureBlob);
 		else
 			return "";
