@@ -149,6 +149,7 @@ if (SurveyMessage == null) { //Prevent null pointer exception
 				</tr>
 				</table>	
 <button type="submit" name="SubmitSurveyBtn" value="submit">Submit Survey</button>
+<button type="button"  name="recommendButton" onclick="document.location='<%="http://localhost:8080/CSI518_Team_Project_Beta/index.jsp" %>'">Click me to see recommended products!</button>
 </form>
 </div>
 </body>

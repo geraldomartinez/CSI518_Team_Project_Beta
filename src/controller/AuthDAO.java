@@ -913,79 +913,169 @@ public class AuthDAO {
      
     public static Product getProductByPurpose(int  use) {
    	 
-        Statement stmt;
-        ResultSet rs;
-        String sql;
-        Product prd = null;
+    	 Statement stmt = null;
+         ResultSet prd_rs = null;
+         String prd_sql;
+         Product prd;
+         int productID=0;
+         int sellerID = 0;
+         int categoryID = 0;
+         String productName = null;
+         float unitPrice = (float) 0.00;
+         //float rating = (float) 0.00;
+         //float shippingCost = (float) 0.00;
+         int quantity= 0;
+         String description=null;
+         String specs = null;
+      //   String picture=null;
+         Connection conn = createConn(); //Create DB connection
+         Blob pictureBlob = null;
+         byte[] blobAsBytes = null;
+         
+         //Execute query to check for matching product
         
-        int productID=0;
         
         if(use == 1)// if purpose of use is Student
         {
-        	Connection conn = createConn(); //Create DB connection
-        	 
-            //Execute query to check for matching product
-            System.out.println("Creating statement...");
-            try {
-                stmt = conn.createStatement();
-                //Query to display all categories except televisions
-                sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`!= 5;";
-                System.out.println(sql);
-                rs = stmt.executeQuery(sql);
-                productID = rs.getInt("productID");
-                prd=AuthDAO.getProductById(productID);
-               
-            }
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-        }
- 
+        	 System.out.println("Creating statement...");
+             
+                try {
+                    stmt = conn.createStatement();
+                    prd_sql = "SELECT * FROM `Products` WHERE `Products`.`categoryID`!=5;";
+                    System.out.println(prd_sql);
+                    prd_rs = stmt.executeQuery(prd_sql);
+         
+                    //Extract data from result set
+                    while (prd_rs.next()) {
+                        //Retrieve by column name
+                   	 productID=prd_rs.getInt("productID");
+                        sellerID=prd_rs.getInt("sellerID");
+                        categoryID=prd_rs.getInt("categoryID");
+                        productName = prd_rs.getString("productName");
+                        unitPrice = prd_rs.getFloat("unitPrice");
+                       
+                        //shippingCost = prd_rs.getString("lastName");
+                        quantity=prd_rs.getInt("quantity");
+                        description=prd_rs.getString("description");
+                        specs=prd_rs.getString("specs");
+                        pictureBlob = prd_rs.getBlob("pictureBlob");
+                        if (pictureBlob != null){
+                        	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                        }else{
+                        	blobAsBytes = new byte[0];
+                        }
+                    }       
+                   
+                   
+                    
+                } catch (Exception ex) { //An error occurred
+                    //Log the exception
+                	System.out.println("Failed to get Product by color");
+                    Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+                    return new Product();
+                }
+             
+           
+        } 
+                     
         if(use == 2)// if purpose of use is Commercial
         {
-        	Connection conn = createConn(); //Create DB connection
+        
         	 
             //Execute query to check for matching product
             System.out.println("Creating statement...");
-            try {
-                stmt = conn.createStatement();
+           
                 //query to display Cellphones, Laptops and Tablets
-                sql = "SELECT * FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4";
-                System.out.println(sql);
-                rs = stmt.executeQuery(sql);
-                productID = rs.getInt("productID");
-                prd=AuthDAO.getProductById(productID);
                
-            }
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+                   try {
+                       stmt = conn.createStatement();
+                       prd_sql ="SELECT * FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4";
+                       System.out.println(prd_sql);
+                       prd_rs = stmt.executeQuery(prd_sql);
+            
+                       //Extract data from result set
+                       while (prd_rs.next()) {
+                           //Retrieve by column name
+                      	 productID=prd_rs.getInt("productID");
+                           sellerID=prd_rs.getInt("sellerID");
+                           categoryID=prd_rs.getInt("categoryID");
+                           productName = prd_rs.getString("productName");
+                           unitPrice = prd_rs.getFloat("unitPrice");
+                          
+                           //shippingCost = prd_rs.getString("lastName");
+                           quantity=prd_rs.getInt("quantity");
+                           description=prd_rs.getString("description");
+                           specs=prd_rs.getString("specs");
+                           pictureBlob = prd_rs.getBlob("pictureBlob");
+                           if (pictureBlob != null){
+                           	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                           }else{
+                           	blobAsBytes = new byte[0];
+                           }
+                       }       
+                      
+                      
+                       
+                   } catch (Exception ex) { //An error occurred
+                       //Log the exception
+                   	System.out.println("Failed to get Product by color");
+                       Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+                       return new Product();
+                   }
         }
         
         if(use == 3)// if purpose of use is Personal
         {
-        	Connection conn = createConn(); //Create DB connection
-        	 
-            //Execute query to check for matching product
-            System.out.println("Creating statement...");
-            try {
-                stmt = conn.createStatement();
-                sql = "SELECT  * FROM `Products`";// display all categories of products
-                System.out.println(sql);
-                rs = stmt.executeQuery(sql);
-                productID = rs.getInt("productID");
-               prd= AuthDAO.getProductById(productID);
-               
-            }
-            catch (SQLException | NumberFormatException ex) { //An error occurred
-                //Log the exception
-                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        	 System.out.println("Creating statement...");
+             try {
+                 stmt = conn.createStatement();
+                 prd_sql = "SELECT * FROM `Products`;";
+                 System.out.println(prd_sql);
+                 prd_rs = stmt.executeQuery(prd_sql);
+      
+                 //Extract data from result set
+                 while (prd_rs.next()) {
+                     //Retrieve by column name
+                	 productID=prd_rs.getInt("productID");
+                     sellerID=prd_rs.getInt("sellerID");
+                     categoryID=prd_rs.getInt("categoryID");
+                     productName = prd_rs.getString("productName");
+                     unitPrice = prd_rs.getFloat("unitPrice");
+                    
+                     //shippingCost = prd_rs.getString("lastName");
+                     quantity=prd_rs.getInt("quantity");
+                     description=prd_rs.getString("description");
+                     specs=prd_rs.getString("specs");
+                     pictureBlob = prd_rs.getBlob("pictureBlob");
+                     if (pictureBlob != null){
+                     	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
+                     }else{
+                     	blobAsBytes = new byte[0];
+                     }
+                 }       
+                
+             }
+                 
+              catch (Exception ex) { //An error occurred
+                 //Log the exception
+             	System.out.println("Failed to get Product by color");
+                 Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+                 return new Product();
+             }
+      
+        }//Clean-up
+        try {
+            prd_rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
         }
+ 
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
         return prd;
+      
+                  
         }
     
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {

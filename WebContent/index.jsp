@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+ <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -78,7 +78,10 @@
 		</style>
 	</head>
 	<body>
+	<%@ page
+		import="controller.AuthDAO,controller.Utilities,controller.Product,java.util.*, java.sql.*"%>
         <%@include file="top_menu.jsp"%>
+           
         <br />
         <div id="page_content_wrapper">
 	        <%
@@ -97,6 +100,65 @@
 				</div>
 			</div>
 			<br />
+			<div id="Recommended Products" class="message">These are the Recommended Products
+		<br />
+		<h1 id="header">Survey</h1>
+		
+<form id="survey" name="survey" action="SurveyServlet" method="POST">
+			<%
+			
+			
+
+			String Btn = request.getParameter("recommendButton");
+			String color=request.getParameter("color");
+			System.out.println(color);
+			Product prd=AuthDAO.getProductByColor(color);
+			String productName = prd.GetProductName();
+			System.out.println(productName);
+			String Description = prd.GetDescription();
+					Float unitPrice = prd.GetPrice();
+				String specs = prd.GetSpecs();
+				int productID=prd.GetProductID();
+					
+					//String picture = prd.getPicture();
+					
+		
+			%>
+			
+		
+		<br />
+		<%
+        	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
+        	if(!RatingAndCount.isEmpty()){
+	      	int avgRating = RatingAndCount.get(1);
+	      	int numberOfReviewers = RatingAndCount.get(0);
+				for(int i = 1; i<=avgRating; i++){
+					%>
+					<span style="color: yellow;">&#9733;</span> 
+					<%
+				}
+				
+				 %>
+				(<%=numberOfReviewers %> Reviews) <%} 
+        	else{
+        		for(int i = 1; i<=5; i++){
+					%>
+					<span style="color: yellow;">&#9734;</span> 
+					<%
+				}
+        		%>(No Reviews)<%
+        	}
+				
+				
+				%>
+		
+			<ul>
+			<li>Description: <%=Description%></li>
+			<li>Price: $<%=unitPrice%></li>
+			<li>Specs: <%=specs%></li>
+		</ul>
+			</form>
+			</div>
 			<br />
 			<hr />
 			<div id="footer">
@@ -111,3 +173,4 @@
         </div>
 	</body>
 </html>
+
