@@ -21,8 +21,8 @@
 	<%@ page
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
 		
-        <div id="page_content_wrapper">
         <%@include file="top_menu.jsp"%>
+        <div id="page_content_wrapper">
        
        
         <H1>List of sellers</H1>
@@ -39,7 +39,7 @@
 					<th>City</th>
 					<th>State</th>
 					<th>Zip</th>
-					<th>Status><th>
+					<th>Status<th>
 				</tr>
 				
 				<%
