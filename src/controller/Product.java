@@ -137,7 +137,7 @@ public class Product {
 	
 	public String getPicture() {
 		if (this.pictureBlob.length > 0)
-			return Base64.getEncoder().encodeToString(this.pictureBlob);
+			return "data:image/jpeg;base64, " + Base64.getEncoder().encodeToString(this.pictureBlob);
 		else
 			return "";
 	}

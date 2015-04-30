@@ -50,7 +50,7 @@
         	<div id="product_mkessage" class="message"><%=productMessage%></div>
         	<h3>Product Page</h3> <br/>
         	Product: <%=pName%>  <br/>
-        	<div ><img src="data:image/jpeg;base64, <%=picture%>" height=200 width=200></div>
+        	<div ><img src="<%=picture%>" style="max-width: 500px; max-height: 500px;"></div>
         	
         	<%
         	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);

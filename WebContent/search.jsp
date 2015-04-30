@@ -8,7 +8,7 @@
 </head>
 <body>
 <%@ page
-		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
+		import="controller.AuthDAO,controller.Utilities,controller.Product,java.util.*, java.sql.*"%>
 	<%@include file="top_menu.jsp"%>
 	
 	<div id="page_content_wrapper">
@@ -40,6 +40,7 @@ __________________________________________
 				String picture="";
 				Connection conn = null;
 				ResultSet rs = null;
+				Product prod = null;
 
 				try {			
 					String sql = "SELECT * FROM Products WHERE removed = 0 AND (productName LIKE '%" +results+"%' OR specs LIKE '%" +results+"%' OR description LIKE '%" +results+"%');";
@@ -54,7 +55,8 @@ __________________________________________
 						pPrice = rs.getFloat("unitPrice");
 						pSpecs = rs.getString("specs");
 						productID = rs.getInt("productID");
-					    picture=rs.getString("picture");
+					    prod = AuthDAO.getProductById(productID);
+						picture = prod.getPicture();
 					 
 						
 		%>
@@ -62,7 +64,7 @@ __________________________________________
 		<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
 		<br>
 		<br>
-		<div ><img src="img/<%=picture%>" height=200 width=200></div>
+		<div ><a href="view_product.jsp?productID=<%=productID %>"><img src="<%=picture%>" style="max-width: 300px; max-height: 300px;"></a></div>
 		<ul>
 			<li>Description: <%=pDescription%></li>
 			<li>Price: <%=pPrice%></li>

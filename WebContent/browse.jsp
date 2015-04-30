@@ -30,7 +30,7 @@
 </head>
 <body>
 	<%@ page
-		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
+		import="controller.AuthDAO,controller.Utilities,controller.Product,java.util.*, java.sql.*"%>
 	<%@include file="top_menu.jsp"%>
 
 
@@ -108,7 +108,8 @@
 				String pSpecs = "";
 				float pPrice = 0;
 				int productID = 0;
-				String picture="";
+				String picture = "";
+				Product prod = null;
 
 				try {			
 					String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='"
@@ -119,18 +120,14 @@
 					PreparedStatement pst = conn.prepareStatement(sql);
 					rs = pst.executeQuery();
 					while (rs.next()) {
+						productID = rs.getInt("productID");
+						prod = AuthDAO.getProductById(productID);
+						
 						productName = rs.getString("productName");
 						pDescription = rs.getString("description");
 						pPrice = rs.getFloat("unitPrice");
 						pSpecs = rs.getString("specs");
-						productID = rs.getInt("productID");
-					    picture=rs.getString("picture");
-					     
-					     //String x=new String(picture);
-						/* InputStream input = rs.getBinaryStream("picture");
-						OutputStream output = response.getOutputStream();
-						response.setContentType("image/gif");
-						InputStream photoStream = rs.getBytes("picture");  */
+						picture = prod.getPicture();
 						
 						
 		%>
@@ -138,7 +135,7 @@
 		<a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a>
 		<br>
 		<br>
-		<div ><img src="img/<%=picture%>" height=200 width=200></div>
+		<div ><a href="view_product.jsp?productID=<%=productID %>"><img src="<%=picture%>" style="max-width: 300px; max-height: 300px;"></a></div>
 		<%
         	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
         	if(!RatingAndCount.isEmpty()){
@@ -168,6 +165,10 @@
 			<li>Price: <%=pPrice%></li>
 			<li>Specs: <%=pSpecs%></li>
 		</ul>
+		<br>
+		<br>
+		<br>
+		<br>
 		
 		<%
 			}
@@ -177,9 +178,6 @@
 				}
 			}
 		%>
-
-
-
 	</div>
 
 
