@@ -146,9 +146,7 @@
 				</table>
 				<br />
 				<br />
-				<form id="checkout_form" action="checkout.jsp" method="POST">
-					<button type="submit">Checkout</button>
-				</form>
+				<a href="checkout.jsp"><img src="img/paypal_button.gif" alt="Checkout with PayPal" /></a>
 				<br />
 				<br />
 				<form id="remove_all_form" action="RemoveAllItemsInCartServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your cart?')">
