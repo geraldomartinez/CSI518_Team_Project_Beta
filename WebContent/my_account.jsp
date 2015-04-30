@@ -53,6 +53,12 @@
 			
 			<br />
         	<br />
+        	<%
+			}
+			%>
+        	<%
+			if ( acctType.equals("A")){
+			%>
 			<a href="view_sellers.jsp">View Sellers</a>
 			<br/>
 			<br/>
