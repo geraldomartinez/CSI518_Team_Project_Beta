@@ -121,24 +121,17 @@
 				int productID = 0;
 				String picture = "";
 				Product prod = null;
-
-				try {			
-					String sql = "SELECT * 	FROM  `Products` WHERE categoryID ='"
-							+ categoryID + "' AND removed = 0 order by productName;";
-					//conn = AuthDAO.createConn();
-					HttpSession ss = request.getSession();
+				List<Product> productList = AuthDAO.getProductsbyCategory(categoryID);
+				
+				for(int j = 0; j<productList.size(); j++){
+					prod = productList.get(j);
+					productID = prod.GetProductID();
 					
-					PreparedStatement pst = conn.prepareStatement(sql);
-					rs = pst.executeQuery();
-					while (rs.next()) {
-						productID = rs.getInt("productID");
-						prod = AuthDAO.getProductById(productID);
-						
-						productName = rs.getString("productName");
-						pDescription = rs.getString("description");
-						pPrice = rs.getFloat("unitPrice");
-						pSpecs = rs.getString("specs");
-						picture = prod.getPicture();
+					productName = prod.GetProductName();
+					pDescription = prod.GetDescription();
+					pPrice = prod.GetPrice();
+					pSpecs = prod.GetSpecs();
+					picture = prod.getPicture();
 						
 		%>
 		
@@ -177,10 +170,11 @@
 		<br>
 		
 		<%
-			}
+			/* }
 					conn.close();
 				} catch (Exception e) {
 					out.print(e);
+				} */
 				}
 			}
 		%>

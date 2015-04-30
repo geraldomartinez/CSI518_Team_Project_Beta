@@ -154,7 +154,7 @@
 				</table>
 				<br />
 				<form id="remove_all_form" action="RemoveAllItemsInWishListServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your wish list?')">
-					<button type="submit"><img src="img/trash.png" alt="trashcan"/> Remove All Items</button>
+					<button type="submit"><img src="img/trash.png" alt="trashcan" style="height: 16px;" /> Remove All Items</button>
 				</form>
 				<br />
 				<h3>Cost</h3>

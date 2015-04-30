@@ -5,14 +5,11 @@
  */
 package controller;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -576,7 +573,7 @@ public class AuthDAO {
    
     public static Product getProductByColor(String color) {
      	 
-     	 String sql;
+     //	 String sql;
     	 Statement stmt = null;
          ResultSet prd_rs = null;
          String prd_sql;
@@ -591,7 +588,7 @@ public class AuthDAO {
          int quantity= 0;
          String description=null;
          String specs = null;
-         String picture=null;
+      //   String picture=null;
          Connection conn = createConn(); //Create DB connection
          Blob pictureBlob = null;
          byte[] blobAsBytes = null;
@@ -665,7 +662,7 @@ public class AuthDAO {
         int quantity= 0;
         String description=null;
         String specs = null;
-        String picture=null;
+      //  String picture=null;
         Connection conn = createConn(); //Create DB connection
         Blob pictureBlob = null;
         byte[] blobAsBytes = null;
@@ -723,8 +720,8 @@ public class AuthDAO {
     public static Product getProductByPrice(String priceRange) {
    	 
         Statement stmt;
-        ResultSet rs;
-        String sql;
+      //  ResultSet rs;
+      //  String sql;
         double val1=0,val2=0;
        
         ResultSet prd_rs;
@@ -857,7 +854,7 @@ public class AuthDAO {
      int quantity= 0;
      String description=null;
      String specs = null;
-     String picture=null;
+   //  String picture=null;
      Blob pictureBlob = null;
      byte[] blobAsBytes = null;
      
@@ -994,7 +991,7 @@ public class AuthDAO {
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
             Statement stmt;
             String sql1,sql2;
-            ResultSet rs;
+            //ResultSet rs;
             Connection conn = AuthDAO.createConn();
 		    //Execute query to insert seller details
             System.out.println("Creating statement...");
@@ -1063,6 +1060,57 @@ public class AuthDAO {
         }
         
     	return RatingAndCount;
+    	
+    }
+    
+    public static List<Product> getProductsbyCategory(int categoryID){
+		List<Product> productList = new ArrayList<Product>();
+		
+
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM  `Products` WHERE categoryID ='"
+					+ categoryID + "' AND removed = 0 order by productName;";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+            	Product prod = new Product();
+            	prod.SetProductName(rs.getString("productName"));
+            	prod.SetDescription(rs.getString("description"));
+            	prod.SetNumInStock(rs.getInt("quantity"));            	
+            	prod.SetSpecs(rs.getString("specs"));
+            	prod.setPicture(rs.getBytes("pictureBlob"));
+            	prod.SetProductID(rs.getInt("productID"));
+            	prod.SetPrice(rs.getFloat("unitPrice"));
+                //Retrieve by column name
+            	productList.add(prod); 
+            	System.out.println(rs.getString("productName"));
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get Rating average by productID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            //return new Product();
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+        
+    	return productList;
     	
     }
     
