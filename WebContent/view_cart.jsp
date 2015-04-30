@@ -61,7 +61,7 @@
 			}
 		</style>
 	</head>
-	<body>
+	<body style="width: 1000px;">
 		<%@include file="top_menu.jsp"%>
 		<br />
 		<div id="page_content_wrapper">
@@ -85,7 +85,7 @@
 			%>
 			<div id="cart_message" class="message"><%=cartMessage%></div>
 			<br />
-			<h3>Cart Items</h3>
+			<h3>Items</h3>
 			<%
 				CartItem tempItem;
 				Product prod;
@@ -94,7 +94,7 @@
 			%>
 				<table id="cart_table">
 				<tr>
-					<th>Product Name</th>
+					<th colspan="2">Product</th>
 					<th>Price</th>
 					<th>Shipping Cost</th>
 					<th>Quantity</th>
@@ -105,37 +105,40 @@
 				for (int i = 0; i < itemList.size(); i++) {
 					prod = AuthDAO.getProductById(itemList.get(i).GetProductID());
 					out.print("<tr>");
-					out.print("<td>");
-						out.print("<a href='view_product.jsp?productID="+prod.GetProductID()+"'>"+prod.GetProductName()+"</a>");
-					out.print("</td>");
-					out.print("<td>");
-						out.print("$"+String.format("%.2f", prod.GetPrice()));
-					out.print("</td>");
-					out.print("<td>");
-						out.print("$"+String.format("%.2f", prod.GetShippingCost()));
-					out.print("</td>");
-					out.print("<td>");
-						out.print("<form id='update_qty_form' action='UpdateQuantityInCartServlet' method='POST'>");
-							out.print("<input type='number' name='quantity' class='quantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
-							out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
-							out.print("<button type='submit'>Update</button>");
-						out.print("</form>");
-					out.print("</td>");
-					out.print("<td>");
-						out.print("<form id='update_qty_form' action='UpdateQuantityInCartServlet' method='POST'>");
-							out.print("<input type='hidden' name='quantity' class='quantity' value='-1' />");
-							out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
-							out.print("<button type='submit'>Remove</button>");
-						out.print("</form>");
-					out.print("</td>");
-					out.print("<td>");
-					out.print("<form id='update_qty_form' action='Add2WishlistServlet' method='POST'>");
-						out.print("<input type='hidden' name='quantity' class='quantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
-						out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
-						out.print("<input type='hidden' name='delFromCart' value='true' />");
-						out.print("<button type='submit' name=wish >Move to Wish List</button>");
-					out.print("</form>");
-				out.print("</td>");
+						out.print("<td>");
+							out.print("<a href='view_product.jsp?productID="+prod.GetProductID()+"'><img src='"+prod.getPicture()+"' style='max-width: 100px; max-height: 100px;'></a>");
+						out.print("</td>");
+						out.print("<td>");
+							out.print("<a href='view_product.jsp?productID="+prod.GetProductID()+"'>"+prod.GetProductName()+"</a>");
+						out.print("</td>");
+						out.print("<td>");
+							out.print("$"+String.format("%.2f", prod.GetPrice()));
+						out.print("</td>");
+						out.print("<td>");
+							out.print("$"+String.format("%.2f", prod.GetShippingCost()));
+						out.print("</td>");
+						out.print("<td>");
+							out.print("<form id='update_qty_form' action='UpdateQuantityInCartServlet' method='POST'>");
+								out.print("<input type='number' name='quantity' class='quantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
+								out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
+								out.print("<button type='submit'>Update</button>");
+							out.print("</form>");
+						out.print("</td>");
+						out.print("<td>");
+							out.print("<form id='update_qty_form' action='UpdateQuantityInCartServlet' method='POST'>");
+								out.print("<input type='hidden' name='quantity' class='quantity' value='-1' />");
+								out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
+								out.print("<button type='submit'>Remove</button>");
+							out.print("</form>");
+						out.print("</td>");
+						out.print("<td>");
+							out.print("<form id='update_qty_form' action='Add2WishlistServlet' method='POST'>");
+								out.print("<input type='hidden' name='quantity' class='quantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
+								out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
+								out.print("<input type='hidden' name='delFromCart' value='true' />");
+								out.print("<button type='submit' name=wish >Move to Wish List</button>");
+							out.print("</form>");
+						out.print("</td>");
 					out.print("</tr>");
 					
 					}

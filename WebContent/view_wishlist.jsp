@@ -14,18 +14,48 @@
 		#page_content_wrapper {
 			text-align: center;
 		}
+		h3{
+       		background: #2C193B;
+			padding-top: 5px;
+			padding-bottom: 5px;
+		}
 		#wishlist_table{
 			width: 100%;
 			border-collapse: collapse;
 		}
+		#wishlist_table th{
+			border-bottom: 1px solid white;
+		}
 		#wishlist_table td{
-			border: 1px solid white;
+			padding-bottom: 5px;
 		}
 		#wishlist_table td a{
 			color: white;
 		}
 		.quantity{
 			width: 50px;
+			text-align: right;
+		}
+		#remove_all_form button{
+			font-size: 16px;
+			vertical-align: middle;
+			cursor: pointer;
+		}
+		#remove_all_form button:hover{
+			color: red;
+		}
+		#remove_all_form button img{
+			height: 16px;
+			vertical-align: middle;
+		}
+		#total_table{
+			display: inline-block;
+			border-collapse: collapse;
+		}
+		#total_table td:nth-child(1){
+			text-align: left;
+		}
+		#total_table td:nth-child(2){
 			text-align: right;
 		}
 		</style>
@@ -54,6 +84,7 @@
 			%>
 			<div id="wishlist_message" class="message"><%=wishlistMessage%></div>
 			<br />
+			<h3>Items</h3>
 			<%
 				CartItem tempItem;
 				Product prod;
@@ -62,15 +93,19 @@
 			%>
 				<table id="wishlist_table">
 				<tr>
-					<th>Product Name</th>
+					<th colspan="2">Product</th>
 					<th>Price</th>
 					<th>Shipping Cost</th>
 					<th>Quantity</th>
+					<th>Remove</th>
 				</tr>
 			<%
 				for (int i = 0; i < itemList.size(); i++) {
 					prod = AuthDAO.getProductById(itemList.get(i).GetProductID());
 					out.print("<tr>");
+					out.print("<td>");
+						out.print("<a href='view_product.jsp?productID="+prod.GetProductID()+"'><img src='"+prod.getPicture()+"' style='max-width: 100px; max-height: 100px;'></a>");
+					out.print("</td>");
 					out.print("<td>");
 						out.print("<a href='view_product.jsp?productID="+prod.GetProductID()+"'>"+prod.GetProductName()+"</a>");
 					out.print("</td>");
@@ -99,9 +134,13 @@
 			%>
 				</table>
 				<br />
+				<form id="remove_all_form" action="RemoveAllItemsInWishListServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your wish list?')">
+					<button type="submit"><img src="img/trash.png" alt="trashcan"/> Remove All Items</button>
+				</form>
 				<br />
+				<h3>Cost</h3>
 				<br />
-				<table>
+				<table id="total_table">
 					<tr>
 						<td>
 							Cost:
@@ -137,9 +176,6 @@
 				</table>
 				<br />
 				<br />
-				<form id="remove_all_form" action="RemoveAllItemsInWishListServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your wishlist?')">
-					<button type="submit">Remove All Items</button>
-				</form>
 				
 			<%
 				}else{
