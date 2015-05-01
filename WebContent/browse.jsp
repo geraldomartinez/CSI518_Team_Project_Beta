@@ -117,11 +117,12 @@
 			String productName = "";
 				String pDescription = "";
 				String pSpecs = "";
-				float pPrice = 0;
+				float pPrice = 0.00f;
 				int productID = 0;
 				String picture = "";
 				Product prod = null;
 				List<Product> productList = AuthDAO.getProductsbyCategory(categoryID);
+				String floatConv = "";
 				
 				for(int j = 0; j<productList.size(); j++){
 					prod = productList.get(j);
@@ -132,6 +133,7 @@
 					pPrice = prod.GetPrice();
 					pSpecs = prod.GetSpecs();
 					picture = prod.getPicture();
+					floatConv = String.format("%.2f", pPrice);
 						
 		%>
 		
@@ -164,17 +166,12 @@
 				%>
 		<ul>
 			<li><strong>Description:</strong> <%=pDescription%></li>
-			<li><strong>Price:</strong> $<%=pPrice%></li>
+			<li><strong>Price:</strong> $<%=floatConv%></li>
 			<li><strong>Specs:</strong> <%=pSpecs%></li>
 		</ul>
 		<br>
 		
 		<%
-			/* }
-					conn.close();
-				} catch (Exception e) {
-					out.print(e);
-				} */
 				}
 			}
 		%>

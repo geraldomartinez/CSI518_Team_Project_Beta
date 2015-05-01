@@ -59,6 +59,7 @@
 		      	float pPrice = new_prd.GetPrice();
 		      	int pQuantity = new_prd.GetNumInStock();
 		      	String picture=new_prd.getPicture();
+		      	String floatConv = String.format("%.2f", pPrice);
         %>
         
         <div id="page_content_wrapper">
@@ -100,7 +101,7 @@
         	<strong>Description:</strong> <%=pDescription%>  <br/>
         	<strong>Specs:</strong> <%=pSpecs%>  <br/>
         	<strong>Quantity Available:</strong> <%=pQuantity%>  <br/>
-        	<strong>Price:</strong> <%=pPrice%>  <br/>
+        	<strong>Price:</strong> <%=floatConv%>  <br/>
         	
         	
         	<br />
@@ -169,7 +170,7 @@
 				%>
 			<!--	<tr> -->
 			<!--	<td nowrap> -->
-				<h4>Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=newDate%></h4>
+				<h4>Reviewed by <strong><%=reviewerFirstName + " " + reviewerLastName %></strong> on <%=newDate%> PST</h4>
 				<%
 				for(int i = 1; i<=rating; i++){
 					%>

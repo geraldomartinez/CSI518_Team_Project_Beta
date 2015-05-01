@@ -69,6 +69,7 @@ String results = request.getParameter("results");
 						productID = rs.getInt("productID");
 					    prod = AuthDAO.getProductById(productID);
 						picture = prod.getPicture();
+						String floatConv = String.format("%.2f", pPrice);
 					 
 						
 		%>
@@ -102,7 +103,7 @@ String results = request.getParameter("results");
 				%>
 		<ul>
 			<li>Description: <%=pDescription%></li>
-			<li>Price: $<%=pPrice%></li>
+			<li>Price: $<%=floatConv%></li>
 			<li>Specs: <%=pSpecs%></li>
 		</ul>
 		
