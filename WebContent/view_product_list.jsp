@@ -95,7 +95,7 @@
         			</td>
         			<td>
         			
-        			<button type="button"  value="edit" name="edit" onclick="document.location="edit_product.jsp?productID=<%=prd.GetProductID()%>'">Edit</button>
+        			<button type="button"  value="edit" name="edit" onclick="document.location='edit_product.jsp?productID=<%=prd.GetProductID()%>'">Edit</button>
 					
                     </td>
 	            	<td>
