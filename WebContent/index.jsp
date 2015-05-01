@@ -110,17 +110,25 @@
 			<br />
 			<%
 			if (navLoggedIn == "true" && acctType.equals("B")){
+				Product[] productsArr = AuthDAO.getRecommendedProducts(User.GetUserID());
 			%>
 			<br />
 			<br />
 			<div id="recommended_products" class="message">
+				<%
+				if (productsArr == null){
+				%>
+				<h3 style="text-align: center;"><a href="survey.jsp" style="color: white;">Take our survey</a> to see recommended products!</h3>
+				<%
+				}else{
+				%>
 				<h3 style="text-align: center;">Recommended For You</h3>
 				<br />
 				<%
-				Product[] productsArr = AuthDAO.getRecommendedProducts(User.GetUserID());
-				for (int i=0; i < productsArr.length; i++)
-					if (productsArr[i] != null){
-						out.print("<a href='view_product.jsp?productID="+productsArr[i].GetProductID()+"'><img src='"+productsArr[i].getPicture()+"' style='max-height: 150px; max-width: 150px;' /></a>&nbsp;");
+					for (int i=0; i < productsArr.length; i++)
+						if (productsArr[i] != null){
+							out.print("<a href='view_product.jsp?productID="+productsArr[i].GetProductID()+"'><img src='"+productsArr[i].getPicture()+"' style='max-height: 150px; max-width: 150px;' /></a>&nbsp;");
+						}
 					}
 				}
 				%>

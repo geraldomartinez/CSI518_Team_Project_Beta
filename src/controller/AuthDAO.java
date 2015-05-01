@@ -883,8 +883,7 @@ public class AuthDAO {
         }
     public static Product[] getRecommendedProducts(int userID)
     {
-    		Product prd1 = null,prd2 = null,prd3=null,prd4=null,prd5=null;
-    		Product[] prd = {prd1,prd2,prd3,prd4,prd5};
+    		Product[] prd = null;
     		
     		//Code goes here
     		Statement stmt;
@@ -895,39 +894,39 @@ public class AuthDAO {
             int sellerID=0;
             int use=0;
             int categoryID=0;
+            int rowCt = 0;
             System.out.println("Creating statement...");
             Connection conn = createConn();
             try {
                 stmt = conn.createStatement();
             
-            sql = "SELECT * FROM  `SurveyResponses` WHERE userID ='"+userID+"';";
-            System.out.println(sql);
-            rs = stmt.executeQuery(sql);
-            rs = stmt.executeQuery(sql);
-            //Extract data from result set
-            while (rs.next()) {
-                //Retrieve by column name
-            	int questionID = rs.getInt("questionID");
-
-            	switch(questionID){
-            		case 1:
-            			color = rs.getString("responseText");
-            			break;
-            		case 2:
-            			categoryID = rs.getInt("responseText");
-            			break;
-            		case 3:
-            			priceRange = rs.getString("responseText");
-            			break;
-            		case 4:
-            			use= rs.getInt("responseText");
-            			break;
-            		case 5:
-            			sellerID = rs.getInt("responseText");
-            			break;
-           
-            }
-            }
+	            sql = "SELECT * FROM  `SurveyResponses` WHERE userID ='"+userID+"';";
+	            System.out.println(sql);
+	            rs = stmt.executeQuery(sql);
+	            //Extract data from result set
+	            while (rs.next()) {
+	                //Retrieve by column name
+	            	int questionID = rs.getInt("questionID");
+	
+	            	switch(questionID){
+	            		case 1:
+	            			color = rs.getString("responseText");
+	            			break;
+	            		case 2:
+	            			categoryID = rs.getInt("responseText");
+	            			break;
+	            		case 3:
+	            			priceRange = rs.getString("responseText");
+	            			break;
+	            		case 4:
+	            			use= rs.getInt("responseText");
+	            			break;
+	            		case 5:
+	            			sellerID = rs.getInt("responseText");
+	            			break;
+	            	}
+	            	rowCt++;
+	            }
             }
             catch (Exception ex) { //An error occurred
                 //Log the exception
@@ -936,11 +935,14 @@ public class AuthDAO {
                 
             }
             
-         prd[0]=getProductByColor(color);
-    	 prd[1]=getProductByCategory(categoryID);
-    	 prd[2]=getProductByPrice(priceRange);
-    	 prd[3]=getProductByPurpose(use);
-    	 prd[4]=getProductByManufacturer(sellerID);
+         if (rowCt > 0){
+        	 prd = new Product[5];
+	         prd[0]=getProductByColor(color);
+	    	 prd[1]=getProductByCategory(categoryID);
+	    	 prd[2]=getProductByPrice(priceRange);
+	    	 prd[3]=getProductByPurpose(use);
+	    	 prd[4]=getProductByManufacturer(sellerID);
+         }
     	return prd;
     	
     }
