@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Edit a Product</title>
 </head>
-
+  <%@ page import="controller.AuthDAO" %>
 <%@ page
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
 		
@@ -38,7 +38,7 @@
 	String pDescription = "";
 	String pSpecs = "";
 	float pPrice = 0;
-	int productID=33;
+	int productID=0;
 	String picture="";
 	Connection conn = null;
 	ResultSet rs = null;
@@ -47,9 +47,14 @@
 
 	try {			
 	
-		
-		//productID=prod.GetProductID();
-			String sql = "SELECT * FROM Products WHERE productID='"+productID+"';";
+		String strProductID = request.getParameter("productID");
+    	if (strProductID == null){
+    		strProductID = "";
+    	}
+    	 productID = Integer.parseInt(strProductID);
+         prod = AuthDAO.getProductById(productID);
+		int userID=User.GetUserID();
+			String sql = "SELECT * FROM Products WHERE productID='"+productID+"'AND sellerID="+userID+";";
 			conn = AuthDAO.createConn();
 			
 			
@@ -62,7 +67,7 @@
 				pSpecs = rs.getString("specs");
 				productID = rs.getInt("productID");
 				pQuantity=rs.getInt("quantity");
-			    prod = AuthDAO.getProductById(productID);
+			    
 				picture = prod.getPicture();
 			 
 	
