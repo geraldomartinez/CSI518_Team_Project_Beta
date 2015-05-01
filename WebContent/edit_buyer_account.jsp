@@ -16,7 +16,22 @@
        			color: white;
        		}
        	</style>
-       	</head>
+       	 <script type="text/javascript" >
+        function ToggleEditable (button) {
+            var div = document.getElementById ("myDiv");
+
+            if (div.contentEditable == "true") {
+                div.contentEditable = "false";
+                button.innerHTML = "Edit!";
+            }
+            else {
+                div.contentEditable = "true";
+                button.innerHTML = "Editing done!";
+            }
+        }
+        
+    </script>
+	</head>
 	<body>
 	<%@ page
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
@@ -26,8 +41,8 @@
        
        
         <H1>Account Information</H1>
-        <button type="button"  value="edit" name="edit" onclick="document.location='edit_buyer_account.jsp?userID=<%=User.GetUserID()%>'">Edit Account Information</button>
-       
+        
+        <button onclick="ToggleEditable (this);">Edit!</button>
         <br>
         <br>
         
@@ -73,34 +88,68 @@
 					while (rs.next()) {
 						firstName = rs.getString("firstName");
 						System.out.println(firstName);
-						out.println("<tr><td>");out.println(firstName);out.println("</td>");
 						middleName = rs.getString("middleName");
-						out.println("<td>");out.println(middleName);out.println("</td>");
 						lastName = rs.getString("lastName");
-						out.println("<td>");out.println(lastName);out.println("</td>");
+					
 						phone = rs.getString("phone");
-						out.println("<td>");out.println(phone);out.println("</td>");
+						
 						address=rs.getString("address");
-						out.println("<td>");out.println(address);out.println("</td>");
+
 						city=rs.getString("city");
-						out.println("<td>");out.println(city);out.println("</td>");
+					
 						state=rs.getString("state");
-						out.println("<td>");out.println(state);out.println("</td>");
+						
 						zip=rs.getString("zip");
-						out.println("<td>");out.println(zip);out.println("</td>");
+						
 						
 					
 					}
 				
 					
         		%>
-        		
+        	
         		<% 
         			
 					} catch (Exception e) {
 						out.print(e);
 					}
 				%>
+			
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=firstName%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=middleName%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=lastName%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=phone%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=address%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=city%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=state%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=zip%>
+		 </div>
+		 </td>
+		 <input type="submit" value="Submit" name="insertbt">
+					
+    </div>
         </table>
 </body>
 </html>

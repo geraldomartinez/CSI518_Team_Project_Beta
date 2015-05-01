@@ -26,7 +26,7 @@
        
        
         <H1>Account Information</H1>
-        <button type="button"  value="edit" name="edit" onclick="document.location='edit_Account.jsp?userID=<%=User.GetUserID()%>'">Edit Account Information</button>
+        <button type="button"  value="edit" name="edit" onclick="document.location='edit_seller_account.jsp?userID=<%=User.GetUserID()%>'">Edit Account Information</button>
         <br>
         <br>
         <table id="sellerInfo" border=1 align=center>
@@ -86,17 +86,8 @@
 						state=rs.getString("state");
 						out.println("<td>");out.println(state);out.println("</td>");
 						zip=rs.getString("zip");
-						/*out.println("<td>");out.println(zip);out.println("</td>");
-						active=rs.getInt("active");
-						if(active==1)
-						{
-							out.println("<td>");out.println("Active");out.println("</td></tr>");
+						out.println("<td>");out.println(zip);out.println("</td>");
 						
-						}else
-						{
-							out.println("<td>");out.println("InActive");out.println("</td></tr>");
-						}
-						*/
 					
 					}
 				}

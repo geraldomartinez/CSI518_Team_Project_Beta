@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Edit a Product</title>
-</head>
+
   <%@ page import="controller.AuthDAO" %>
 <%@ page
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>

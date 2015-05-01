@@ -16,7 +16,22 @@
        			color: white;
        		}
        	</style>
-       	</head>
+       	 <script type="text/javascript" >
+        function ToggleEditable (button) {
+            var div = document.getElementById ("myDiv");
+
+            if (div.contentEditable == "true") {
+                div.contentEditable = "false";
+                button.innerHTML = "Edit!";
+            }
+            else {
+                div.contentEditable = "true";
+                button.innerHTML = "Editing done!";
+            }
+        }
+        
+    </script>
+	</head>
 	<body>
 	<%@ page
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
@@ -26,12 +41,12 @@
        
        
         <H1>Account Information</H1>
-        <button type="button"  value="edit" name="edit" onclick="document.location='edit_buyer_account.jsp?userID=<%=User.GetUserID()%>'">Edit Account Information</button>
-       
+        
+        <button onclick="ToggleEditable (this);">Edit!</button>
         <br>
         <br>
         
-        <table id="buyerInfo" border=1 align=center>
+        <table id="sellerInfo" border=1 align=center>
 				<tr>
 					<th >First Name</th>
 					<th>Middle Name</th>
@@ -45,7 +60,7 @@
 				</tr>
 				
 				<%
-        		int userID = User.GetUserID(); //Page will error out if there is no seller logged in...
+        		int sellerID = User.GetUserID(); //Page will error out if there is no seller logged in...
 	        	Connection conn = null;
 				ResultSet rs = null; //Handles the list of categories
 				ResultSet rs2 = null; //Handles the list of products
@@ -59,12 +74,14 @@
 				String city="";
 				String state="";
 				String zip="";
-				int active=0;
+				
 				try {
 				
-				
-					String sql = "SELECT DISTINCT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip FROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'B' AND u.UserID ='"+userID+"';";
-					System.out.println(sql);
+					if(AuthDAO.VerifySellerID(sellerID))
+					{
+
+						String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip FROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'S'AND u.UserID = s.sellerID AND s.sellerID ='"+sellerID+"';";
+						System.out.println(sql);
 					conn = AuthDAO.createConn();
 					HttpSession ss = request.getSession();
 	
@@ -73,34 +90,73 @@
 					while (rs.next()) {
 						firstName = rs.getString("firstName");
 						System.out.println(firstName);
-						out.println("<tr><td>");out.println(firstName);out.println("</td>");
 						middleName = rs.getString("middleName");
-						out.println("<td>");out.println(middleName);out.println("</td>");
 						lastName = rs.getString("lastName");
-						out.println("<td>");out.println(lastName);out.println("</td>");
+					
 						phone = rs.getString("phone");
-						out.println("<td>");out.println(phone);out.println("</td>");
-						address=rs.getString("address");
-						out.println("<td>");out.println(address);out.println("</td>");
-						city=rs.getString("city");
-						out.println("<td>");out.println(city);out.println("</td>");
-						state=rs.getString("state");
-						out.println("<td>");out.println(state);out.println("</td>");
-						zip=rs.getString("zip");
-						out.println("<td>");out.println(zip);out.println("</td>");
 						
+						address=rs.getString("address");
+
+						city=rs.getString("city");
 					
+						state=rs.getString("state");
+						
+						zip=rs.getString("zip");
+						
+						
 					}
+					}
+					else
+						{ 
+							String error="Not logged in as seller";
+							System.out.println("Not logged in as seller");
+							out.println("<tr><td>");out.println(error);out.println("</td>");
+						}
 				
-					
         		%>
-        		
+        	
         		<% 
-        			
-					} catch (Exception e) {
+				
+				} catch (Exception e) {
 						out.print(e);
 					}
 				%>
+			
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=firstName%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=middleName%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=lastName%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=phone%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=address%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=city%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=state%>
+		 </div>
+		 </td>
+		 <td>
+		 <div id="myDiv" contentEditable="true"><%=zip%>
+		 </div>
+		 </td>
+		 <input type="submit" value="Submit" name="insertbt">
+					
+    </div>
         </table>
 </body>
 </html>
