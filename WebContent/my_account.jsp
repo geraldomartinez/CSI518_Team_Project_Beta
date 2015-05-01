@@ -50,7 +50,9 @@
 			<br />
         	<br />
 			<a href="add_product.jsp">Add Product</a>
-			
+			<br />
+        	<br />
+			<a href="view_seller_account_info.jsp">Account Information</a>
 			<br />
         	<br />
         	<%
@@ -73,6 +75,13 @@
 			<br/>
 			<%
 			}
+        	if ( acctType.equals("B")){
+			%>
+			<a href="view_buyer_account_info.jsp">Account Information</a>
+			<br />
+        	<br />
+        	<%
+			}
 			%>
 			<a href="notifications.jsp?userID=<%=userID%>">Notifications</a>
 			<br />
@@ -88,6 +97,8 @@
 			<br />
         	<br />
 			<a style="color: #F23A5C;" href="deactivate.jsp">Deactivate Account</a>
+			<br/>
+			<br/>
 			<%
 			}
             }
