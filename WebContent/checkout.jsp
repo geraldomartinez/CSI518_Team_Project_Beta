@@ -13,12 +13,39 @@
 	       	#page_content_wrapper{
 	       		text-align: center;
 	       	}
+			h3{
+        		background: #2C193B;
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
 	       	#checkout_form input{
 	       		margin-bottom: 5px;
 	       	}
 	       	#checkout_items_wrapper{
 	       		text-align: center;
 	       	}
+	       	#checkout_items_wrapper table{
+				width: 100%;
+				border-collapse: collapse;
+			}
+			#checkout_items_wrapper th{
+				border-bottom: 1px solid white;
+				padding-bottom: 5px;
+			}
+			#checkout_items_wrapper td{
+				padding-top: 5px;
+			}
+			#total_table{
+				display: inline-block;
+				border-collapse: collapse;
+			}
+			#total_table td:nth-child(1){
+				text-align: left;
+			}
+			#total_table td:nth-child(2){
+				padding-left: 20px;
+				text-align: right;
+			}
        	</style>
 	</head>
 	<body>
@@ -47,11 +74,17 @@
             %>
             <div id="checkout_message" class="message"><%=checkoutMessage%></div>
         	<br />
-            <h3 id="sub_header">Your items:</h3>
+            <h3 id="sub_header">Items</h3>
         	<div id="checkout_items_wrapper">
-	        	<table>
+	        	<table style="width: 100%;">
+		        	<tr>
+						<th colspan="2">Product</th>
+						<th>Price</th>
+						<th>Shipping Cost</th>
+						<th>Quantity</th>
+					</tr>
 	            <%
-	            	
+	            	float productShippingCost;
 	                List<CartItem> items = cart.GetAllItems();
 	            	Product prod;
 	           		for (int i=0; i < items.size(); i++){
@@ -67,6 +100,26 @@
 		     			<td>
 		     				$<%= String.format("%.02f", prod.GetPrice()) %>
 		     			</td>
+		     			<td>
+		     				<%
+							productShippingCost = -1.0f;
+							switch(wishlist.GetShippingMethod()){
+								case 1:
+									productShippingCost = prod.GetGroundShippingCost();
+									break;
+								case 2:
+									productShippingCost = prod.GetTwoDayShippingCost();
+									break;
+								case 3:
+									productShippingCost = prod.GetNextDayShippingCost();
+									break;
+							}
+							out.print("$"+String.format("%.02f", productShippingCost));
+							%>
+						</td>
+		     			<td>
+		     				<%= items.get(i).GetQuantity() %>
+		     			</td>
 	     			</tr>
 	       		<%
 	            	}
@@ -75,7 +128,45 @@
 	            <br />
 	            
         	</div>
-            <h3 id="sub_header">Shipping Details:</h3>
+            <br />
+            <br />
+			<table id="total_table">
+				<tr>
+					<td>
+						Cost:
+					</td>
+					<td>
+						<%= "$"+String.format("%.2f", cart.GetCost()) %>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Total Shipping Cost:
+					</td>
+					<td>
+						<%= "$"+String.format("%.2f", cart.GetShippingCost()) %>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Tax:
+					</td>
+					<td>
+						<%= "$"+String.format("%.2f", cart.GetTax()) %>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-weight: bold; border-top: 1px solid white;">
+						Total:
+					</td>
+					<td style="font-weight: bold; border-top: 1px solid white;">
+						<%= "$"+String.format("%.2f", cart.GetTotal()) %>
+					</td>
+				</tr>
+			</table>
+            <br />
+            <br />
+            <h3 id="sub_header">Order Details</h3>
             <div id="checkout_form_wrapper">
                 <form id="checkout_form" action="CheckoutServlet" method="POST">
                     <input name="shipping_name" type="text" placeholder="Recipient's Name"/>

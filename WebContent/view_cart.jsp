@@ -58,6 +58,7 @@
 				text-align: left;
 			}
 			#total_table td:nth-child(2){
+				padding-left: 20px;
 				text-align: right;
 			}
 		</style>
