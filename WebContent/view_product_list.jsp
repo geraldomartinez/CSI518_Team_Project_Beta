@@ -95,8 +95,8 @@
         			</td>
         			<td>
         			
-        			<button type="button"  value="edit" name="edit" onclick="document.location='<%="http://localhost:8080/CSI518_Team_Project_Beta/edit_product.jsp" %>'">Edit</button>
-					</form>
+        			<button type="button"  value="edit" name="edit" onclick="document.location="edit_product.jsp?productID=<%=prd.GetProductID()%>'">Edit</button>
+					
                     </td>
 	            	<td>
 		            	<form id="delete_product" action="RemoveProductServlet" method="POST">
