@@ -103,11 +103,11 @@
 				</tr>
 				<tr>
 					<td>Product Name:</td>
-					<td><input name="productname" type="text"></td>
+					<td><input name="productname" type="text" /></td>
 				</tr>
 				<tr>
 					<td>Description:</td>
-					<td><textarea name="description"></textarea></td>
+					<td><textarea  name="description"></textarea></td>
 				</tr>
 				<tr>
 					<td>Specs:</td>

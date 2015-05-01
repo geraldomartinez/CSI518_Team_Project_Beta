@@ -43,7 +43,7 @@
 				</tr>
 				
 				<%
-        		//int sellerID = usr.GetUserID(); //Page will error out if there is no seller logged in...
+        		int sellerID = usr.GetUserID(); //Page will error out if there is no seller logged in...
 	        	Connection conn = null;
 				ResultSet rs = null; //Handles the list of categories
 				ResultSet rs2 = null; //Handles the list of products

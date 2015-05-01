@@ -41,7 +41,7 @@
 	            if (productListMessage == null) { //Prevent null pointer exception
 	            	productListMessage = "";
 	            }
-	            String sellerName = usr.GetFirstName();
+	           String sellerName = usr.GetFirstName();
 	           
 	        %>
         	<div id="product_list_message" class="message"><%=productListMessage%></div>
@@ -94,7 +94,9 @@
         				<a href="view_product.jsp?productID=<%=prd.GetProductID()%>" style="color: white;"><%=prd.GetProductName()%></a>
         			</td>
         			<td>
-						<button type="submit" class="gold_button" name="edit">Edit</button>
+        			
+        			<button type="button"  value="edit" name="edit" onclick="document.location='<%="http://localhost:8080/CSI518_Team_Project_Beta/edit_product.jsp" %>'">Edit</button>
+					</form>
                     </td>
 	            	<td>
 		            	<form id="delete_product" action="RemoveProductServlet" method="POST">
