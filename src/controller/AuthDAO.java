@@ -1077,14 +1077,67 @@ public class AuthDAO {
       
                   
         }
-    public static Product getRecommendedProducts(String color,int categoryID, String priceRange,int use, int sellerID)
+    public static Product[] getRecommendedProducts(int userID)
     {
-    	Product prd1=getProductByColor(color);
-    	Product prd2=getProductByCategory(categoryID);
-    	Product prd3=getProductByPrice(priceRange);
-    	Product prd4=getProductByPurpose(use);
-    	Product prd5=getProductByManufacturer(sellerID);
-    	return prd1;
+    		Product prd1 = null,prd2 = null,prd3=null,prd4=null,prd5=null;
+    		Product[] prd= {prd1,prd2,prd3,prd4,prd5};
+    		
+    		//Code goes here
+    		Statement stmt;
+            ResultSet rs;
+            String sql;
+            String color="";
+            String priceRange="";
+            int sellerID=0;
+            int use=0;
+            int categoryID=0;
+            System.out.println("Creating statement...");
+            Connection conn = createConn();
+            try {
+                stmt = conn.createStatement();
+            
+            sql = "SELECT * FROM  `SurveyResponses` WHERE userID ='"+userID+"';";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            rs = stmt.executeQuery(sql);
+            //Extract data from result set
+            while (rs.next()) {
+                //Retrieve by column name
+            	int questionID = rs.getInt("questionID");
+
+            	switch(questionID){
+            		case 1:
+            			color = rs.getString("responseText");
+            			break;
+            		case 2:
+            			categoryID = rs.getInt("responseText");
+            			break;
+            		case 3:
+            			priceRange = rs.getString("responseText");
+            			break;
+            		case 4:
+            			use= rs.getInt("responseText");
+            			break;
+            		case 5:
+            			sellerID = rs.getInt("responseText");
+            			break;
+           
+            }
+            }
+            }
+            catch (Exception ex) { //An error occurred
+                //Log the exception
+            	System.out.println("Failed to get Product by color");
+                Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+                
+            }
+            
+         prd[0]=getProductByColor(color);
+    	 prd[1]=getProductByCategory(categoryID);
+    	 prd[2]=getProductByPrice(priceRange);
+    	 prd[3]=getProductByPurpose(use);
+    	 prd[4]=getProductByManufacturer(sellerID);
+    	return prd;
     	
     }
     public static void InsertSurveyResponses(int userID, int questionID,  String responseText, String questionText) throws IOException, ClassNotFoundException {
@@ -1097,9 +1150,7 @@ public class AuthDAO {
 		
 		    try {
 		    stmt = conn.createStatement();
-		    sql2 = "DELETE IGNORE FROM `SurveyResponses` WHERE `userID`='"+userID+"'";
-		    stmt.executeUpdate(sql2);
-		                System.out.println(sql2);
+		   
 		    sql1 = "INSERT INTO `SurveyResponses` (`userID`,`questionID`,`responseText`,`questionText`) "
 		    + "VALUES ('" +userID+ "','" +questionID+"','"  + responseText + "','"  + questionText +"');";
 		                System.out.println(sql1);

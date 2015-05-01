@@ -72,6 +72,13 @@ public class SurveyServlet extends HttpServlet {
 		System.out.println(use);
 		System.out.println(responseText);
 		
+		try{
+			AuthDAO.DeleteOldSurveyResponses(userID);
+		}catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if (SubmitSurveyBtn.length() != 0){
 	if(color==null)
 	{
