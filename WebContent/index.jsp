@@ -72,8 +72,10 @@
 			}
 			
 			#footer{
+				color: white;
 				text-align: center;
 				font-size: 10px;
+				padding-bottom: 10px;
 			}
 			
 			#recommended_products{
