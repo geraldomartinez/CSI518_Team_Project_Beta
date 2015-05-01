@@ -31,7 +31,7 @@ public class SignupServlet extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("signup.jsp");
 
         String registerMessage = "";
-        String email, password, passwordConfirm, firstName, lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum,companyName;
+        String email, password, passwordConfirm, firstName, lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum,companyName,url,shipping;
         int newUserID;
         boolean insertNewUser = true;
         // String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -47,6 +47,8 @@ public class SignupServlet extends HttpServlet {
         city = request.getParameter("city");
         state = request.getParameter("state");
         zip = request.getParameter("zip");
+        url=request.getParameter("url");
+        shipping=request.getParameter("shipping");
         companyName = request.getParameter("company_name");
         accountNum = request.getParameter("account_number");
         routingNum = request.getParameter("routing_number");
@@ -89,6 +91,12 @@ public class SignupServlet extends HttpServlet {
         }
         if (zip == null) {
             zip = "";
+        }
+        if (url == null) {
+            url = "";
+        }
+        if (shipping == null) {
+            shipping = "";
         }
         if (companyName == null) {
         	companyName = "";
@@ -173,6 +181,22 @@ public class SignupServlet extends HttpServlet {
                  registerMessage += "The zip code you entered was in an invalid format. Please enter a 5-digit zip code.";
                  insertNewUser = false;	
             }
+            if (url.equals("")) {
+                if (!registerMessage.equals("")) {
+                    registerMessage += "<br />";
+                }
+                registerMessage += "You did not enter url";
+                insertNewUser = false;
+            }
+            if (shipping.equals("")) {
+                if (!registerMessage.equals("")) {
+                    registerMessage += "<br />";
+                }
+                registerMessage += "Did not select a shipping option";
+                insertNewUser = false;
+            }
+            
+            
             if(state.length()!=2)
             {
             	 if (!registerMessage.equals("")) {
@@ -212,7 +236,7 @@ public class SignupServlet extends HttpServlet {
                     registerMessage = "New User Insert Failed.";
                 } else if (!AuthDAO.enterUserName(newUserID,firstName,middleName,lastName,phone,address,city,state,zip)) {
                     registerMessage = "Create Account Failed, Please Try Again.";
-                } else if (accountType == "S" && !AuthDAO.enterNewSellerDetails(newUserID, accountNum, routingNum, companyName)) {
+                } else if (accountType == "S" && !AuthDAO.enterNewSellerDetails(newUserID, accountNum, routingNum, companyName,url,shipping)) {
                     registerMessage = "Create Account Failed, Please Try Again.";
                 } else {
                     rd = request.getRequestDispatcher("index.jsp");
