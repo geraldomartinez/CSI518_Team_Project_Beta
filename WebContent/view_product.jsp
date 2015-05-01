@@ -58,8 +58,12 @@
 		      	String pSpecs = new_prd.GetSpecs();
 		      	float pPrice = new_prd.GetPrice();
 		      	int pQuantity = new_prd.GetNumInStock();
+		      	int avgRating = 0;
+		      	int numberOfReviewers = 0;
 		      	String picture=new_prd.getPicture();
 		      	String floatConv = String.format("%.2f", pPrice);
+		      	avgRating = new_prd.GetRating();
+		      	numberOfReviewers = new_prd.getReviewCount();
         %>
         
         <div id="page_content_wrapper">
@@ -74,10 +78,10 @@
         	<div class="product_image"><img src="<%=picture%>" style="max-width: 500px; max-height: 500px;"></div>
         	
         	<%
-        	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
-        	if(!RatingAndCount.isEmpty()){
-	      	int avgRating = RatingAndCount.get(1);
-	      	int numberOfReviewers = RatingAndCount.get(0);
+        	//ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
+        	if(numberOfReviewers > 0){
+	      	//int avgRating = RatingAndCount.get(1);
+	      	//int numberOfReviewers = RatingAndCount.get(0);
 				for(int i = 1; i<=avgRating; i++){
 					%>
 					<span style="color: yellow;">&#9733;</span> 

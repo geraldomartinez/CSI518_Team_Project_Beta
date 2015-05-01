@@ -434,14 +434,19 @@ public class AuthDAO {
         String specs = null;
         Blob pictureBlob = null;
         byte[] blobAsBytes = null;
- 
+        int ratingAvg=0, ratingCount =0;
         Connection conn = createConn(); //Create DB connection
  
         //Execute query to check for matching product
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT * FROM `Products` WHERE `Products`.`productID`='" + productID + "';";
+            prd_sql = "SELECT p . * , pr.rankingAVG, pr.count FROM Products p "+
+			"LEFT JOIN (SELECT productID, AVG( ranking ) AS rankingAVG, COUNT( * ) AS count "+
+			"FROM ProductReviews "+
+			"GROUP BY productID "+
+			")pr ON p.productID = pr.productID WHERE p.productID='" 
+            + productID + "';";
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
@@ -457,6 +462,10 @@ public class AuthDAO {
                 quantity=prd_rs.getInt("quantity");
                 description=prd_rs.getString("description");
                 specs=prd_rs.getString("specs");
+                float rating = prd_rs.getFloat("rankingAVG");
+            	//prod.SetRating(Math.round(rating));
+            	ratingAvg = Math.round(rating);
+            	ratingCount = prd_rs.getInt("count");
                 pictureBlob = prd_rs.getBlob("pictureBlob");
                 if (pictureBlob != null){
                 	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
@@ -483,7 +492,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, ratingAvg, ratingCount);   
         return prd;
     }
 
