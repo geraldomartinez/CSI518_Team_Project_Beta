@@ -75,6 +75,12 @@
 				text-align: center;
 				font-size: 10px;
 			}
+			
+			#recommended_products{
+				display: block;
+				padding-bottom: 15px;
+				text-align: center;
+			}
 		</style>
 	</head>
 	<body>
@@ -100,17 +106,22 @@
 				</div>
 			</div>
 			<br />
-			<div id="Recommended Products" class="message">These are the Recommended Products
-		<br />
-		<h1 id="header">Survey</h1>
-
 			<%
-			
-			Product[] productsArr = AuthDAO.getRecommendedProducts(User.GetUserID());
-		System.out.println(productsArr);
-		//display Products
+			if (navLoggedIn == "true"){
 			%>
-	
+			<br />
+			<br />
+			<div id="recommended_products" class="message">
+				<h3 style="text-align: center;">Recommended For You</h3>
+				<br />
+				<%
+				Product[] productsArr = AuthDAO.getRecommendedProducts(User.GetUserID());
+				for (int i=0; i < productsArr.length; i++)
+					if (productsArr[i] != null){
+						out.print("<a href='view_product.jsp?productID="+productsArr[i].GetProductID()+"'><img src='"+productsArr[i].getPicture()+"' style='max-height: 150px; max-width: 150px;' /></a>&nbsp;");
+					}
+				}
+				%>
 			</div>
 			<br />
 			<hr />

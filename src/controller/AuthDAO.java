@@ -597,7 +597,7 @@ public class AuthDAO {
          System.out.println("Creating statement...");
          try {
              stmt = conn.createStatement();
-             prd_sql = "SELECT * FROM `Products` WHERE `Products`.`color`='" + color + "';";
+             prd_sql = "SELECT * FROM `Products` WHERE `Products`.`color`='" + color + "' AND `removed` <> '1' ORDER BY RAND() LIMIT 1;";
              System.out.println(prd_sql);
              prd_rs = stmt.executeQuery(prd_sql);
   
@@ -671,7 +671,7 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "';";
+            prd_sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
@@ -793,7 +793,7 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT * FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"';";  
+            prd_sql = "SELECT * FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";  
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
@@ -864,7 +864,7 @@ public class AuthDAO {
      System.out.println("Creating statement...");
      try {
          stmt = conn.createStatement();
-         prd_sql = "SELECT * FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "';";
+         prd_sql = "SELECT * FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";
          System.out.println(prd_sql);
          prd_rs = stmt.executeQuery(prd_sql);
 
@@ -941,7 +941,7 @@ public class AuthDAO {
              
                 try {
                     stmt = conn.createStatement();
-                    prd_sql = "SELECT * FROM `Products` WHERE `Products`.`categoryID`!=5;";
+                    prd_sql = "SELECT * FROM `Products` WHERE `Products`.`categoryID` <> 5  AND `removed` <> '1' ORDER BY RAND() LIMIT 1;";
                     System.out.println(prd_sql);
                     prd_rs = stmt.executeQuery(prd_sql);
          
@@ -1080,7 +1080,7 @@ public class AuthDAO {
     public static Product[] getRecommendedProducts(int userID)
     {
     		Product prd1 = null,prd2 = null,prd3=null,prd4=null,prd5=null;
-    		Product[] prd= {prd1,prd2,prd3,prd4,prd5};
+    		Product[] prd = {prd1,prd2,prd3,prd4,prd5};
     		
     		//Code goes here
     		Statement stmt;
