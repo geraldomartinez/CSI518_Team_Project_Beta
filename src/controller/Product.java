@@ -9,7 +9,8 @@ public class Product {
 	private String specs;
 	private float price;
 	private float shippingCost;
-	private float rating;
+	private int rating;
+	private int reviewCount;
 	private int numInStock;
 	private int categoryID;
 	private byte[] pictureBlob;
@@ -27,6 +28,7 @@ public class Product {
 		this.categoryID=0;
 		this.numInStock = 0;
 		this.pictureBlob=null;
+		this.setReviewCount(0);
 	}	
 	
 
@@ -38,7 +40,7 @@ public class Product {
 			float unitPrice, 
 			int quantity, 
 			int categoryID,
-			byte[] pictureBlob){
+			byte[] pictureBlob, int rating, int reviewCount){
 		this.productID = productID;
 		this.sellerID = sellerID;
 		this.name = productName;
@@ -46,7 +48,8 @@ public class Product {
 		this.specs = specs;
 		this.price = unitPrice;
 		//shippingCost = 0.0f;
-		//rating = 0.0f;
+		this.rating = rating;
+		this.setReviewCount(reviewCount);
 		this.numInStock = quantity;
 		this.categoryID=categoryID;
 		this.pictureBlob=pictureBlob;
@@ -112,11 +115,11 @@ public class Product {
 		this.shippingCost = x;
 	}
 	
-	public float GetRating(){
+	public int GetRating(){
 		return this.rating;
 	}
 	
-	public void SetRating(float x /*in, product rating*/){
+	public void SetRating(int x /*in, product rating*/){
 		this.rating = x;
 	}
 	
@@ -145,6 +148,16 @@ public class Product {
 
 	public void setPicture(byte[] picture) {
 		this.pictureBlob = picture;
+	}
+
+
+	public int getReviewCount() {
+		return reviewCount;
+	}
+
+
+	public void setReviewCount(int reviewCount) {
+		this.reviewCount = reviewCount;
 	}
 	
 	

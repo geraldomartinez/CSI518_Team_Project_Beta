@@ -483,7 +483,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
         return prd;
     }
 
@@ -640,7 +640,7 @@ public class AuthDAO {
              //If it fails to close, just leave it.
          }
   
-         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
+         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
          return prd;
         
          
@@ -713,7 +713,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
         return prd;
     }
    
@@ -835,7 +835,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
         return prd;
     }
 
@@ -907,7 +907,7 @@ public class AuthDAO {
          //If it fails to close, just leave it.
      }
 
-     prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
+     prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
      return prd;
     }
      
@@ -1072,7 +1072,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
         return prd;
       
                   
@@ -1249,7 +1249,9 @@ public class AuthDAO {
     	
         try {
             stmt = conn.createStatement();
-            sql = "SELECT * FROM  `Products` WHERE categoryID ='"
+            sql = "SELECT p . * , pr.rankingAVG, pr.count FROM Products" + 
+            " p LEFT JOIN (SELECT productID, AVG( ranking ) AS rankingAVG, COUNT( * ) AS count "+
+            		"FROM ProductReviews GROUP BY productID)pr ON p.productID = pr.productID WHERE categoryID ='"
 					+ categoryID + "' AND removed = 0 order by productName;";
             System.out.println(sql);
             rs = stmt.executeQuery(sql);
@@ -1264,6 +1266,9 @@ public class AuthDAO {
             	prod.setPicture(rs.getBytes("pictureBlob"));
             	prod.SetProductID(rs.getInt("productID"));
             	prod.SetPrice(rs.getFloat("unitPrice"));
+            	float rating = rs.getFloat("rankingAVG");
+            	prod.SetRating(Math.round(rating));
+            	prod.setReviewCount(rs.getInt("count"));
                 //Retrieve by column name
             	productList.add(prod); 
             	System.out.println(rs.getString("productName"));

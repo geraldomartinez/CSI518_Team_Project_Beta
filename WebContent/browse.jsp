@@ -123,6 +123,8 @@
 				Product prod = null;
 				List<Product> productList = AuthDAO.getProductsbyCategory(categoryID);
 				String floatConv = "";
+				int avgRating = 0;
+		      	int numberOfReviewers = 0;
 				
 				for(int j = 0; j<productList.size(); j++){
 					prod = productList.get(j);
@@ -134,6 +136,8 @@
 					pSpecs = prod.GetSpecs();
 					picture = prod.getPicture();
 					floatConv = String.format("%.2f", pPrice);
+					avgRating = prod.GetRating();
+					numberOfReviewers = prod.getReviewCount();
 						
 		%>
 		
@@ -141,10 +145,9 @@
 		<div ><a href="view_product.jsp?productID=<%=productID %>"><img src="<%=picture%>" style="max-width: 300px; max-height: 300px;"></a></div>
 		<br />
 		<%
-        	ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
-        	if(!RatingAndCount.isEmpty()){
-	      	int avgRating = RatingAndCount.get(1);
-	      	int numberOfReviewers = RatingAndCount.get(0);
+        	//ArrayList<Integer> RatingAndCount = AuthDAO.getProductAverageRating(productID);
+        	if(numberOfReviewers > 0){
+	      	
 				for(int i = 1; i<=avgRating; i++){
 					%>
 					<span style="color: yellow;">&#9733;</span> 
