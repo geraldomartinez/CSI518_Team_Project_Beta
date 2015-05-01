@@ -5,14 +5,21 @@ import controller.CartItem;
 
 public class Cart {
 	
+	private final byte GROUND_SHIPPING = 1;
+	private final byte TWO_DAY_SHIPPING = 2;
+	private final byte NEXT_DAY_SHIPPING = 3;
+	
 	private final float TAX_PERCENTAGE = 0.07f;
 	protected List<CartItem> items;
-	private float cost, shippingCost;
+	private float cost;
+	private float shippingCost;
+	private byte shippingMethod;
 	
 	public Cart(){
 		this.cost = 0.0f;
 		this.shippingCost = 0.0f;
 		items = new ArrayList<CartItem>();
+		shippingMethod = GROUND_SHIPPING; //Default shipping method is ground shipping
 	}
 	
 	public List<CartItem> GetAllItems(){
@@ -83,12 +90,24 @@ public class Cart {
 		this.shippingCost = 0.0f;
 		int qty = 0;
 		Product prod; //Prevent null exception
+		float productShippingCost = -1.0f;
 		
 		for (int i=0; i < this.items.size(); i++){
 			qty = this.items.get(i).GetQuantity();
 			prod = AuthDAO.getProductById(this.items.get(i).GetProductID());
 			this.cost += prod.GetPrice() * qty;
-			this.shippingCost += prod.GetShippingCost() * qty;
+			switch (this.shippingMethod){ //Determine the shipping method and cost
+				case GROUND_SHIPPING:
+					productShippingCost = prod.GetGroundShippingCost();
+					break;
+				case TWO_DAY_SHIPPING:
+					productShippingCost = prod.GetTwoDayShippingCost();
+					break;
+				case NEXT_DAY_SHIPPING:
+					productShippingCost = prod.GetNextDayShippingCost();
+					break;
+			}
+			this.shippingCost += productShippingCost * qty;
 		}
 	}
 	
@@ -106,6 +125,14 @@ public class Cart {
 	
 	public float GetTotal(){
 		return (this.GetCost() + this.GetTax() + this.GetShippingCost());
+	}
+	
+	public byte GetShippingMethod(){
+		return this.shippingMethod;
+	}
+	
+	public void SetShippingMethod(byte x /*Shipping method*/){
+		this.shippingMethod = x;
 	}
 	
 }

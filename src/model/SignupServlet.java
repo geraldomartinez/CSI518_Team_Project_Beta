@@ -48,7 +48,6 @@ public class SignupServlet extends HttpServlet {
         state = request.getParameter("state");
         zip = request.getParameter("zip");
         url=request.getParameter("url");
-        shipping=request.getParameter("shipping");
         companyName = request.getParameter("company_name");
         accountNum = request.getParameter("account_number");
         routingNum = request.getParameter("routing_number");
@@ -94,9 +93,6 @@ public class SignupServlet extends HttpServlet {
         }
         if (url == null) {
             url = "";
-        }
-        if (shipping == null) {
-            shipping = "";
         }
         if (companyName == null) {
         	companyName = "";
@@ -188,13 +184,6 @@ public class SignupServlet extends HttpServlet {
                 registerMessage += "You did not enter url";
                 insertNewUser = false;
             }
-            if (shipping.equals("")) {
-                if (!registerMessage.equals("")) {
-                    registerMessage += "<br />";
-                }
-                registerMessage += "Did not select a shipping option";
-                insertNewUser = false;
-            }
             
             
             if(state.length()!=2)
@@ -236,7 +225,7 @@ public class SignupServlet extends HttpServlet {
                     registerMessage = "New User Insert Failed.";
                 } else if (!AuthDAO.enterUserName(newUserID,firstName,middleName,lastName,phone,address,city,state,zip)) {
                     registerMessage = "Create Account Failed, Please Try Again.";
-                } else if (accountType == "S" && !AuthDAO.enterNewSellerDetails(newUserID, accountNum, routingNum, companyName,url,shipping)) {
+                } else if (accountType == "S" && !AuthDAO.enterNewSellerDetails(newUserID, accountNum, routingNum, companyName,url)) {
                     registerMessage = "Create Account Failed, Please Try Again.";
                 } else {
                     rd = request.getRequestDispatcher("index.jsp");

@@ -16,6 +16,9 @@
 	       	#checkout_form input{
 	       		margin-bottom: 5px;
 	       	}
+	       	#checkout_items_wrapper{
+	       		text-align: center;
+	       	}
        	</style>
 	</head>
 	<body>
@@ -46,16 +49,31 @@
         	<br />
             <h3 id="sub_header">Your items:</h3>
         	<div id="checkout_items_wrapper">
-            <%
-                List<CartItem> items = cart.GetAllItems();
-            	Product prod;
-           		for (int i=0; i < items.size(); i++){
-					prod = AuthDAO.getProductById(items.get(i).GetProductID());
-       		%>
-       				<%=prod.GetProductName()%>
-       		<%
-            	}
-            %>
+	        	<table>
+	            <%
+	            	
+	                List<CartItem> items = cart.GetAllItems();
+	            	Product prod;
+	           		for (int i=0; i < items.size(); i++){
+						prod = AuthDAO.getProductById(items.get(i).GetProductID());
+	       		%>
+	       			<tr>
+		     			<td>
+		     				<img src="<%=prod.getPicture()%>" style="max-height: 50px; max-width: 50px;"/>
+		     			</td>
+		     			<td>
+		     				<%=prod.GetProductName()%>
+		     			</td>
+		     			<td>
+		     				$<%= String.format("%.02f", prod.GetPrice()) %>
+		     			</td>
+	     			</tr>
+	       		<%
+	            	}
+	            %>
+	            </table>
+	            <br />
+	            
         	</div>
             <h3 id="sub_header">Shipping Details:</h3>
             <div id="checkout_form_wrapper">

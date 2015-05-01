@@ -222,7 +222,7 @@ public class AuthDAO {
         return newUserID;
     }
     
-    public static boolean enterNewSellerDetails(int sellerID, String acctNum, String routingNum, String companyName, String url, String shipping) {
+    public static boolean enterNewSellerDetails(int sellerID, String acctNum, String routingNum, String companyName, String url) {
     	 
         Statement stmt;
         String sql;
@@ -232,7 +232,7 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO `SellerDetails` (`sellerID`,`isVerified`,`accountNumber`,`routingNumber`, `companyName`,`url`,`shipping`) VALUES ('" + sellerID + "', 0, '" + acctNum +"','" + routingNum + "','" + companyName + "','" + url + "','" + shipping + "');";
+            sql = "INSERT INTO `SellerDetails` (`sellerID`,`isVerified`,`accountNumber`,`routingNumber`, `companyName`,`url`) VALUES ('" + sellerID + "', 0, '" + acctNum +"','" + routingNum + "','" + companyName + "','" + url + "');";
             System.out.println(sql);
             stmt.executeUpdate(sql);
         } catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -344,7 +344,7 @@ public class AuthDAO {
         return true;
     }
 	
-    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, Part filePart) throws IOException, ClassNotFoundException {
+    public static int InsertProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, Part filePart, String groundCost, String twoCost, String nextCost) throws IOException, ClassNotFoundException {
 	  	 
     	PreparedStatement ps = null;
         String sql;
@@ -360,8 +360,8 @@ public class AuthDAO {
         try {
           
         	//Insert the new product
-            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`,`pictureBlob`) "
-            		+ "VALUES ('" + sellerID + "','" + categoryID + "','" + name + "','"+ price + "','"+numInStock+"','"+description+"','"+specs+"', ? );";
+            sql = "INSERT INTO `Products` (`sellerID`,`categoryID`,`productName`,`unitPrice`,`quantity`,`description`,`specs`,`groundCost`,`twoCost`,`nextCost`,`pictureBlob`) "
+            		+ "VALUES ('" + sellerID + "','" + categoryID + "','" + name + "','"+ price + "','"+numInStock+"','"+description+"','"+specs+"', '"+groundCost+"', '"+twoCost+"', '"+nextCost+"', ?);";
             conn.setAutoCommit(false);
             ps = conn.prepareStatement(sql);  //Prepare the statement
             ps.setBinaryStream(1, inputStream, fileSize); //Add the binary stream to the statement
@@ -428,7 +428,9 @@ public class AuthDAO {
         String productName = null;
         float unitPrice = (float) 0.00;
         //float rating = (float) 0.00;
-        //float shippingCost = (float) 0.00;
+        float groundCost = (float) -1.00f;
+        float twoCost = (float) -1.00f;
+        float nextCost = (float) -1.00f;
         int quantity= 0;
         String description=null;
         String specs = null;
@@ -457,8 +459,6 @@ public class AuthDAO {
                 categoryID=prd_rs.getInt("categoryID");
                 productName = prd_rs.getString("productName");
                 unitPrice = prd_rs.getFloat("unitPrice");
-               
-                //shippingCost = prd_rs.getString("lastName");
                 quantity=prd_rs.getInt("quantity");
                 description=prd_rs.getString("description");
                 specs=prd_rs.getString("specs");
@@ -466,6 +466,12 @@ public class AuthDAO {
             	//prod.SetRating(Math.round(rating));
             	ratingAvg = Math.round(rating);
             	ratingCount = prd_rs.getInt("count");
+            	
+            	//Get shipping costs
+            	groundCost = prd_rs.getFloat("groundCost");
+            	twoCost = prd_rs.getFloat("twoCost");
+            	nextCost = prd_rs.getFloat("nextCost");
+            	
                 pictureBlob = prd_rs.getBlob("pictureBlob");
                 if (pictureBlob != null){
                 	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
@@ -492,7 +498,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, ratingAvg, ratingCount);   
+        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, ratingAvg, ratingCount, groundCost, twoCost, nextCost);   
         return prd;
     }
 
@@ -582,31 +588,19 @@ public class AuthDAO {
    
     public static Product getProductByColor(String color) {
      	 
-     //	 String sql;
-    	 Statement stmt = null;
-         ResultSet prd_rs = null;
-         String prd_sql;
-         Product prd;
-         int productID=0;
-         int sellerID = 0;
-         int categoryID = 0;
-         String productName = null;
-         float unitPrice = (float) 0.00;
-         //float rating = (float) 0.00;
-         //float shippingCost = (float) 0.00;
-         int quantity= 0;
-         String description=null;
-         String specs = null;
-      //   String picture=null;
-         Connection conn = createConn(); //Create DB connection
-         Blob pictureBlob = null;
-         byte[] blobAsBytes = null;
-         
+		// String sql;
+		Connection conn = createConn();
+		Statement stmt = null;
+		ResultSet prd_rs = null;
+		String prd_sql;
+		Product prd;
+		int productID = 0;
+
          //Execute query to check for matching product
          System.out.println("Creating statement...");
          try {
              stmt = conn.createStatement();
-             prd_sql = "SELECT * FROM `Products` WHERE `Products`.`color`='" + color + "' AND `removed` <> '1' ORDER BY RAND() LIMIT 1;";
+             prd_sql = "SELECT `productID` FROM `Products` WHERE `Products`.`color`='" + color + "' AND `removed` <> '1' ORDER BY RAND() LIMIT 1;";
              System.out.println(prd_sql);
              prd_rs = stmt.executeQuery(prd_sql);
   
@@ -614,21 +608,6 @@ public class AuthDAO {
              while (prd_rs.next()) {
                  //Retrieve by column name
             	 productID=prd_rs.getInt("productID");
-                 sellerID=prd_rs.getInt("sellerID");
-                 categoryID=prd_rs.getInt("categoryID");
-                 productName = prd_rs.getString("productName");
-                 unitPrice = prd_rs.getFloat("unitPrice");
-                
-                 //shippingCost = prd_rs.getString("lastName");
-                 quantity=prd_rs.getInt("quantity");
-                 description=prd_rs.getString("description");
-                 specs=prd_rs.getString("specs");
-                 pictureBlob = prd_rs.getBlob("pictureBlob");
-                 if (pictureBlob != null){
-                 	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-                 }else{
-                 	blobAsBytes = new byte[0];
-                 }
              }       
             
             
@@ -649,59 +628,33 @@ public class AuthDAO {
              //If it fails to close, just leave it.
          }
   
-         prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
+         prd = AuthDAO.getProductById(productID);
          return prd;
         
          
      }
     	
     public static Product getProductByCategory(int categoryID) {
-    	
+
+		Connection conn = createConn();
     	Statement stmt;
         ResultSet prd_rs;
         String prd_sql;
         Product prd;
         int productID=0;
-        int sellerID = 0;
-      
-        String productName = null;
-        float unitPrice = (float) 0.00;
-        //float rating = (float) 0.00;
-        //float shippingCost = (float) 0.00;
-        int quantity= 0;
-        String description=null;
-        String specs = null;
-      //  String picture=null;
-        Connection conn = createConn(); //Create DB connection
-        Blob pictureBlob = null;
-        byte[] blobAsBytes = null;
         
         //Execute query to check for matching product
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT  * FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";
+            prd_sql = "SELECT  `productID` FROM `Products` WHERE `Products`.`categoryID`='" + categoryID + "' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
             //Extract data from result set
             while (prd_rs.next()) {
                 //Retrieve by column name
-           	 productID=prd_rs.getInt("productID");
-                //sellerID=prd_rs.getInt("sellerID");
-                productName = prd_rs.getString("productName");
-                unitPrice = prd_rs.getFloat("unitPrice");
-                
-                //shippingCost = prd_rs.getString("lastName");
-                quantity=prd_rs.getInt("quantity");
-                description=prd_rs.getString("description");
-                specs=prd_rs.getString("specs");
-                pictureBlob = prd_rs.getBlob("pictureBlob");
-                if (pictureBlob != null){
-                	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-                }else{
-                	blobAsBytes = new byte[0];
-                }
+           	 	productID=prd_rs.getInt("productID");
             }       
             
            
@@ -722,7 +675,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
+        prd = AuthDAO.getProductById(productID);
         return prd;
     }
    
@@ -737,17 +690,6 @@ public class AuthDAO {
         String prd_sql;
         Product prd;
         int productID=0;
-        int sellerID = 0;
-        int categoryID=0;
-        String productName = null;
-        float unitPrice = (float) 0.00;
-        //float rating = (float) 0.00;
-        //float shippingCost = (float) 0.00;
-        int quantity= 0;
-        String description=null;
-        String specs = null;
-        Blob pictureBlob = null;
-        byte[] blobAsBytes = null;
        
         switch(priceRange)//To select price range
         {
@@ -802,28 +744,14 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            prd_sql = "SELECT * FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";  
+            prd_sql = "SELECT `productID` FROM  `Products` WHERE  `Products`.`unitPrice` BETWEEN'"+val1+ "'AND'"+val2+"' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";  
             System.out.println(prd_sql);
             prd_rs = stmt.executeQuery(prd_sql);
  
             //Extract data from result set
             while (prd_rs.next()) {
                 //Retrieve by column name
-           	 productID=prd_rs.getInt("productID");
-                sellerID=prd_rs.getInt("sellerID");
-                productName = prd_rs.getString("productName");
-                unitPrice = prd_rs.getFloat("unitPrice");
-                categoryID=prd_rs.getInt("categoryID");
-                //shippingCost = prd_rs.getString("lastName");
-                quantity=prd_rs.getInt("quantity");
-                description=prd_rs.getString("description");
-                specs=prd_rs.getString("specs");
-                pictureBlob = prd_rs.getBlob("pictureBlob");
-                if (pictureBlob != null){
-                	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-                }else{
-                	blobAsBytes = new byte[0];
-                }
+           	 	productID=prd_rs.getInt("productID");
             }       
             
            
@@ -844,7 +772,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
+        prd = AuthDAO.getProductById(productID);
         return prd;
     }
 
@@ -854,18 +782,6 @@ public class AuthDAO {
      String prd_sql;
      Product prd;
      int productID=0;
-    
-     int categoryID = 0;
-     String productName = null;
-     float unitPrice = (float) 0.00;
-     //float rating = (float) 0.00;
-     //float shippingCost = (float) 0.00;
-     int quantity= 0;
-     String description=null;
-     String specs = null;
-   //  String picture=null;
-     Blob pictureBlob = null;
-     byte[] blobAsBytes = null;
      
      Connection conn = createConn(); //Create DB connection
      
@@ -873,7 +789,7 @@ public class AuthDAO {
      System.out.println("Creating statement...");
      try {
          stmt = conn.createStatement();
-         prd_sql = "SELECT * FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";
+         prd_sql = "SELECT `productID` FROM `Products` WHERE `Products`.`sellerID`='" + sellerID + "' AND `removed` <> '1'  ORDER BY RAND() LIMIT 1;";
          System.out.println(prd_sql);
          prd_rs = stmt.executeQuery(prd_sql);
 
@@ -881,21 +797,6 @@ public class AuthDAO {
          while (prd_rs.next()) {
              //Retrieve by column name
         	 productID=prd_rs.getInt("productID");
-        
-             categoryID=prd_rs.getInt("categoryID");
-             productName = prd_rs.getString("productName");
-             unitPrice = prd_rs.getFloat("unitPrice");
-            
-             //shippingCost = prd_rs.getString("lastName");
-             quantity=prd_rs.getInt("quantity");
-             description=prd_rs.getString("description");
-             specs=prd_rs.getString("specs");
-             pictureBlob = prd_rs.getBlob("pictureBlob");
-             if (pictureBlob != null){
-             	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-             }else{
-             	blobAsBytes = new byte[0];
-             }
          }       
          
         
@@ -916,163 +817,57 @@ public class AuthDAO {
          //If it fails to close, just leave it.
      }
 
-     prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
+     prd = AuthDAO.getProductById(productID);   
      return prd;
     }
      
     public static Product getProductByPurpose(int  use) {
-   	 
-    	 Statement stmt = null;
-         ResultSet prd_rs = null;
-         String prd_sql;
-         Product prd;
-         int productID=0;
-         int sellerID = 0;
-         int categoryID = 0;
-         String productName = null;
-         float unitPrice = (float) 0.00;
-         //float rating = (float) 0.00;
-         //float shippingCost = (float) 0.00;
-         int quantity= 0;
-         String description=null;
-         String specs = null;
-      //   String picture=null;
-         Connection conn = createConn(); //Create DB connection
-         Blob pictureBlob = null;
-         byte[] blobAsBytes = null;
+
+		Connection conn = createConn();
+		Statement stmt = null;
+		ResultSet prd_rs = null;
+		String prd_sql = "";
+		Product prd;
+		int productID = 0;
          
          //Execute query to check for matching product
         
         
         if(use == 1)// if purpose of use is Student
         {
-        	 System.out.println("Creating statement...");
-             
-                try {
-                    stmt = conn.createStatement();
-                    prd_sql = "SELECT * FROM `Products` WHERE `Products`.`categoryID` <> 5  AND `removed` <> '1' ORDER BY RAND() LIMIT 1;";
-                    System.out.println(prd_sql);
-                    prd_rs = stmt.executeQuery(prd_sql);
-         
-                    //Extract data from result set
-                    while (prd_rs.next()) {
-                        //Retrieve by column name
-                   	 productID=prd_rs.getInt("productID");
-                        sellerID=prd_rs.getInt("sellerID");
-                        categoryID=prd_rs.getInt("categoryID");
-                        productName = prd_rs.getString("productName");
-                        unitPrice = prd_rs.getFloat("unitPrice");
-                       
-                        //shippingCost = prd_rs.getString("lastName");
-                        quantity=prd_rs.getInt("quantity");
-                        description=prd_rs.getString("description");
-                        specs=prd_rs.getString("specs");
-                        pictureBlob = prd_rs.getBlob("pictureBlob");
-                        if (pictureBlob != null){
-                        	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-                        }else{
-                        	blobAsBytes = new byte[0];
-                        }
-                    }       
-                   
-                   
-                    
-                } catch (Exception ex) { //An error occurred
-                    //Log the exception
-                	System.out.println("Failed to get Product by color");
-                    Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-                    return new Product();
-                }
-             
-           
+            prd_sql = "SELECT `productID` FROM `Products` WHERE `Products`.`categoryID` <> 5  AND `removed` <> '1' ORDER BY RAND() LIMIT 1;";
         } 
                      
         if(use == 2)// if purpose of use is Commercial
         {
-        
-        	 
-            //Execute query to check for matching product
-            System.out.println("Creating statement...");
-           
-                //query to display Cellphones, Laptops and Tablets
-               
-                   try {
-                       stmt = conn.createStatement();
-                       prd_sql ="SELECT * FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4";
-                       System.out.println(prd_sql);
-                       prd_rs = stmt.executeQuery(prd_sql);
-            
-                       //Extract data from result set
-                       while (prd_rs.next()) {
-                           //Retrieve by column name
-                      	 productID=prd_rs.getInt("productID");
-                           sellerID=prd_rs.getInt("sellerID");
-                           categoryID=prd_rs.getInt("categoryID");
-                           productName = prd_rs.getString("productName");
-                           unitPrice = prd_rs.getFloat("unitPrice");
-                          
-                           //shippingCost = prd_rs.getString("lastName");
-                           quantity=prd_rs.getInt("quantity");
-                           description=prd_rs.getString("description");
-                           specs=prd_rs.getString("specs");
-                           pictureBlob = prd_rs.getBlob("pictureBlob");
-                           if (pictureBlob != null){
-                           	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-                           }else{
-                           	blobAsBytes = new byte[0];
-                           }
-                       }       
-                      
-                      
-                       
-                   } catch (Exception ex) { //An error occurred
-                       //Log the exception
-                   	System.out.println("Failed to get Product by color");
-                       Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-                       return new Product();
-                   }
+        	prd_sql ="SELECT `productID` FROM  `Products` WHERE  `Products`.`categoryID` =1 OR  `Products`.`categoryID` =2 OR  `Products`.`categoryID` =4 ORDER BY RAND() LIMIT 1;";
         }
         
         if(use == 3)// if purpose of use is Personal
         {
-        	 System.out.println("Creating statement...");
-             try {
-                 stmt = conn.createStatement();
-                 prd_sql = "SELECT * FROM `Products`;";
-                 System.out.println(prd_sql);
-                 prd_rs = stmt.executeQuery(prd_sql);
-      
-                 //Extract data from result set
-                 while (prd_rs.next()) {
-                     //Retrieve by column name
-                	 productID=prd_rs.getInt("productID");
-                     sellerID=prd_rs.getInt("sellerID");
-                     categoryID=prd_rs.getInt("categoryID");
-                     productName = prd_rs.getString("productName");
-                     unitPrice = prd_rs.getFloat("unitPrice");
-                    
-                     //shippingCost = prd_rs.getString("lastName");
-                     quantity=prd_rs.getInt("quantity");
-                     description=prd_rs.getString("description");
-                     specs=prd_rs.getString("specs");
-                     pictureBlob = prd_rs.getBlob("pictureBlob");
-                     if (pictureBlob != null){
-                     	blobAsBytes = pictureBlob.getBytes(1,(int)pictureBlob.length());
-                     }else{
-                     	blobAsBytes = new byte[0];
-                     }
-                 }       
-                
-             }
-                 
-              catch (Exception ex) { //An error occurred
-                 //Log the exception
-             	System.out.println("Failed to get Product by color");
-                 Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-                 return new Product();
-             }
-      
+            prd_sql = "SELECT `productID` FROM `Products` ORDER BY RAND() LIMIT 1;";
         }//Clean-up
+   	 
+    	System.out.println("Creating statement...");
+    	
+		try {
+			stmt = conn.createStatement();
+			System.out.println(prd_sql);
+			prd_rs = stmt.executeQuery(prd_sql);
+
+			// Extract data from result set
+			while (prd_rs.next()) {
+				// Retrieve by column name
+				productID = prd_rs.getInt("productID");
+			}
+
+		} catch (Exception ex) { // An error occurred
+			// Log the exception
+			System.out.println("Failed to get Product by purpose");
+			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			return new Product();
+		}
+
         try {
             prd_rs.close(); //Close result set
             stmt.close(); //Close statement object
@@ -1081,7 +876,7 @@ public class AuthDAO {
             //If it fails to close, just leave it.
         }
  
-        prd = new Product(productID, sellerID, productName, description, specs, unitPrice, quantity, categoryID, blobAsBytes, 0, 0);   
+        prd = AuthDAO.getProductById(productID);
         return prd;
       
                   

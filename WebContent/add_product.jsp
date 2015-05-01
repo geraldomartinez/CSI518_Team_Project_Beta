@@ -12,11 +12,7 @@
 <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 <!-- jQuery Library -->
 
-<style type="text/css">
-	body{
-		height: 600px;
-	}
-	
+<style type="text/css">	
 	#page_content_wrapper {
 		text-align: center;
 	}
@@ -118,18 +114,29 @@
 					<td><input name="price" type="number" step="any"></td>
 				</tr>
 				<tr>
-					<td>Quantity:</td>
+					<td>Ground (3-5 day) Shipping Cost:</td>
+					<td><input name="ground_cost" type="number" ></td>
+				</tr>
+				<tr>
+					<td>Two-Day Shipping Cost:</td>
+					<td><input name="two_cost" type="number" ></td>
+				</tr>
+				<tr>
+					<td>Next-Day Shipping Cost:</td>
+					<td><input name="next_cost" type="number" ></td>
+				</tr>
+				<tr>
+					<td>Quantity Available:</td>
 					<td><input name="numinstock" type="number" ></td>
 				</tr>
 				<tr>
-				<td>Product Image</td>
-				<td><input type="file" id="product_image" name="product_image"></td>
+					<td>Product Image:</td>
+					<td><input type="file" id="product_image" name="product_image"></td>
 				<tr>
 					<td></td>
 					<td><input type="submit" value="Submit" name="insertbt"></td>
 				</tr>
 			</table>
-
 		</form>
 	</div>
 </body>

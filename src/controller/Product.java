@@ -8,7 +8,9 @@ public class Product {
 	private String description;
 	private String specs;
 	private float price;
-	private float shippingCost;
+	private float groundCost;
+	private float twoCost;
+	private float nextCost;
 	private int rating;
 	private int reviewCount;
 	private int numInStock;
@@ -23,7 +25,9 @@ public class Product {
 		this.description = "";
 		this.specs = "";
 		this.price = 0.0f;
-		//this.shippingCost = 0.0f;
+		this.groundCost = -1.0f;
+		this.twoCost = -1.0f;
+		this.nextCost = -1.0f;
 		//this.rating = 0.0f;
 		this.categoryID=0;
 		this.numInStock = 0;
@@ -40,14 +44,21 @@ public class Product {
 			float unitPrice, 
 			int quantity, 
 			int categoryID,
-			byte[] pictureBlob, int rating, int reviewCount){
+			byte[] pictureBlob, 
+			int rating, 
+			int reviewCount,
+			float groundCost,
+			float twoCost,
+			float nextCost){
 		this.productID = productID;
 		this.sellerID = sellerID;
 		this.name = productName;
 		this.description = description;
 		this.specs = specs;
 		this.price = unitPrice;
-		//shippingCost = 0.0f;
+		this.groundCost = groundCost;
+		this.twoCost = twoCost;
+		this.nextCost = nextCost;
 		this.rating = rating;
 		this.setReviewCount(reviewCount);
 		this.numInStock = quantity;
@@ -107,12 +118,28 @@ public class Product {
 		this.price = x;
 	}
 	
-	public float GetShippingCost(){
-		return this.shippingCost;
+	public float GetGroundShippingCost(){
+		return this.groundCost;
 	}
 	
-	public void SetShippingCost(float x /*in, product shipping cost*/){
-		this.shippingCost = x;
+	public void SetGroundShippingCost(float x /*in, ground shipping cost*/){
+		this.groundCost = x;
+	}
+	
+	public float GetTwoDayShippingCost(){
+		return this.twoCost;
+	}
+	
+	public void SetTwoDayShippingCost(float x /*in, two-day shipping cost*/){
+		this.twoCost = x;
+	}
+	
+	public float GetNextDayShippingCost(){
+		return this.nextCost;
+	}
+	
+	public void SetNextDayShippingCost(float x /*in, next-day shipping cost*/){
+		this.nextCost = x;
 	}
 	
 	public int GetRating(){

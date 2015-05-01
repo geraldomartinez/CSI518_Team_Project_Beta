@@ -8,8 +8,9 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 		<title>View Cart - Great Danes Electronics</title>
 		
-		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 		<!-- jQuery Library -->
+		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+		
 		<style type="text/css">
 			#page_content_wrapper {
 				text-align: center;
@@ -60,6 +61,13 @@
 				text-align: right;
 			}
 		</style>
+		<script type="text/javascript">
+			$(document).ready(function() { 
+				$('input[name=shipping_method]').change(function() {
+					$('#shipping_method_form').submit();
+				});
+			});
+		</script>
 	</head>
 	<body style="width: 1000px;">
 		<%@include file="top_menu.jsp"%>
@@ -90,6 +98,7 @@
 				CartItem tempItem;
 				Product prod;
 				List<CartItem> itemList = cart.GetAllItems();
+				float productShippingCost = -1.0f;
 				if (!itemList.isEmpty()){
 			%>
 				<table id="cart_table">
@@ -115,7 +124,19 @@
 							out.print("$"+String.format("%.2f", prod.GetPrice()));
 						out.print("</td>");
 						out.print("<td>");
-							out.print("$"+String.format("%.2f", prod.GetShippingCost()));
+							productShippingCost = -1.0f;
+							switch(cart.GetShippingMethod()){
+								case 1:
+									productShippingCost = prod.GetGroundShippingCost();
+									break;
+								case 2:
+									productShippingCost = prod.GetTwoDayShippingCost();
+									break;
+								case 3:
+									productShippingCost = prod.GetNextDayShippingCost();
+									break;
+							}
+							out.print("$"+String.format("%.2f", productShippingCost));
 						out.print("</td>");
 						out.print("<td>");
 							out.print("<form id='update_qty_form' action='UpdateQuantityInCartServlet' method='POST'>");
@@ -144,6 +165,20 @@
 					}
 			%>
 				</table>
+				<br />
+				<br />
+				<form class="message" action="UpdateCartShippingMethodServlet" method="POST" id="shipping_method_form">
+					<h4>Shipping Method:</h4>
+					<div style="text-align: left; width: 200px;">
+						<input type="radio" value="1" name="shipping_method" <%= ((cart.GetShippingMethod() == 1)? "checked='checked'":"") %> /> Ground Shipping
+						<br />
+						<input type="radio" value="2" name="shipping_method" <%= ((cart.GetShippingMethod() == 2)? "checked='checked'":"") %> /> Two-Day Shipping
+						<br />
+						<input type="radio" value="3" name="shipping_method" <%= ((cart.GetShippingMethod() == 3)? "checked='checked'":"") %> /> Next-Day Shipping
+						<br />
+						<br />
+					</div>
+				</form>
 				<br />
 				<br />
 				<form id="remove_all_form" action="RemoveAllItemsInCartServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your cart?')">

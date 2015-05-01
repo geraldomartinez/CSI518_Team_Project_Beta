@@ -8,71 +8,68 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 		<title>View Wish List - Great Danes Electronics</title>
 		
-		<script type="text/javascript" src="js/jquery-2.1.3.min.js">
-		
-		
-		function OnButtonLogin()
-		{
-			document.
-		    document.Form1.action = "UpdateQuantityInWishListServlet";
-		    document.Form1.target = "_blank";    
-		    document.Form1.submit();             
-		    return true;
-		}
-         
-		</script>
 		<!-- jQuery Library -->
+		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+
 		<style type="text/css">
-		#page_content_wrapper {
-			text-align: center;
-		}
-		h3{
-       		background: #2C193B;
-			padding-top: 5px;
-			padding-bottom: 5px;
-		}
-		#wishlist_table{
-			width: 100%;
-			border-collapse: collapse;
-		}
-		#wishlist_table th{
-			border-bottom: 1px solid white;
-		}
-		#wishlist_table td{
-			padding-bottom: 5px;
-		}
-		#wishlist_table td a{
-			color: white;
-		}
-		.quantity{
-			width: 50px;
-			text-align: right;
-		}
-		#remove_all_form button{
-			font-size: 16px;
-			vertical-align: middle;
-			cursor: pointer;
-		}
-		#remove_all_form button:hover{
-			color: red;
-		}
-		#remove_all_form button img{
-			height: 16px;
-			vertical-align: middle;
-		}
-		#total_table{
-			display: inline-block;
-			border-collapse: collapse;
-		}
-		#total_table td:nth-child(1){
-			text-align: left;
-		}
-		#total_table td:nth-child(2){
-			text-align: right;
-		}
+			#page_content_wrapper {
+				text-align: center;
+			}
+			h3{
+	       		background: #2C193B;
+				padding-top: 5px;
+				padding-bottom: 5px;
+			}
+			#wishlist_table{
+				width: 100%;
+				border-collapse: collapse;
+			}
+			#wishlist_table th{
+				border-bottom: 1px solid white;
+			}
+			#wishlist_table td{
+				padding-bottom: 5px;
+			}
+			#wishlist_table td a{
+				color: white;
+			}
+			.quantity{
+				width: 50px;
+				text-align: right;
+			}
+			#remove_all_form button{
+				font-size: 16px;
+				vertical-align: middle;
+				cursor: pointer;
+			}
+			#remove_all_form button:hover{
+				color: red;
+			}
+			#remove_all_form button img{
+				height: 16px;
+				vertical-align: middle;
+			}
+			#total_table{
+				display: inline-block;
+				border-collapse: collapse;
+			}
+			#total_table td:nth-child(1){
+				text-align: left;
+			}
+			#total_table td:nth-child(2){
+				text-align: right;
+			}
 		</style>
+		
+		<script type="text/javascript">
+			$(document).ready(function() { 
+				$('input[name=shipping_method]').change(function() {
+					$('#shipping_method_form').submit();
+				});
+			});
+		</script>
 	</head>
-	<body>
+	<body style="width: 1000px;">
 		<%@include file="top_menu.jsp"%>
 		<br />
 		<div id="page_content_wrapper">
@@ -101,6 +98,7 @@
 				CartItem tempItem;
 				Product prod;
 				List<CartItem> itemList = wishlist.GetAllItems();
+				float productShippingCost = -1.0f;
 				if (!itemList.isEmpty()){
 			%>
 				<table id="wishlist_table">
@@ -110,6 +108,7 @@
 					<th>Shipping Cost</th>
 					<th>Quantity</th>
 					<th>Remove</th>
+					<th>Move to Cart</th>
 				</tr>
 			<%
 				for (int i = 0; i < itemList.size(); i++) {
@@ -125,7 +124,19 @@
 						out.print("$"+String.format("%.2f", prod.GetPrice()));
 					out.print("</td>");
 					out.print("<td>");
-						out.print("$"+String.format("%.2f", prod.GetShippingCost()));
+						productShippingCost = -1.0f;
+						switch(wishlist.GetShippingMethod()){
+							case 1:
+								productShippingCost = prod.GetGroundShippingCost();
+								break;
+							case 2:
+								productShippingCost = prod.GetTwoDayShippingCost();
+								break;
+							case 3:
+								productShippingCost = prod.GetNextDayShippingCost();
+								break;
+						}
+						out.print("$"+String.format("%.2f", productShippingCost));
 					out.print("</td>");
 					out.print("<td>");
 						out.print("<form id='update_qty_form' action='UpdateQuantityInWishListServlet' method='POST'>");
@@ -142,20 +153,36 @@
 						out.print("</form>");
 					out.print("</td>");
 					out.print("<td>");
-					out.print("<form id='update_qty_form'  action='UpdateQuantityInWishListServlet' method='POST'>");
-					out.print("<input type='hidden' name='quantity' class='quantity' value='-1' />");
-				out.print("<input type='hidden' name='newquantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
-					out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
-					out.print("<input type='hidden' name='delFromWish' value='true' />");
-					out.print("<button type='submit'>Move to cart</button>");
+						out.print("<form id='update_qty_form'  action='UpdateQuantityInWishListServlet' method='POST'>");
+							out.print("<input type='hidden' name='quantity' class='quantity' value='-1' />");
+							out.print("<input type='hidden' name='newquantity' value='"+Integer.toString(itemList.get(i).GetQuantity())+"' />");
+							out.print("<input type='hidden' name='productID' value='"+Integer.toString(prod.GetProductID())+"' />");
+							out.print("<input type='hidden' name='delFromWish' value='true' />");
+							out.print("<button type='submit'>Move to cart</button>");
+						out.print("</form>");
+					out.print("</td>");
 					out.print("</tr>");
 					}
 			%>
 				</table>
 				<br />
-				<form id="remove_all_form" action="RemoveAllItemsInWishListServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your wish list?')">
-					<button type="submit"><img src="img/trash.png" alt="trashcan" style="height: 16px;" /> Remove All Items</button>
+				<br />
+				<form class="message" action="UpdateWishListShippingMethodServlet" method="POST" id="shipping_method_form">
+					<h4>Shipping Method:</h4>
+					<div style="text-align: left; width: 200px;">
+						<input type="radio" value="1" name="shipping_method" <%= ((wishlist.GetShippingMethod() == 1)? "checked='checked'":"") %> /> Ground Shipping
+						<br />
+						<input type="radio" value="2" name="shipping_method" <%= ((wishlist.GetShippingMethod() == 2)? "checked='checked'":"") %> /> Two-Day Shipping
+						<br />
+						<input type="radio" value="3" name="shipping_method" <%= ((wishlist.GetShippingMethod() == 3)? "checked='checked'":"") %> /> Next-Day Shipping
+						<br />
+						<br />
+					</div>
 				</form>
+				<br />
+				<!-- <form id="remove_all_form" action="RemoveAllItemsInWishListServlet" method="POST" onsubmit="return confirm('Are you sure you want to remove all items from your wish list?')">
+					<button type="submit"><img src="img/trash.png" alt="trashcan" style="height: 16px;" /> Remove All Items</button>
+				</form> -->
 				<br />
 				<h3>Cost</h3>
 				<br />
@@ -170,7 +197,7 @@
 					</tr>
 					<tr>
 						<td>
-							Total Shipping Cost:
+							Tax:
 						</td>
 						<td>
 							<%= "$"+String.format("%.2f", wishlist.GetShippingCost()) %>

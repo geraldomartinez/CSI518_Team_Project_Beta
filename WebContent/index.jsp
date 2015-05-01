@@ -109,7 +109,7 @@
 			</div>
 			<br />
 			<%
-			if (navLoggedIn == "true"){
+			if (navLoggedIn == "true" && acctType.equals("B")){
 			%>
 			<br />
 			<br />

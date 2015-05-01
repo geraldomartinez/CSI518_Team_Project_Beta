@@ -57,7 +57,7 @@ public class ProductServlet extends HttpServlet {
     	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
 		int productID = -1;
 		int sellerID;
-		String name, description, specs, price, numInStock, insertbt, filePath;
+		String name, description, specs, price, numInStock, insertbt, groundCost, twoCost, nextCost;
 		String categoryID;
 		String inputMessage = "";
 		boolean insertproduct=true;
@@ -68,6 +68,11 @@ public class ProductServlet extends HttpServlet {
 		categoryID=request.getParameter("categoryID");
 		numInStock=request.getParameter("numinstock");
 		insertbt=request.getParameter("insertbt");
+		
+		groundCost=request.getParameter("ground_cost");
+		twoCost=request.getParameter("two_cost");
+		nextCost=request.getParameter("next_cost");
+		
 		sellerID = usr.GetUserID();
 
 		//Image
@@ -149,13 +154,46 @@ public class ProductServlet extends HttpServlet {
                 insertproduct = false;
             }else{
             	numInStock = numInStock.replace("'","\\'");
-            }           
+            }    
+
+            
+        	//Try to parse a number out of the given shipping costs. If the parse fails, set the string to empty string
+        	try{
+        		Float.parseFloat(groundCost);
+        	}catch(Exception e){
+        		groundCost = "";
+        	}
+        	
+        	try{
+        		Float.parseFloat(twoCost);
+        	}catch(Exception e){
+        		twoCost = "";
+        	}
+        	
+        	try{
+        		Float.parseFloat(nextCost);
+        	}catch(Exception e){
+        		nextCost = "";
+        	}
+        	
+            if (groundCost.equals("") && twoCost.equals("") && nextCost.equals("")) {
+                if (!inputMessage.equals("")) {
+                	inputMessage += "<br />";
+                }
+                inputMessage += "You did not enter at least one valid shipping option cost";
+                insertproduct = false;
+            }else{
+            	
+            	groundCost = groundCost.replace("'","\\'");
+            	twoCost = twoCost.replace("'","\\'");
+            	nextCost = nextCost.replace("'","\\'");
+            }         
             
             	
            
             if (insertproduct) {        		
                 try {
-					productID = AuthDAO.InsertProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart);
+					productID = AuthDAO.InsertProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart, groundCost, twoCost, nextCost);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

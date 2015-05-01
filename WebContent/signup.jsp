@@ -92,12 +92,6 @@
                     <br />
                     <input name="URL" type="text" placeholder="URL"/>
                     <br/>
-                    <p>Enter the Shipping options you can provide:</p>
-<p>
-<input type="checkbox" name="shipping" value="1"/>Ground<br/>
-<input type="checkbox" name="shipping" value="2"/>Two-Days<br/>
-<input type="checkbox" name="shipping" value="3"/>Next Day<br/>
-</p>
                     <input name="company_name" type="text" style="display: none;" placeholder="Company Name"/>
                     <br />
                     <input name="account_number" type="text" style="display: none;" placeholder="Bank Account Number"/>
