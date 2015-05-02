@@ -26,7 +26,7 @@
        
        
         <H1>Account Information</H1>
-        <button type="button"  value="edit" name="edit" onclick="document.location='edit_seller_account.jsp?userID=<%=User.GetUserID()%>'">Edit Account Information</button>
+        <button type="button"  value="edit" name="edit" onclick="document.location='edit_seller_account.jsp?sellerID=<%=User.GetUserID()%>'">Edit Account Information</button>
         <br>
         <br>
         <table id="sellerInfo" border=1 align=center>

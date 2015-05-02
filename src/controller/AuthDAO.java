@@ -388,6 +388,48 @@ public class AuthDAO {
         return productID;
     }   
     
+    public static int UpdateProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, Part filePart, String groundCost, String twoCost, String nextCost) throws IOException, ClassNotFoundException {
+	  	 
+    	PreparedStatement ps = null;
+        String sql;
+        ResultSet rs;
+        Connection conn = AuthDAO.createConn();
+        int productID=-1;
+        int fileSize = (int)filePart.getSize();
+        InputStream inputStream = filePart.getInputStream();
+        System.out.println("Filesize: "+Integer.toString(fileSize)+" bytes");
+ 
+        //Execute query to insert seller details
+        System.out.println("Creating statement...");
+        try {
+          
+        	//Insert the new product
+            sql = "'Update`Products` set `sellerID`='" + sellerID + "','" +"'`categoryID`='"+categoryID + "','" +"'`productName`='"+ name + "','"+"'`unitPrice`='" +price + "','"+"'`quantity`='"+numInStock+"','"+"'`description`='"+description+"','"+"'`specs`='"+specs+"', '"+"'`groundCost`='"+groundCost+"', '"+"'`twoCost`='"+twoCost+"', '"+"'`nextCost`='"+nextCost+"'where`productID`='"+ productID+"'sellerID='"+sellerID+"';'";
+            conn.setAutoCommit(false);
+            ps = conn.prepareStatement(sql);  //Prepare the statement
+            ps.setBinaryStream(1, inputStream, fileSize); //Add the binary stream to the statement
+            System.out.println(ps);
+            ps.executeUpdate(); //Execute the insert query
+            conn.commit();
+            inputStream.close();
+            
+            sql = "SELECT max(`productID`) FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
+            System.out.println(sql);
+            rs = ps.executeQuery(sql);
+            
+            while (rs.next()) { //Get newly created user ID,
+                //Retrieve by column name
+                productID = (rs.getInt("max(`productID`)"));
+            }
+            ps.close();
+            
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return productID;
+    }   
     public static boolean deactivateaccount( String accounttype, int username) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;

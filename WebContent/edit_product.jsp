@@ -30,8 +30,30 @@
         
     </script>
 </head>
-   
-    
+   <body>
+   <form id="add_product" name="add_product" action="UpdateProductServlet" method="POST" enctype="multipart/form-data">
+    <div id="page_content_wrapper">
+		<%
+			RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
+	        String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
+			String updateProductMessage = (String) request.getAttribute("updateProductMessage"); //Obtain the message from the session (if there is one)
+			
+			if (updateProductMessage == null) { //Prevent null pointer exception
+				updateProductMessage = "";
+			}
+			
+	        if (loggedIn == null) { //Prevent null pointer exception
+	            loggedIn = "false";
+	        }
+	
+	        if (loggedIn != "true") { //If the user is logged in
+	            //Alert the user that they are already logged in
+	            request.setAttribute("indexMessage", "Please log into your seller account before attempting to edit a product");
+	            rd.forward(request, response); //Forward the user with the response above
+	        }
+		%>
+		<div id="update_product_message" class="message"><%=updateProductMessage%></div>
+		<br />
     <%@ page import="controller.Product" %>
     <%
     String productName = "";
@@ -69,7 +91,8 @@
 				pQuantity=rs.getInt("quantity");
 			    
 				picture = prod.getPicture();
-			 
+				String floatConv = String.format("%.2f", pPrice);
+				 
 	
 					}
 					conn.close();
@@ -100,11 +123,11 @@
 		 <div>Quantity:
 		 <div id="myDiv" contentEditable="true"><%=pQuantity%></div>
 		 </div>
-		 <input type="submit" value="Submit" name="insertbt">
+		 <input type="submit" value="Submit" name="updatebt">
 					
     </div>
 <br/>
-<button onclick="ToggleEditable (this);">Edit!</button>
-    
+
+    </form>
 </body>
 </html>
