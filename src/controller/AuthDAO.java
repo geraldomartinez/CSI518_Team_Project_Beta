@@ -243,7 +243,27 @@ public class AuthDAO {
  
         return true;
     }
+    public static boolean UpdateSellerDetails(int sellerID, String acctNum, String routingNum, String companyName, String url) {
+   	 
+        Statement stmt;
+        String sql;
+        Connection conn = createConn();
  
+        //Execute query to insert seller details
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            sql = "INSERT INTO `SellerDetails` (`sellerID`,`isVerified`,`accountNumber`,`routingNumber`, `companyName`,`url`) VALUES ('" + sellerID + "', 0, '" + acctNum +"','" + routingNum + "','" + companyName + "','" + url + "');";
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+ 
+        return true;
+    }
     public static boolean enterUserName(int userID, String firstName,String middleName, String lastName,String phone,String address,String city,String state,String zip) {
  
         Statement stmt;
