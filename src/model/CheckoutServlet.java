@@ -1,6 +1,7 @@
 package model;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,8 +13,11 @@ import javax.servlet.http.HttpSession;
 
 import controller.AuthDAO;
 import controller.Cart;
+import controller.CartItem;
+import controller.Notification;
 import controller.User;
 import controller.WishList;
+import controller.Product;
 
 /**
  * Servlet implementation class CheckoutServlet
@@ -170,6 +174,24 @@ public class CheckoutServlet extends HttpServlet {
             if (shippingInfoIsValid){
             	cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
             	if ((orderID = AuthDAO.checkout(usr.GetUserID(),cart,shippingName,shippingAddr,shippingCity,shippingState,shippingZip,paypalEmail)) != -1){
+            		
+            		//Notify sellers for each product sold
+            		List<CartItem> items = cart.GetAllItems();
+            		for(int i = 0; i < items.size(); i++){
+            			
+            			int toUserID = AuthDAO.getProductById(items.get(i).GetProductID()).GetSellerID();
+            			Notification notification = new Notification(-1, toUserID, 'O', 
+            					"One of your products has been purchased", usr.GetUserID(), orderID, null);
+            			if(AuthDAO.notifyUser(notification)){
+            				System.out.println("Notification inserted successfully");
+            			}
+            			else{
+            				System.out.println("Notification insertion failed");
+            			}
+            		}
+            		
+            		
+            		
 		    		rd = request.getRequestDispatcher("index.jsp");
 		    		session.setAttribute("cart",new Cart()); //Empty the cart
 			    	request.setAttribute("indexMessage","Checkout complete! Thank you for your purchase. Your order confirmation ID is: "+Integer.toString(orderID));

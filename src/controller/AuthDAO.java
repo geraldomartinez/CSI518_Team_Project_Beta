@@ -1203,7 +1203,7 @@ public class AuthDAO {
         try {
             stmt = conn.createStatement();
             sql = "INSERT INTO `Orders` "
-            		+ "(`buyerID`,`receiverName`,`receiverAddress`,`receiverCity`,`receiverState`,`receiverZip`,`buyerPaypalEmail`,`shippingMethod`,`orderDate`) "
+            		+ "(`buyerID`,`receiverName`,`receiverAddress`,`receiverCity`,`receiverState`,`receiverZip`,`buyerPaypalEmail`,`shippingMethod`,`orderTimestamp`) "
             		+ "VALUES ('"+userID+"','"+shippingName+"','"+shippingAddr+"','"+shippingCity+"','"+shippingState+"','"+shippingZip+"','"+paypalEmail+"','"+cart.GetShippingMethod()+"',NOW());";
             System.out.println(sql);
             stmt.executeUpdate(sql);
@@ -1255,6 +1255,41 @@ public class AuthDAO {
     	
     	return -1;
     }
+    
+    public static boolean notifyUser(Notification notification){
+    	Statement stmt;
+        //ResultSet rs;
+        String sql;
+       // int orderID = -1;
+        Connection conn = createConn();
+        int toUserID = notification.getToUserID(); 
+        char notificationType = notification.getNotificationType();
+        String notificationText = notification.getNotificationMessage();
+		int aboutUserID = notification.getAboutUserID();
+		int typeID = notification.getTypeID();
+        
+        try {
+		    stmt = conn.createStatement();
+		   
+		    sql = "INSERT INTO Notifications (toUserID, type, text, aboutUserID, typeID) "
+		    + "VALUES ('" +toUserID+ "','" +notificationType+"','"  + notificationText + "','"  + aboutUserID +"','" +typeID +"');";
+		    
+		    System.out.println(sql);
+		    stmt.executeUpdate(sql);
+		    //System.out.println(sql2);
+		    //stmt.executeUpdate(sql2);
+            
+          return true;
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    	
+    	return false;
+    }
+    
+    
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
