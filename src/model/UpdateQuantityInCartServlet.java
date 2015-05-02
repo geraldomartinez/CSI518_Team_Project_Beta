@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import controller.AuthDAO;
 import controller.Cart;
+import controller.Product;
 import controller.User;
 
 /**
@@ -50,6 +52,8 @@ public class UpdateQuantityInCartServlet extends HttpServlet {
 		String strProductID = request.getParameter("productID");
 		String strNewQty = request.getParameter("quantity");
 		User usr = (User) session.getAttribute("user"); //Get the user object from the session	
+		Product prd;
+		
 		if (strProductID == null){
 	    	request.setAttribute("indexMessage","No product ID given");
 		}else{
@@ -63,13 +67,20 @@ public class UpdateQuantityInCartServlet extends HttpServlet {
 		    	request.setAttribute("indexMessage","Only buyers and guests are allowed to access cart features");
 	    	}else{
 		    	rd = request.getRequestDispatcher("view_cart.jsp");
-	    		cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
-	    		cart.UpdateQuantity(productID,newQty);
-	    		session.setAttribute("cart",cart); //Set the cart in the session with the new item added
-	    		if (newQty > 0){
-	    			request.setAttribute("cartMessage","Item quantity successfully updated");
+		    	
+
+	    		prd = AuthDAO.getProductById(productID);
+	    		if (prd.GetNumInStock() < newQty){
+			    	request.setAttribute("cartMessage","Failed to update quantity to "+Integer.toString(newQty)+" - there are only "+Integer.toString(prd.GetNumInStock())+" currently in stock");
 	    		}else{
-			    	request.setAttribute("cartMessage","Item successfully removed from cart");
+		    		cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
+		    		cart.UpdateQuantity(productID,newQty);
+		    		session.setAttribute("cart",cart); //Set the cart in the session with the new item added
+		    		if (newQty > 0){
+		    			request.setAttribute("cartMessage","Item quantity successfully updated");
+		    		}else{
+				    	request.setAttribute("cartMessage","Item successfully removed from cart");
+		    		}
 	    		}
 	    	}
 	    	

@@ -94,13 +94,14 @@ body{
 	border-radius: 28px;
 	border: none;
 	font-family: Arial;
-	color: #ffffff;
+	color: #2C193B;
 	font-size: 16px;
 	background: #EAAA00;
 	padding: 10px 15px;
 	text-decoration: none;
 	cursor: pointer;
 	vertical-align: middle;
+	font-weight: bold;
 }
 
 .gold_btn img{

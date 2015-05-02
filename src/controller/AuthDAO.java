@@ -1142,6 +1142,74 @@ public class AuthDAO {
     	
     }
     
+    public static int checkout(int userID, Cart cart, String shippingName, String shippingAddr, String shippingCity, String shippingState, String shippingZip, String paypalEmail){
+    	boolean returnVal = false;
+    	
+    	Statement stmt;
+        ResultSet rs;
+        String sql;
+        int orderID = -1;
+        Connection conn = createConn();
+        List<CartItem> itemList;
+ 
+        //Execute query to check username and password
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            sql = "INSERT INTO `Orders` "
+            		+ "(`buyerID`,`receiverName`,`receiverAddress`,`receiverCity`,`receiverState`,`receiverZip`,`buyerPaypalEmail`,`shippingMethod`,`orderDate`) "
+            		+ "VALUES ('"+userID+"','"+shippingName+"','"+shippingAddr+"','"+shippingCity+"','"+shippingState+"','"+shippingZip+"','"+paypalEmail+"','"+cart.GetShippingMethod()+"',NOW());";
+            System.out.println(sql);
+            stmt.executeUpdate(sql);
+ 
+            //Get ID of newly created user
+            sql = "SELECT MAX(`orderID`) FROM `Orders`";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) { //Get newly created user ID,
+                //Retrieve by column name
+            	orderID = Integer.parseInt(rs.getString("MAX(`orderID`)"));
+            }
+            
+            if (orderID != -1){
+            	itemList = cart.GetAllItems();
+            	Product prd;
+            	float shippingPrice;
+            	
+				if (!itemList.isEmpty()){
+					for (int i=0; i < itemList.size(); i++){
+						shippingPrice = -1.0f;
+						prd = AuthDAO.getProductById(itemList.get(i).GetProductID());
+						switch(cart.GetShippingMethod()){
+							case 1:
+								shippingPrice = prd.GetGroundShippingCost();
+								break;
+							case 2:
+								shippingPrice = prd.GetTwoDayShippingCost();
+								break;
+							case 3:
+								shippingPrice = prd.GetNextDayShippingCost();
+								break;
+						}
+						
+			            sql = "INSERT INTO `OrderItems` "
+			            		+ "(`orderID`,`productID`,`quantity`,`unitPrice`,`shippingPrice`) "
+			            		+ "VALUES ('"+orderID+"','"+prd.GetProductID()+"','"+itemList.get(i).GetQuantity()+"','"+prd.GetPrice()+"','"+shippingPrice+"');";
+			            
+			            System.out.println(sql);
+			            stmt.executeUpdate(sql);
+					}
+				}
+	            return orderID;
+            }
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    	
+    	return -1;
+    }
+    
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
             if (conn != null) { //If the connection object is set

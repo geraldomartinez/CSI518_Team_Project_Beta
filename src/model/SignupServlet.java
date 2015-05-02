@@ -113,7 +113,7 @@ public class SignupServlet extends HttpServlet {
 			registerMessage += "Email [" + email + "] is NOT available to use for registration. Please choose a different email.";
 			insertNewUser = false;
 		} else if (checkEmailBtn.length() != 0) {
-    		registerMessage += "<span style='color: green'>Email [" + email + "] is not associated with another account. You may use it for registration.</span>";
+    		registerMessage += "Email [" + email + "] is not associated with another account. You may use it for registration.";
 		}
 
         if (submitBtn.length() != 0) { //If the submit button was pressed
@@ -229,7 +229,7 @@ public class SignupServlet extends HttpServlet {
                     registerMessage = "Create Account Failed, Please Try Again.";
                 } else {
                     rd = request.getRequestDispatcher("index.jsp");
-                    request.setAttribute("indexMessage", "<span style='color: green'>Registration for [" + email + "] succesful. Log in to view your account.</span>");
+                    request.setAttribute("indexMessage", "Registration for [" + email + "] succesful. Log in to view your account.");
                     rd.forward(request, response);
                 }
             }

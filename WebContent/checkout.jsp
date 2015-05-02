@@ -61,7 +61,7 @@
 	            }
 	
 	            if (loggedIn != "true" || !usr.getAccountType().equals("B")) { //If the user is not logged in OR they are not a buyer
-	                request.setAttribute("indexMessage", "Only buyers may access the checkout page");
+	                request.setAttribute("indexMessage", "Please log in as a buyer to access the checkout page");
 	                rd.forward(request, response); //Forward the user with the response above
 	            }
 	        %>
@@ -83,13 +83,19 @@
 						<th>Shipping Cost</th>
 						<th>Quantity</th>
 					</tr>
-	            <%
-	            	float productShippingCost;
-	                List<CartItem> items = cart.GetAllItems();
-	            	Product prod;
-	           		for (int i=0; i < items.size(); i++){
-						prod = AuthDAO.getProductById(items.get(i).GetProductID());
-	       		%>
+		            <%
+		            	float productShippingCost;
+		                List<CartItem> items = cart.GetAllItems();
+		            	Product prod;
+		            	
+		            	if (items.size() == 0){
+		            	    request.setAttribute("indexMessage", "Please add items to your cart before checking out");
+			                rd.forward(request, response); //Forward the user with the response above
+		            	}
+		            	
+		           		for (int i=0; i < items.size(); i++){
+							prod = AuthDAO.getProductById(items.get(i).GetProductID());
+		       		%>
 	       			<tr>
 		     			<td>
 		     				<img src="<%=prod.getPicture()%>" style="max-height: 50px; max-width: 50px;"/>
@@ -103,7 +109,7 @@
 		     			<td>
 		     				<%
 							productShippingCost = -1.0f;
-							switch(wishlist.GetShippingMethod()){
+							switch(cart.GetShippingMethod()){
 								case 1:
 									productShippingCost = prod.GetGroundShippingCost();
 									break;
@@ -168,6 +174,24 @@
             <br />
             <h3 id="sub_header">Order Details</h3>
             <div id="checkout_form_wrapper">
+            	<div>
+            	<span style="font-weight: bold;">Shipping Method:</span>
+				<br /> 
+            	<%
+					switch(cart.GetShippingMethod()){
+						case 1:
+							out.print("Ground (3-5 days)");
+							break;
+						case 2:
+							out.print("Two-day shipping");
+							break;
+						case 3:
+							out.print("Next-day shipping");
+							break;
+					}
+				%>
+            	</div>
+            	<br />
                 <form id="checkout_form" action="CheckoutServlet" method="POST">
                     <input name="shipping_name" type="text" placeholder="Recipient's Name"/>
                     <br />
@@ -181,10 +205,8 @@
                     <br />
                     <input name="paypal_email" type="text" placeholder="PayPal Email Address"/>
                     <br />
-                    <input name="paypal_password" type="number" placeholder="Shipping Zip Code"/>
                     <br />
-                    <br />
-                    <button type="submit" name="place_order">Place Order</button>
+                    <button type="submit" name="place_order" class="gold_btn">Place Order</button>
                 </form>
             </div>
         </div>
