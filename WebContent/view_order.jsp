@@ -222,7 +222,7 @@
 								<br />
 								<span class="tinytext">Tax is on price + shipping</span>
 							</th>
-							<%=((acctType.equals("B"))?"<th>Update Quantity</th>":"<th>Quantity</th>")%>
+							<%=((acctType.equals("B"))?"<th>Update Quantity<br /><span class='tinytext'>Update available if item <br /> has not been shipped or canceled</span></th>":"<th>Quantity</th>")%>
 							<th>
 								Cancel Item
 								<br />
@@ -262,13 +262,12 @@
 								out.print("<td>"+itemPrice+"</td>");
 								out.print("<td>"+shippingPrice+"</td>");
 								out.print("<td>"+tax+"</td>");
-								out.print(((acctType.equals("B"))?"<td><input type='number' value='"+quantity+"' class='quantity' /> &nbsp; <input type='button' value='Update' /></td>":"<td>"+quantity+"</td>"));
+								out.print(((acctType.equals("B") && !rs.getBoolean("hasShipped") && !rs.getBoolean("canceled"))?"<td><input type='number' value='"+quantity+"' class='quantity' /> &nbsp; <input type='button' value='Update' /></td>":"<td>"+quantity+"</td>"));
 								out.print("<td><input type='button' value='Cancel' "+((rs.getBoolean("hasShipped") || (rs.getBoolean("canceled"))?"disabled":""))+" /></td>");
 								out.print("<td>"+shipped+"</td>");
 								out.print(((acctType.equals("S"))?"<td><input type='button' value='Mark as Shipped' /></td>":""));
 								out.print("<td>"+canceled+"</td>");
 							out.print("</tr>");
-							
 						}
 					%>
 					</table>
