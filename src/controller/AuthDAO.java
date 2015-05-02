@@ -287,6 +287,30 @@ public class AuthDAO {
  
         return insertSuccess;
     }
+    public static boolean UpdateUserDetails(int userID, String firstName,String middleName, String lastName,String phone,String address,String city,String state,String zip) {
+   	 
+        Statement stmt;
+        String sql;
+        boolean insertSuccess = false;
+        Connection conn = createConn();
+ 
+        //Execute query to check username and password
+        System.out.println("Creating statement...");
+        try {
+            stmt = conn.createStatement();
+            sql = "INSERT INTO `UserProfile` (`userID`,`firstName`,`middleName`,`lastName`,`phone`,`address`,`city`,`state`,`zip`)"
+                        + " VALUES ('" + userID + "','" + firstName + "','" + middleName + "','"+ lastName + "','"+phone+"','"+address+"','"+
+                        city+"','"+state+"','"+zip+"');";
+        System.out.println("["+sql+"]");
+            insertSuccess = stmt.executeUpdate(sql) > 0;
+        } catch (SQLException | NumberFormatException ex) { //An error occurred
+            //Log the exception
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+ 
+        return insertSuccess;
+    }
+
  
     public static boolean isEmailAvailable(String email) {
  
@@ -408,16 +432,16 @@ public class AuthDAO {
         return productID;
     }   
     
-    public static int UpdateProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, Part filePart, String groundCost, String twoCost, String nextCost) throws IOException, ClassNotFoundException {
+    public static int UpdateProductDetails( String sellerID, String name,  String description,String specs,  String price, String categoryID, String numInStock, String groundCost, String twoCost, String nextCost) throws IOException, ClassNotFoundException {
 	  	 
     	PreparedStatement ps = null;
         String sql;
         ResultSet rs;
         Connection conn = AuthDAO.createConn();
         int productID=-1;
-        int fileSize = (int)filePart.getSize();
-        InputStream inputStream = filePart.getInputStream();
-        System.out.println("Filesize: "+Integer.toString(fileSize)+" bytes");
+        //int fileSize = (int)filePart.getSize();
+        //InputStream inputStream = filePart.getInputStream();
+        //System.out.println("Filesize: "+Integer.toString(fileSize)+" bytes");
  
         //Execute query to insert seller details
         System.out.println("Creating statement...");
@@ -427,11 +451,11 @@ public class AuthDAO {
             sql = "'Update`Products` set `sellerID`='" + sellerID + "','" +"'`categoryID`='"+categoryID + "','" +"'`productName`='"+ name + "','"+"'`unitPrice`='" +price + "','"+"'`quantity`='"+numInStock+"','"+"'`description`='"+description+"','"+"'`specs`='"+specs+"', '"+"'`groundCost`='"+groundCost+"', '"+"'`twoCost`='"+twoCost+"', '"+"'`nextCost`='"+nextCost+"'where`productID`='"+ productID+"'sellerID='"+sellerID+"';'";
             conn.setAutoCommit(false);
             ps = conn.prepareStatement(sql);  //Prepare the statement
-            ps.setBinaryStream(1, inputStream, fileSize); //Add the binary stream to the statement
+            //ps.setBinaryStream(1, inputStream, fileSize); //Add the binary stream to the statement
             System.out.println(ps);
             ps.executeUpdate(); //Execute the insert query
             conn.commit();
-            inputStream.close();
+            //inputStream.close();
             
             sql = "SELECT max(`productID`) FROM `Products` WHERE `sellerID`='" + sellerID + "' ";
             System.out.println(sql);
@@ -450,6 +474,8 @@ public class AuthDAO {
  
         return productID;
     }   
+
+     
     public static boolean deactivateaccount( String accounttype, int username) throws IOException, ClassNotFoundException {
 	  	 
         Statement stmt;

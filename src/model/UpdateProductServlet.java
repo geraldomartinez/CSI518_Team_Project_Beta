@@ -61,12 +61,12 @@ public class UpdateProductServlet extends HttpServlet {
 		String categoryID;
 		String updateMessage = "";
 		boolean updateproduct=true;
-		name=request.getParameter("productname");
+		name=request.getParameter("productName");
 		description=request.getParameter("description");
 		specs=request.getParameter("specs");
 		price=request.getParameter("price");
 		categoryID=request.getParameter("categoryID");
-		numInStock=request.getParameter("numinstock");
+		numInStock=request.getParameter("quantity");
 		updatebt=request.getParameter("updatebt");
 		
 		groundCost=request.getParameter("ground_cost");
@@ -76,7 +76,7 @@ public class UpdateProductServlet extends HttpServlet {
 		sellerID = usr.GetUserID();
 
 		//Image
-		Part filePart=request.getPart("product_image");
+		//Part filePart=request.getPart("product_image");
 
 		System.out.println(categoryID);
 		if (name == null) {
@@ -146,16 +146,7 @@ public class UpdateProductServlet extends HttpServlet {
             	specs = specs.replace("'","\\'");
             }
             
-            if (numInStock.equals("")) {
-                if (!updateMessage.equals("")) {
-                	updateMessage += "<br />";
-                }
-                updateMessage += "You did not enter the number of items in stock";
-                updateproduct = false;
-            }else{
-            	numInStock = numInStock.replace("'","\\'");
-            }    
-
+          
             
         	//Try to parse a number out of the given shipping costs. If the parse fails, set the string to empty string
         	try{
@@ -193,7 +184,7 @@ public class UpdateProductServlet extends HttpServlet {
            
             if (updateproduct) {        		
                 try {
-					productID = AuthDAO.UpdateProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart, groundCost, twoCost, nextCost);
+					productID = AuthDAO.UpdateProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock,  groundCost, twoCost, nextCost);
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

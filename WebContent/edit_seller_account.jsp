@@ -28,7 +28,7 @@
 		<div id="page_content_wrapper">
 			<H1>Account Information</H1>
 			<br>
-			<form action="SERVLET_NAME_GOES_HERE" method="POST">
+			<form action="UpdateSellerInfo" method="POST">
 				<table id="sellerInfo" border=1 align=center>
 					<tr>
 						<th>First Name</th>
@@ -56,12 +56,15 @@
 						String city = "";
 						String state = "";
 						String zip = "";
+						int accountNumber = 0;
+						int routingNumber = 0;
+						String companyName = "";
 		
 						try {
 		
 							if (AuthDAO.VerifySellerID(sellerID)) {
 		
-								String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip FROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'S'AND u.UserID = s.sellerID AND s.sellerID ='" + sellerID + "';";
+								String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip ,s.accountNumber,s.routingNumber,s.companyNameFROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'S'AND u.UserID = s.sellerID AND s.sellerID ='" + sellerID + "';";
 								System.out.println(sql);
 								conn = AuthDAO.createConn();
 								HttpSession ss = request.getSession();
@@ -83,7 +86,9 @@
 									state = rs.getString("state");
 		
 									zip = rs.getString("zip");
-		
+									accountNumber=rs.getInt("accountNumber");
+									routingNumber=rs.getInt("routingNumber");
+									companyName=rs.getString("comapanyName");
 								}
 							} else {
 								String error = "Not logged in as seller";
@@ -107,9 +112,12 @@
 						<td><input type="text" value="<%=city%>" name="city" /></td>
 						<td><input type="text" value="<%=state%>" name="state" /></td>
 						<td><input type="text" value="<%=zip%>" name="zip" /></td>
+						<td><input type="text" value="<%=accountNumber%>" name="accountNumber" /></td>
+						<td><input type="text" value="<%=routingNumber%>" name="routingNumber" /></td>
+						<td><input type="text" value="<%=companyName%>" name="companyName" /></td>
 					</tr>
 				</table>
-				<input type="submit" value="Submit" name="insertbt">
+				<input type="submit" value="Submit" name="updatebt">
 			</form>
 		</div>
 	</body>

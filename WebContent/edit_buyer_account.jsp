@@ -30,7 +30,7 @@
 			<H1>Account Information</H1>
 			<br>
 			<br>
-			<form method="SERVLET_NAME_GOES_HERE" method="POST">
+			<form method="UpdateBuyerInfo" method="POST">
 				<table id="buyerInfo" border=1 align=center>
 					<tr>
 						<th>First Name</th>
@@ -60,7 +60,7 @@
 							String city = "";
 							String state = "";
 							String zip = "";
-							int active = 0;
+							
 							try {
 		
 								String sql = "SELECT DISTINCT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip FROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'B' AND u.UserID ='" + userID + "';";
@@ -85,6 +85,7 @@
 									state = rs.getString("state");
 		
 									zip = rs.getString("zip");
+									
 		
 								}
 		
@@ -101,8 +102,11 @@
 						<td><input type="text" value="<%=city%>" name="city" /></td>
 						<td><input type="text" value="<%=state%>" name="state" /></td>
 						<td><input type="text" value="<%=zip%>" name="zip" /></td>
+						<input type="submit" value="Submit" name="insertbt">
+						
 					</tr>
 				</table>
+				<input type="submit" value="Submit" name="updatebt">
 			</form>
 		</div>
 	</body>

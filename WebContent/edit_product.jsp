@@ -13,25 +13,9 @@
         <%@include file="top_menu.jsp"%>
         <div id="page_content_wrapper">
         
-
-    <script type="text/javascript" >
-        function ToggleEditable (button) {
-            var div = document.getElementById ("myDiv");
-
-            if (div.contentEditable == "true") {
-                div.contentEditable = "false";
-                button.innerHTML = "Edit!";
-            }
-            else {
-                div.contentEditable = "true";
-                button.innerHTML = "Editing done!";
-            }
-        }
-        
-    </script>
 </head>
    <body>
-   <form id="add_product" name="add_product" action="UpdateProductServlet" method="POST" enctype="multipart/form-data">
+   <form id="edit_product" name="edit_product" method="UpdateProductServlet" method="POST" enctype="multipart/form-data">
     <div id="page_content_wrapper">
 		<%
 			RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
@@ -65,7 +49,8 @@
 	Connection conn = null;
 	ResultSet rs = null;
 	Product prod = null;
-	int sellerID=0,pQuantity=0;
+	int sellerID=0 ,categoryID,pQuantity=0;
+	float groundCost=0, twoCost=0,nextCost=0;
 
 	try {			
 	
@@ -89,9 +74,11 @@
 				pSpecs = rs.getString("specs");
 				productID = rs.getInt("productID");
 				pQuantity=rs.getInt("quantity");
-			    
+				groundCost=rs.getFloat("groundCost");
+				twoCost=rs.getFloat("twoCost");
+				nextCost=rs.getFloat("nextCost");
 				picture = prod.getPicture();
-				String floatConv = String.format("%.2f", pPrice);
+			
 				 
 	
 					}
@@ -106,24 +93,16 @@
 		<h4><a href="view_product.jsp?productID=<%=productID %>" style="color: white;"><%=productName%></a></h4>
 		<div ><a href="view_product.jsp?productID=<%=productID %>"><img src="<%=picture%>" style="max-width: 300px; max-height: 300px;"></a></div>
 		<br />
-		 <div>Product Name: 
-		 
-		 <div id="myDiv" contentEditable="true"><%=productName%>
-		 </div>
-		 </div>
-		 <div>Description:
-		 <div id="myDiv" contentEditable="true"><%=pDescription%></div>
-		 </div>
-		 <div>Specifications:
-		 <div id="myDiv" contentEditable="true"><%=pSpecs%></div>
-		 </div>
-		 <div>Price:
-		 <div id="myDiv" contentEditable="true"><%=pPrice%></div>
-		 </div>
-		 <div>Quantity:
-		 <div id="myDiv" contentEditable="true"><%=pQuantity%></div>
-		 </div>
-		 <input type="submit" value="Submit" name="updatebt">
+		
+		 <input type="text" value="<%=productName%>" name="productName" />
+		 <input type="text" value="<%=pDescription%>" name="description" />
+		 <input type="text" value="<%=pSpecs%>" name="specs" />
+		 <input type="text" value="<%=pPrice%>" name="price" />
+		 <input type="text" value="<%=pQuantity%>" name="quantity" />
+		 <input type="text" value="<%=groundCost%>" name="ground_cost" />
+		 <input type="text" value="<%=twoCost%>" name="two_cost" />
+		 <input type="text" value="<%=nextCost%>" name="next_cost" />
+		 <input type="submit" value="submit" name="updatebt">
 					
     </div>
 <br/>
