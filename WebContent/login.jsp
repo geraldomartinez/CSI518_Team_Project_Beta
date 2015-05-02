@@ -40,7 +40,7 @@
 
             if (loggedIn == "true") { //If the user is logged in
                 //Alert the user that they are already logged in
-                request.setAttribute("indexMessage", "<span style='color: red;'>You are already logged in</span>");
+                request.setAttribute("indexMessage", "You are already logged in");
                 rd.forward(request, response); //Forward the user with the response above
             }
         %>
