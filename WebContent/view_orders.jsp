@@ -53,15 +53,15 @@
         	<table id="orders_table">
         		<tr>
        			 	<th>Order ID</th>
-        			<th>Order Timestamp<br /><span class="tinytext">(y-m-d h:m:s)</span></th>
+        			<th>Order Timestamp<br /><span class="tinytext">y-m-d h:m:s</span></th>
         			<%
 					switch (acctType){
 						case "B":
         			 %>
         			<th>Number of Items</th>
         			<th>Total Cost</th>
-        			<th>Shipping Status<br /><span class="tinytext">(None/Some/All Shipped)</span></th>
-        			<th>Cancellation Status<br /><span class="tinytext">(None/Some/All Canceled)</span></th>
+        			<th>Shipping Status<br /><span class="tinytext">None/Some/All Shipped</span></th>
+        			<th>Cancellation Status<br /><span class="tinytext">None/Some/All Canceled</span></th>
         			<%
         					break;
 						case "A":
@@ -74,8 +74,8 @@
          			<th>Buyer Email</th>
         			<th>Number of Items</th>
         			<th>Total Cost</th>
-        			<th>Shipping Status<br /><span class="tinytext">(None/Some/All Shipped)</span></th>
-        			<th>Cancellation Status<br /><span class="tinytext">(None/Some/All Canceled)</span></th>
+        			<th>Shipping Status<br /><span class="tinytext">None/Some/All Shipped</span></th>
+        			<th>Cancellation Status<br /><span class="tinytext">None/Some/All Canceled</span></th>
          			<%
 						break;
 					}
@@ -116,6 +116,14 @@
 									shippingStatus = "Some Shipped";
 								}else{
 									shippingStatus = "None Shipped";
+								}
+								
+								if (itemCount == numItemsCanceled){
+									cancelStatus = "All Canceled";
+								}else if (numItemsCanceled > 0){
+									cancelStatus = "Some Canceled";
+								}else{
+									cancelStatus = "None Canceled";
 								}
 		        	
 			        		%>
