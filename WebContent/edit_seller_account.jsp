@@ -1,162 +1,116 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Home - Great Danes Electronics</title>
 		
-       	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script> <!-- jQuery Library -->
-       	
-       	<style type="text/css">
-       		#page_content_wrapper{
-       			text-align: center;
-       		}
-       		#page_content_wrapper a{
-       			color: white;
-       		}
-       	</style>
-       	 <script type="text/javascript" >
-        function ToggleEditable (button) {
-            var div = document.getElementById ("myDiv");
-
-            if (div.contentEditable == "true") {
-                div.contentEditable = "false";
-                button.innerHTML = "Edit!";
-            }
-            else {
-                div.contentEditable = "true";
-                button.innerHTML = "Editing done!";
-            }
-        }
-        
-    </script>
+		<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+		<!-- jQuery Library -->
+		
+		<style type="text/css">
+		#page_content_wrapper {
+			text-align: center;
+		}
+		
+		#page_content_wrapper a {
+			color: white;
+		}
+		input[type=text]{
+			width: 80px;
+		}
+		</style>
 	</head>
 	<body>
-	<%@ page
-		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
+		<%@ page import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
+		<%@include file="top_menu.jsp"%>
+		<div id="page_content_wrapper">
+			<H1>Account Information</H1>
+			<br>
+			<form action="SERVLET_NAME_GOES_HERE" method="POST">
+				<table id="sellerInfo" border=1 align=center>
+					<tr>
+						<th>First Name</th>
+						<th>Middle Name</th>
+						<th>Last Name</th>
+						<th>Phone</th>
+						<th>Address</th>
+						<th>City</th>
+						<th>State</th>
+						<th>Zip</th>
+					</tr>
+					<tr>
+					<%
+						int sellerID = User.GetUserID(); //Page will error out if there is no seller logged in...
+						Connection conn = null;
+						ResultSet rs = null; //Handles the list of categories
+						ResultSet rs2 = null; //Handles the list of products
+						int categoryID = 0;
+						int productID = 0;
+						String firstName = "";
+						String middleName = "";
+						String lastName = "";
+						String phone = "";
+						String address = "";
+						String city = "";
+						String state = "";
+						String zip = "";
 		
-        <%@include file="top_menu.jsp"%>
-        <div id="page_content_wrapper">
-       
-       
-        <H1>Account Information</H1>
-        
-        <button onclick="ToggleEditable (this);">Edit!</button>
-        <br>
-        <br>
-        
-        <table id="sellerInfo" border=1 align=center>
-				<tr>
-					<th >First Name</th>
-					<th>Middle Name</th>
-					<th>Last Name</th>
-					<th>Phone</th>
-					<th>Address</th>
-					<th>City</th>
-					<th>State</th>
-					<th>Zip</th>
-					
-				</tr>
-				
-				<%
-        		int sellerID = User.GetUserID(); //Page will error out if there is no seller logged in...
-	        	Connection conn = null;
-				ResultSet rs = null; //Handles the list of categories
-				ResultSet rs2 = null; //Handles the list of products
-				int categoryID =0;
-				int productID = 0;
-				String firstName = "";
-				String middleName = "";
-				String lastName = "";
-				String phone="";
-				String address="";
-				String city="";
-				String state="";
-				String zip="";
-				
-				try {
-				
-					if(AuthDAO.VerifySellerID(sellerID))
-					{
-
-						String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip FROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'S'AND u.UserID = s.sellerID AND s.sellerID ='"+sellerID+"';";
-						System.out.println(sql);
-					conn = AuthDAO.createConn();
-					HttpSession ss = request.getSession();
-	
-					PreparedStatement pst = conn.prepareStatement(sql);
-					rs = pst.executeQuery();
-					while (rs.next()) {
-						firstName = rs.getString("firstName");
-						System.out.println(firstName);
-						middleName = rs.getString("middleName");
-						lastName = rs.getString("lastName");
-					
-						phone = rs.getString("phone");
-						
-						address=rs.getString("address");
-
-						city=rs.getString("city");
-					
-						state=rs.getString("state");
-						
-						zip=rs.getString("zip");
-						
-						
-					}
-					}
-					else
-						{ 
-							String error="Not logged in as seller";
-							System.out.println("Not logged in as seller");
-							out.println("<tr><td>");out.println(error);out.println("</td>");
+						try {
+		
+							if (AuthDAO.VerifySellerID(sellerID)) {
+		
+								String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip FROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'S'AND u.UserID = s.sellerID AND s.sellerID ='" + sellerID + "';";
+								System.out.println(sql);
+								conn = AuthDAO.createConn();
+								HttpSession ss = request.getSession();
+		
+								PreparedStatement pst = conn.prepareStatement(sql);
+								rs = pst.executeQuery();
+								while (rs.next()) {
+									firstName = rs.getString("firstName");
+									System.out.println(firstName);
+									middleName = rs.getString("middleName");
+									lastName = rs.getString("lastName");
+		
+									phone = rs.getString("phone");
+		
+									address = rs.getString("address");
+		
+									city = rs.getString("city");
+		
+									state = rs.getString("state");
+		
+									zip = rs.getString("zip");
+		
+								}
+							} else {
+								String error = "Not logged in as seller";
+								System.out.println("Not logged in as seller");
+								out.println("<tr><td>");
+								out.println(error);
+								out.println("</td>");
+							}
+					%>
+		
+					<%
+						} catch (Exception e) {
+							out.print(e);
 						}
-				
-        		%>
-        	
-        		<% 
-				
-				} catch (Exception e) {
-						out.print(e);
-					}
-				%>
-			
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=firstName%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=middleName%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=lastName%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=phone%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=address%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=city%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=state%>
-		 </div>
-		 </td>
-		 <td>
-		 <div id="myDiv" contentEditable="true"><%=zip%>
-		 </div>
-		 </td>
-		 <input type="submit" value="Submit" name="insertbt">
-					
-    </div>
-        </table>
-</body>
+					%>
+						<td><input type="text" value="<%=firstName%>" name="first_name" /></td>
+						<td><input type="text" value="<%=middleName%>"name="middle_name" /></td>
+						<td><input type="text" value="<%=lastName%>" name="last_name" /></td>
+						<td><input type="text" value="<%=phone%>" name="phone" /></td>
+						<td><input type="text" value="<%=address%>" name="address" /></td>
+						<td><input type="text" value="<%=city%>" name="city" /></td>
+						<td><input type="text" value="<%=state%>" name="state" /></td>
+						<td><input type="text" value="<%=zip%>" name="zip" /></td>
+					</tr>
+				</table>
+				<input type="submit" value="Submit" name="insertbt">
+			</form>
+		</div>
+	</body>
 </html>
