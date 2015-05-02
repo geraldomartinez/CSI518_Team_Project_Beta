@@ -86,7 +86,7 @@
 			<a href="notifications.jsp?userID=<%=userID%>">Notifications</a>
 			<br />
         	<br />
-			<a href="#">Orders</a>
+			<a href="view_orders.jsp"><%= ((acctType.equals("A"))?"All":"My") %> Orders</a>
 			<br />
 			<br />
 			<br />

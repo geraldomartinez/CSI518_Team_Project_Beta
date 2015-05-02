@@ -1203,7 +1203,7 @@ public class AuthDAO {
         try {
             stmt = conn.createStatement();
             sql = "INSERT INTO `Orders` "
-            		+ "(`buyerID`,`receiverName`,`receiverAddress`,`receiverCity`,`receiverState`,`receiverZip`,`buyerPaypalEmail`,`shippingMethod`,`orderDate`) "
+            		+ "(`buyerID`,`receiverName`,`receiverAddress`,`receiverCity`,`receiverState`,`receiverZip`,`buyerPaypalEmail`,`shippingMethod`,`orderTimestamp`) "
             		+ "VALUES ('"+userID+"','"+shippingName+"','"+shippingAddr+"','"+shippingCity+"','"+shippingState+"','"+shippingZip+"','"+paypalEmail+"','"+cart.GetShippingMethod()+"',NOW());";
             System.out.println(sql);
             stmt.executeUpdate(sql);
