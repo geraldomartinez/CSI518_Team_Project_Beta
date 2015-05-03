@@ -57,10 +57,11 @@ public class ProductServlet extends HttpServlet {
     	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
 		int productID = -1;
 		int sellerID;
-		String name, description, specs, price, numInStock, insertbt, groundCost, twoCost, nextCost;
+		String strProductID, name, description, specs, price, numInStock, insertbt, groundCost, twoCost, nextCost;
 		String categoryID;
-		String inputMessage = "";
+		String inputMessage = "", messageAttribute = "addProductMessage";
 		boolean insertproduct=true;
+		strProductID=request.getParameter("productID");
 		name=request.getParameter("productname");
 		description=request.getParameter("description");
 		specs=request.getParameter("specs");
@@ -77,8 +78,11 @@ public class ProductServlet extends HttpServlet {
 
 		//Image
 		Part filePart=request.getPart("product_image");
-
-		System.out.println(categoryID);
+		
+		if (strProductID == null) {
+			strProductID = "";
+        }
+		
 		if (name == null) {
         	name = "";
         }
@@ -193,22 +197,28 @@ public class ProductServlet extends HttpServlet {
            
             if (insertproduct) {        		
                 try {
-					productID = AuthDAO.InsertProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart, groundCost, twoCost, nextCost);
+                	if (!strProductID.equals("")){ //If updating an existing product
+                		productID = AuthDAO.UpdateProductDetails(Integer.parseInt(strProductID), ((usr.getAccountType().equals("A"))?true:false), Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart, groundCost, twoCost, nextCost);
+                		rd = request.getRequestDispatcher("view_product.jsp?productID="+productID);
+                		messageAttribute = "viewProductMessage";
+                	}else{
+                		productID = AuthDAO.InsertProductDetails(Integer.toString(sellerID), name, description, specs, price, categoryID, numInStock, filePart, groundCost, twoCost, nextCost);
+                	}
 				} catch (ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 if (productID == -1) {
-                	inputMessage = "Product insert failed.";
+                	inputMessage = "Product insert/update failed.";
                 }else{
-                	inputMessage = "Product inserted successfully";
+                	inputMessage = "Product inserted/updated successfully";
                 }
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed
             inputMessage += "An enexpected error has occured"; //There was an error in http request
         }
 
-        request.setAttribute("addProductMessage", inputMessage);
+        request.setAttribute(messageAttribute, inputMessage);
         rd.forward(request, response);
         
 	}

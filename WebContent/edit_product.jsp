@@ -76,15 +76,20 @@
 		%>
 		<div id="edit_product_message" class="message"><%=editProductMessage%></div>
 		<br />
-		<h1 id="header">Edit Product #<%=productID%></h1>
+		<h1 id="header">Edit Product</h1>
 		<br />
 		<img src="<%= prd.getPicture() %>" alt="Product Image" style="max-width: 200px;  max-height: 200px;" />
 		<br />
-		<a href="view_product.jsp?productID="+<%=productID%>>Click here to view current product page</a>
+		<a href="view_product.jsp?productID="+<%=productID%> style="color: white;">Click here to view current product page</a>
 		<br />
 		<br />
-		<form id="add_product" name="add_product" action="UpdateProductServlet" method="POST" enctype="multipart/form-data">
+		<br />
+		<form id="add_product" name="add_product" action="ProductServlet" method="POST" enctype="multipart/form-data">
 			<table>
+				<tr>
+					<td>Product ID:</td>
+					<td><%=productID%><input type='hidden' name='productID' value='<%=productID%>'/></td>
+				</tr>
 				<tr>
 					<td>Product Category:</td>
 					<td><select id=categoryID name=categoryID>
@@ -126,11 +131,11 @@
 				</tr>
 				<tr>
 					<td>Description:</td>
-					<td><textarea  name="description"value="<%=prd.GetDescription() %>"></textarea></td>
+					<td><textarea  name="description"><%=prd.GetDescription() %></textarea></td>
 				</tr>
 				<tr>
 					<td>Specs:</td>
-					<td><textarea name="specs" value="<%=prd.GetSpecs() %>"></textarea></td>
+					<td><textarea name="specs"><%=prd.GetSpecs() %></textarea></td>
 				</tr>
 				<tr>
 					<td>Price:</td>
@@ -153,7 +158,7 @@
 					<td><input name="numinstock" type="number" value="<%=prd.GetNumInStock() %>" ></td>
 				</tr>
 				<tr>
-					<td>Product Image:</td>
+					<td>New Product Image:</td>
 					<td><input type="file" id="product_image" name="product_image"></td>
 				<tr>
 					<td></td>

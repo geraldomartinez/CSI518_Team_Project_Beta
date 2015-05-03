@@ -39,20 +39,17 @@
 	        <%
            	RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
             String productListMessage = (String) request.getAttribute("productListMessage"); //Obtain the message to be displayed for the product list page (if there is one)
-			String productSellerID = "", productSellerEmail = "", sellerID = "-1", sql = "";
+			String productSellerID = "", productSellerEmail = "", acctID = "-1", sql = "";
             ResultSet rs0;
             if (productListMessage == null) { //Prevent null pointer exception
             	productListMessage = "";
             }
 			
-
-			
 			if (acctType.equals("S")){
-				sellerID = Integer.toString(usr.GetUserID());
-				sql = "SELECT DISTINCT `userID` as `sellerID`,`email` from `Users` WHERE `userID` = '"+sellerID+"'";
+				acctID = Integer.toString(usr.GetUserID());
+				sql = "SELECT DISTINCT `userID` as `sellerID`,`email` from `Users` WHERE `userID` = '"+acctID+"'";
 			}else if (acctType.equals("A")){
-				sellerID = "%";
-				sql = "SELECT DISTINCT `sellerID`,`Users`.`email` from `Products` JOIN (`Users`) ON (`Products`.`sellerID` = `Users`.`userID`)";
+				sql = "SELECT DISTINCT `sellerID`,`Users`.`email` from `Products` JOIN (`Users`) ON (`Products`.`sellerID` = `Users`.`userID`) ORDER BY `Products`.`sellerID` ASC";
 			}else{
 	            request.setAttribute("indexMessage", "Please log into your seller account before attempting to add a product");
 	            rd.forward(request, response); //Forward the user with the response above
@@ -101,7 +98,7 @@
 					String productName = "";
 					Product prd;
 					
-					sql = "select distinct p.categoryName, p.categoryID from ProductCategories p WHERE categoryID IN (SELECT categoryID FROM `Products` WHERE sellerID LIKE '"+ sellerID + "') order by p.categoryName;";
+					sql = "select distinct p.categoryName, p.categoryID from ProductCategories p WHERE categoryID IN (SELECT categoryID FROM `Products` WHERE sellerID LIKE '"+ productSellerID + "') order by p.categoryName;";
 					
 					conn = AuthDAO.createConn();
 					pst = conn.prepareStatement(sql);
@@ -116,24 +113,14 @@
         				<%=categoryName%>
         			</th>
         		</tr>
-<<<<<<< HEAD
 	           	<%
-	        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "' and removed='0' AND `sellerID` LIKE '"+sellerID+"' order by productName;";
+	        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "' and removed='0' AND `sellerID` LIKE '"+productSellerID+"' order by productName;";
 	        			pst = conn.prepareStatement(sql2);
 						rs2 = pst.executeQuery();
 	        			while(rs2.next()){
 	        				productID = rs2.getInt("productID");
 	        				prd = AuthDAO.getProductById(productID);
-=======
-        		<%
-        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "' and removed='0' AND sellerID ='"+ sellerID + "' order by productName;";
-        			pst = conn.prepareStatement(sql2);
-					rs2 = pst.executeQuery();
-        			while(rs2.next()){
-        				productID = rs2.getInt("productID");
-        				prd = AuthDAO.getProductById(productID);
->>>>>>> branch 'master' of https://github.com/sampellino/CSI518_Team_Project_Beta.git
-        				%>
+      				%>
         		<tr>
         			<td>
         				<img src="<%=prd.getPicture()%>" style="max-width: 50px; max-height: 50px;"/>
@@ -164,9 +151,6 @@
 					out.print(e);
 				}
 				%>
-        		
-        	
-        		
         	</table>
         </div>
 	</body>

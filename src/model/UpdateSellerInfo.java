@@ -42,19 +42,19 @@ public class UpdateSellerInfo extends HttpServlet {
         RequestDispatcher rd = request.getRequestDispatcher("edit_seller_account.jsp");
         
 	       
-        String   firstName, lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum,companyName,url,shipping;
+        String   firstName, lastName,middleName,phone,address,city,state,zip,accountNum,routingNum,companyName,url,shipping;
       
         String updatebt=request.getParameter("updatebt");
         
         boolean insertNewUser = true;
         // String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
         
-        accountType=request.getParameter("accountType");
+       
         
 	       
         firstName = request.getParameter("firstName");
         lastName = request.getParameter("lastName");
-        middleName = request.getParameter("middleNname");
+        middleName = request.getParameter("middleName");
         phone = request.getParameter("phone");
         address = request.getParameter("address");
         city = request.getParameter("city");
@@ -175,7 +175,8 @@ public class UpdateSellerInfo extends HttpServlet {
                
              if (!AuthDAO.UpdateUserDetails(userID,firstName,middleName,lastName,phone,address,city,state,zip)) {
                 updateMessage = "Update Account Failed, Please Try Again.";
-            } else if (accountType == "S" && !AuthDAO.UpdateSellerDetails(userID, accountNum, routingNum, companyName,url)) {
+             }
+            if (!AuthDAO.UpdateSellerDetails(userID, accountNum, routingNum, companyName,url)) {
                 updateMessage = "Update Account Failed, Please Try Again.";
             }
             else {
@@ -183,7 +184,7 @@ public class UpdateSellerInfo extends HttpServlet {
             }
         }
         
-        
+            
         try {
             AuthDAO.DB_Close();
         } catch (Throwable e) {

@@ -67,6 +67,7 @@ input[type=text] {
 					<th>accounting Number</th>
 					<th>routing Number</th>
 					<th>company Name</th>
+					<th>url</th>
 				</tr>
 				<tr>
 					<%
@@ -87,10 +88,10 @@ input[type=text] {
 						int accountNumber = 0;
 						int routingNumber = 0;
 						String companyName = "";
-
+						String url="";
 						try {
 
-							String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip ,s.accountNumber,s.routingNumber,s.companyName FROM UserProfile u, Users v, SellerDetails s WHERE u.userID = v.userID AND v.accountType =  'S' AND u.userID = s.sellerID AND s.sellerID ='"
+							String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip ,s.accountNumber,s.routingNumber,s.companyName,s.url FROM UserProfile u, Users v, SellerDetails s WHERE u.userID = v.userID AND v.accountType =  'S' AND u.userID = s.sellerID AND s.sellerID ='"
 									+ sellerID + "';";
 							System.out.println(sql);
 							conn = AuthDAO.createConn();
@@ -115,7 +116,8 @@ input[type=text] {
 								zip = rs.getString("zip");
 								accountNumber = rs.getInt("accountNumber");
 								routingNumber = rs.getInt("routingNumber");
-								companyName = rs.getString("comapanyName");
+								companyName = rs.getString("companyName");
+								url = rs.getString("url");
 							}
 					%>
 
@@ -139,6 +141,8 @@ input[type=text] {
 						name="routingNumber" /></td>
 					<td><input type="text" value="<%=companyName%>"
 						name="companyName" /></td>
+						<td><input type="text" value="<%=url%>"
+						name="url" /></td>
 				</tr>
 			</table>
 			<input type="submit" value="Submit" name="updatebt">
