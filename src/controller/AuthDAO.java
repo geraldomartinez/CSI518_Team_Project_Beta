@@ -126,6 +126,56 @@ public class AuthDAO {
         return id;
 
     }
+    
+	public static boolean hasPurchasedItemBefore(int userID, int productID) {
+		Statement stmt = null;
+
+		ResultSet rs = null;
+		boolean order = false;
+
+		Connection conn = createConn();
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT `OrderItems`.`productID` FROM `OrderItems` LEFT JOIN (`Orders`, `Products`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) WHERE `Orders`.`buyerID` = '" + userID + "' AND `OrderItems`.`productID` = '" + productID + "'";
+
+			System.out.println("SQL Statement:");
+			System.out.println(sql);
+
+			rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				order = true;
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return order;
+	}
+	
+	public static boolean insertreview(int userID, int productID, int rating, String review) {
+
+		Statement stmt;
+		String sql;
+		Connection conn = createConn();
+
+		// Execute query to insert seller details
+		System.out.println("Creating statement...");
+		try {
+			stmt = conn.createStatement();
+			sql = "INSERT INTO `ProductReviews` (`userID`,`productID`,`ranking`,`review`) VALUES ('" + userID + "','" + productID + "','" + rating + "','" + review + "');";
+			System.out.println(sql);
+			stmt.executeUpdate(sql);
+		} catch (SQLException | NumberFormatException ex) { // An error occurred
+			// Log the exception
+			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+
+		return true;
+	}
+    
     public static User getUserById(int userID) {
     	 
         Statement stmt;

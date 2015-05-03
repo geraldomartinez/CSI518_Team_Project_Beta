@@ -137,8 +137,53 @@
         		
         	}
 			%>
-			
-			<h3>Customer Reviews</h3>
+
+
+		<%
+			int userID = 18;
+				HttpSession ss1 = request.getSession();
+				User user = (User) ss1.getAttribute("user");
+
+				System.out.println("hello the id" + user.GetUserID());
+
+				//userID=usr.GetUserID();
+				System.out.println("new id" + userID);
+				System.out.println("new id" + productID);
+
+				if (AuthDAO.hasPurchasedItemBefore(userID, productID)) {
+
+					String reviewMessage = (String) request.getAttribute("reviewMessage"); //Obtain the wishlist message from the session
+					if (reviewMessage == null) { //Prevent null pointer exception
+						reviewMessage = "";
+					}
+
+					out.print("<div id=review_message class=message>" + reviewMessage + "</div>");
+
+					System.out.println("heello you are in");
+
+					out.print("<br><br><br>");
+					out.print("Please review your purchased product");
+					out.print("<br><br>");
+
+					out.print("<form name=insertreview action=AddReviewServlet method=post>");
+					out.print("Rating    &nbsp;&nbsp;&nbsp<select id=Rating name=Rating>");
+
+					out.print("<option value='1'>1</option>");
+					out.print(" <option value='2'>2</option>");
+					out.print("<option value='3'>3</option>");
+					out.print("<option value='4'>4</option>");
+					out.print("<option value='5'>5</option>");
+					out.print("</select><br><br>");
+					out.print(" Review : <textarea name=review></textarea>");
+					out.print("<br><br>");
+					out.print("<input type=submit name=addreview value=Review>");
+
+					out.print("</form>");
+				}
+		%>
+
+
+		<h3>Customer Reviews</h3>
 		<!--	<table> -->
 			
 			<%
