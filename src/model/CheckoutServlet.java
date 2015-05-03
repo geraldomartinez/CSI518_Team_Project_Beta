@@ -197,7 +197,7 @@ public class CheckoutServlet extends HttpServlet {
             		for(int i = 0; i < sellers.size(); i++){
             			int toUserID = sellers.get(i);
             			Notification notification = new Notification(-1, toUserID, 'O', 
-            					"One of your products has been purchased", usr.GetUserID(), orderID, null);
+            					"One or more of your products has been purchased", usr.GetUserID(), orderID, null);
             			if(AuthDAO.notifyUser(notification)){
             				System.out.println("Notification inserted successfully");
             			}

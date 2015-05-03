@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controller.AuthDAO;
+import controller.Notification;
 import controller.Product;
 import controller.User;
 
@@ -65,6 +66,18 @@ public class MarkItemAsShippedServlet extends HttpServlet {
 			rd = request.getRequestDispatcher("view_order.jsp?orderID="+orderID);
 			try{
 				if (AuthDAO.MarkItemAsShipped(usr.GetUserID(), Integer.parseInt(orderID), Integer.parseInt(productID))){
+					int buyerID = AuthDAO.getOrderBuyer(Integer.parseInt(orderID));
+					Product prd = AuthDAO.getProductById(Integer.parseInt(productID));
+					Notification notification = new Notification(-1, buyerID, 'S', 
+        					"Your purchase of " + prd.GetProductName() + " has been shipped!", usr.GetUserID(), Integer.parseInt(orderID), null);
+        			if(AuthDAO.notifyUser(notification)){
+        				System.out.println("Notification inserted successfully");
+        			}
+        			else{
+        				System.out.println("Notification insertion failed");
+        			}
+					
+					
 					request.setAttribute("orderMessage", "Item successfully marked as shipped");
 				}else{
 					request.setAttribute("orderMessage", "Marking item as shipped failed");

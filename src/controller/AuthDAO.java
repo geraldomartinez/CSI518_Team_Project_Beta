@@ -151,7 +151,7 @@ public class AuthDAO {
 		Connection conn = createConn();
 		try {
 			stmt = conn.createStatement();
-			String sql = "SELECT `OrderItems`.`productID` FROM `OrderItems` LEFT JOIN (`Orders`, `Products`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) WHERE `Orders`.`buyerID` = '" + userID + "' AND `OrderItems`.`productID` = '" + productID + "' AND `OrderItems`.`hasShipped` = '1' AND `OrderItems`.`canceled` <> '0'";
+			String sql = "SELECT `OrderItems`.`productID` FROM `OrderItems` LEFT JOIN (`Orders`, `Products`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) WHERE `Orders`.`buyerID` = '" + userID + "' AND `OrderItems`.`productID` = '" + productID + "' AND `OrderItems`.`hasShipped` = '1' AND `OrderItems`.`canceled` = '0'";
 
 			System.out.println("SQL Statement:");
 			System.out.println(sql);
@@ -183,12 +183,13 @@ public class AuthDAO {
 		return order;
 	}
 	
-	public static boolean insertreview(int userID, int productID, int rating, String review) {
+	public static int insertreview(int userID, int productID, int rating, String review) {
 
 		Statement stmt;
 		String sql;
 		Connection conn = createConn();
-
+		  ResultSet rs;
+		  int reviewID = -1;
 		// Execute query to insert seller details
 		System.out.println("Creating statement...");
 		try {
@@ -196,13 +197,22 @@ public class AuthDAO {
 			sql = "INSERT INTO `ProductReviews` (`userID`,`productID`,`ranking`,`review`) VALUES ('" + userID + "','" + productID + "','" + rating + "','" + review + "');";
 			System.out.println(sql);
 			stmt.executeUpdate(sql);
+			sql = "SELECT MAX(`reviewID`) FROM `ProductReviews`";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) { //Get newly created user ID,
+                //Retrieve by column name
+            	reviewID = Integer.parseInt(rs.getString("MAX(`reviewID`)"));
+            }
+            
+            return reviewID;
 		} catch (SQLException | NumberFormatException ex) { // An error occurred
 			// Log the exception
 			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-			return false;
+			//return 0;
 		}
 
-		return true;
+		return -1;
 	}
     
     public static User getUserById(int userID) {
@@ -1547,6 +1557,46 @@ public class AuthDAO {
         }
     	
     	return notifications;
+    }
+    
+    public static int getOrderBuyer(int orderID){
+    	int buyerID = -1;
+    	
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT buyerID FROM `Orders` WHERE orderID = '"
+					+ orderID + "';";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+            	buyerID = rs.getInt("buyerID");
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get buyerID by orderID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            //return new Product();
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+    	
+    	
+    	return buyerID;
     }
     
     public static void DB_Close() throws Throwable {

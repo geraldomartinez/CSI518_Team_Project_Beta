@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controller.AuthDAO;
+import controller.Notification;
 import controller.Product;
 import controller.User;
 
@@ -83,10 +84,22 @@ public class AddReviewServlet extends HttpServlet {
 			productID=Integer.parseInt(request.getParameter("productID"));
 			System.out.println("entered insert"+productID);
 			rd = request.getRequestDispatcher("view_product.jsp?productID="+productID);
-			
+			int reviewID = -1; 
 			if (navLoggedIn != "true") {
 				request.setAttribute("productMessage", "You must logged in to perform this request");
-			}else if(AuthDAO.insertreview(userID, productID, rating, review)){
+			}else if((reviewID = AuthDAO.insertreview(userID, productID, rating, review)) != -1){
+				
+				Product prd = AuthDAO.getProductById(productID);
+				
+				Notification notification = new Notification(-1, prd.GetSellerID(), 'R', 
+    					"Your item - " + prd.GetProductName() + " has been reviewed", userID, reviewID, null);
+    			if(AuthDAO.notifyUser(notification)){
+    				System.out.println("Notification inserted successfully");
+    			}
+    			else{
+    				System.out.println("Notification insertion failed");
+    			}
+				
 				request.setAttribute("productMessage", "Product with ID " + productID + " has been reviewed successfully. Thank you for your feedback!");
 				System.out.println("the prod id"+ productID);
 			}else{

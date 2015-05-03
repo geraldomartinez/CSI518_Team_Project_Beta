@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controller.AuthDAO;
+import controller.Notification;
 import controller.Product;
 import controller.User;
 
@@ -76,7 +77,18 @@ public class UpdateOrderQuantityServlet extends HttpServlet {
 				}else if (prd.GetNumInStock() < (Integer.parseInt(quantity)- oldQty)){
 			    	request.setAttribute("orderMessage","Failed to update quantity to "+quantity+" - only "+Integer.toString(prd.GetNumInStock())+" more currently left in stock");
 	    		}else if (AuthDAO.UpdateOrderQuantity(usr.GetUserID(), Integer.parseInt(orderID), Integer.parseInt(productID), Integer.parseInt(quantity))){
-					request.setAttribute("orderMessage", "Quantity update successful");
+					
+	    			Notification notification = new Notification(-1, prd.GetSellerID(), 'Q', 
+        					"The quantity of item - " + prd.GetProductName()  +" has been changed", usr.GetUserID(), Integer.parseInt(orderID), null);
+        			if(AuthDAO.notifyUser(notification)){
+        				System.out.println("Notification inserted successfully");
+        			}
+        			else{
+        				System.out.println("Notification insertion failed");
+        			}
+	    			
+	    			
+	    			request.setAttribute("orderMessage", "Quantity update successful");
 				}else{
 					request.setAttribute("orderMessage", "Quantity update failed");
 	    		}
