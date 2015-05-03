@@ -46,9 +46,9 @@
         	
         	if (strProductID == ""){
    		%>
-	        <div id="page_content_wrapper">
-	        	<h3 style="text-align: center;">No product ID given</h3>
-	        </div>
+<!-- 	        <div id="page_content_wrapper"> -->
+<!-- 	        	<h3 style="text-align: center;">No product ID given</h3> -->
+<!-- 	        </div> -->
    		<%
         	}else{
 	       		int productID = Integer.parseInt(strProductID);
@@ -140,33 +140,30 @@
 
 
 		<%
-			int userID = 18;
-				HttpSession ss1 = request.getSession();
-				User user = (User) ss1.getAttribute("user");
+			int userID = usr.GetUserID();
+		 				HttpSession ss1 = request.getSession();
+				// user = (User) ss1.getAttribute("user");
 
-				System.out.println("hello the id" + user.GetUserID());
+				System.out.println("hello the id" + usr.GetUserID());
 
 				//userID=usr.GetUserID();
 				System.out.println("new id" + userID);
 				System.out.println("new id" + productID);
+			//	ss1.setAttribute("productID", productID);
 
 				if (AuthDAO.hasPurchasedItemBefore(userID, productID)) {
 
-					String reviewMessage = (String) request.getAttribute("reviewMessage"); //Obtain the wishlist message from the session
-					if (reviewMessage == null) { //Prevent null pointer exception
-						reviewMessage = "";
-					}
+				 
 
-					out.print("<div id=review_message class=message>" + reviewMessage + "</div>");
-
-					System.out.println("heello you are in");
+					System.out.println("hi"+ productMessage);
 
 					out.print("<br><br><br>");
 					out.print("Please review your purchased product");
 					out.print("<br><br>");
 
 					out.print("<form name=insertreview action=AddReviewServlet method=post>");
-					out.print("Rating    &nbsp;&nbsp;&nbsp<select id=Rating name=Rating>");
+					out.print("Rate your product from 1 to 5 ");
+							out.print("<select id=Rating name=Rating>");
 
 					out.print("<option value='1'>1</option>");
 					out.print(" <option value='2'>2</option>");
@@ -176,6 +173,7 @@
 					out.print("</select><br><br>");
 					out.print(" Review : <textarea name=review></textarea>");
 					out.print("<br><br>");
+					out.print("<input type='hidden' name='productID' value='"+(productID)+"' />");
 					out.print("<input type=submit name=addreview value=Review>");
 
 					out.print("</form>");

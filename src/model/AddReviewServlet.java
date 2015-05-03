@@ -55,26 +55,47 @@ public class AddReviewServlet extends HttpServlet {
 		String review="";
 		String categoryID;
 	
-		int userID=18;
-		String reviewMessage = "";
+		int userID=usr.GetUserID();
+		
 		boolean insertproduct=true;
 		review=request.getParameter("review");
 			rating=Integer.parseInt(request.getParameter("Rating"));
 			User user = (User) session.getAttribute("user");
+			
+			
+			if(navLoggedIn=="")
+			{
+				navLoggedIn=null;
+			}
+			
+			if(review==null)
+			{
+				review="";
+			}
+			
+			
 			//userID=user.GetUserID();
 		//Product p =(Product) session.getAttribute("Product");
 
 		//productID=Integer.parseInt(request.getParameter("ProductID"));
-			productID=33;
+			productID=Integer.parseInt(request.getParameter("productID"));
 			
 			System.out.println("entered insert"+productID);
+			
+			
+			if (navLoggedIn != "true") {
+				request.setAttribute("productMessage", "You must logged in to perform this request");
+			}else
 		
 		if(AuthDAO.insertreview(userID, productID, rating, review))
 		{
-			request.setAttribute("reviewMessage", "Product with ID " + productID + " has been reviewed");
-			rd = request.getRequestDispatcher("view_product.jsp");
+			request.setAttribute("productMessage", "Product with ID " + productID + " has been reviewed");
+			
+			System.out.println("the prod id"+ productID);
+			rd = request.getRequestDispatcher("/view_product.jsp");
+			rd.forward(request, response);
 		} else {
-			request.setAttribute("reviewMessage", "Review " + productID + " failed");
+			request.setAttribute("productMessage", "Review " + productID + " failed");
 		}
 		
 	}
