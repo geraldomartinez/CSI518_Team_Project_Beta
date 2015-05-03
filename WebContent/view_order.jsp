@@ -154,7 +154,7 @@
 								break;
 							case "A":
 							case "S":
-								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`paypalEmail`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
+								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`buyerPaypalEmail`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
 										"	FROM `Orders` LEFT JOIN (`OrderItems`,`Products`,`Users`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID` AND `Orders`.`buyerID`=`Users`.`userID`)" +
 											"WHERE `Orders`.`orderID` = '"+orderID+"' "+((acctType.equals("S"))?("	AND `Products`.`sellerID` = '"+usr.GetUserID()+"'"):"");
 								System.out.println(sql);
@@ -169,7 +169,7 @@
 									itemCount = rs.getInt("itemCount");
 									numItemsShipped = rs.getInt("numItemsShipped");
 									numItemsCanceled = rs.getInt("numItemsCanceled");
-									paypalEmail = rs.getString("paypalEmail");
+									paypalEmail = rs.getString("buyerPaypalEmail");
 									orderTotal = String.format("%.2f", rs.getFloat("totalCost") + rs.getFloat("totalShipping") + rs.getFloat("totalTax"));
 									if (itemCount == numItemsShipped){
 										shippingStatus = "All Shipped";
