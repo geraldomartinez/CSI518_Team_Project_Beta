@@ -31,26 +31,39 @@ public class AuthDAO {
     public static final String DB_DRIVER = "com.mysql.jdbc.Driver"; //Database driver
     
     public static Connection createConn(){
-    	
-    	Connection conn = null;
-    	
-        //Register JDBC Driver
-        System.out.println("Register JDBC Driver...");
-        try {
-            Class.forName(DB_DRIVER);
-        } catch (Exception ex) { //An error occurred
-            //Log the exception
-            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    	try {
+			if (conn == null || !conn.isValid(5)){				
+			    //Register JDBC Driver
+			    System.out.println("Register JDBC Driver...");
+			    try {
+			        Class.forName(DB_DRIVER);
+			    } catch (Exception ex) { //An error occurred
+			        //Log the exception
+			        Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			    }
 
-        //Open connection to DB
-        System.out.println("Connecting to database...");
-        try {
-            conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
-        } catch (Exception ex) {//An error occurred
-            //Log the exception
-            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
+			    //Open connection to DB
+			    System.out.println("Connecting to database...");
+			    try {
+			        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
+			    } catch (Exception ex) {//An error occurred
+			        //Log the exception
+			        Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			    }
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+
+		    //Open connection to DB
+		    System.out.println("Connecting to database...");
+		    try {
+		        conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PW);
+		    } catch (Exception ex) {//An error occurred
+		        //Log the exception
+		        Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+		    }
+		}
         
         return conn;
     }
