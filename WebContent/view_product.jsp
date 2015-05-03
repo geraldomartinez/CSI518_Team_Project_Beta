@@ -151,7 +151,7 @@
 				System.out.println("new id" + productID);
 			//	ss1.setAttribute("productID", productID);
 
-				if (AuthDAO.hasPurchasedItemBefore(userID, productID)) {
+				if (AuthDAO.okayToLeaveReview(userID, productID)) {
 
 				 
 

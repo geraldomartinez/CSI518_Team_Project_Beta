@@ -140,7 +140,7 @@ public class AuthDAO {
 
     }
     
-	public static boolean hasPurchasedItemBefore(int userID, int productID) {
+	public static boolean okayToLeaveReview(int userID, int productID) {
 		Statement stmt = null;
 
 		ResultSet rs = null;
@@ -157,7 +157,21 @@ public class AuthDAO {
 			rs = stmt.executeQuery(sql);
 
 			while (rs.next()) {
+
+				rs.close();
+				
+				sql = "SELECT `reviewID` from `ProductReviews` WHERE `userID`='"+userID+"' AND `productID`='"+productID+"'";
+
+				System.out.println("SQL Statement:");
+				System.out.println(sql);
+				rs = stmt.executeQuery(sql);
+
 				order = true;
+				while (rs.next()) {
+					order = false;
+					break;
+				}
+				break;
 			}
 
 		} catch (SQLException e) {

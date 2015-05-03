@@ -11,7 +11,6 @@
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
 		
         <%@include file="top_menu.jsp"%>
-        <div id="page_content_wrapper">
         
 </head>
    <body>
