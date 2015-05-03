@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
 				session.setAttribute("user", usr);
 				session.setAttribute("wishlist", AuthDAO.ReturnUserWishlist(usr.GetUserID()));
 				rd = request.getRequestDispatcher("index.jsp");
-				request.setAttribute("indexMessage", "Login Successful. Welcome " + usr.GetFirstName());
+				request.setAttribute("indexMessage", "Login Successful. Hello " + usr.GetFirstName() +" " + usr.GetLastName() + "!");
 			} else if (checkResponse == -2) {
 				request.setAttribute("loginMessage", "Database Connection Error");
 			} else if (checkResponse == -3) {
