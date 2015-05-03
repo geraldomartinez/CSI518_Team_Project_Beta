@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import controller.AuthDAO;
+import controller.Notification;
+import controller.Product;
 import controller.User;
 
 /**
@@ -64,7 +66,39 @@ public class CancelItemServlet extends HttpServlet {
 			rd = request.getRequestDispatcher("view_order.jsp?orderID="+orderID);
 			try{
 				if (AuthDAO.CancelItem(usr.GetUserID(), Integer.parseInt(orderID), Integer.parseInt(productID))){
-					request.setAttribute("orderMessage", "Cancellation successful");
+					Product prd = AuthDAO.getProductById(Integer.parseInt(productID));
+					
+					//if the user cancelling the item is a seller or an admin...
+					if(usr.getAccountType().equals("S") || (usr.getAccountType().equals("A"))){
+						int buyerID = AuthDAO.getOrderBuyer(Integer.parseInt(orderID));
+						Notification notification = new Notification(-1, buyerID, 'C', 
+	        					"The order of item - " + prd.GetProductName() + " has been cancelled by the seller.", 
+	        					usr.GetUserID(), Integer.parseInt(productID), null);
+	        			if(AuthDAO.notifyUser(notification)){
+	        				System.out.println("Notification inserted successfully");
+	        			}
+	        			else{
+	        				System.out.println("Notification insertion failed");
+	        			}
+						
+						
+						
+					}else { //Buyer is cancelling the order...
+						int sellerID = prd.GetSellerID();
+						Notification notification = new Notification(-1, sellerID, 'C', 
+	        					"The order of item - " + prd.GetProductName() + " has been cancelled by the buyer.", 
+	        					usr.GetUserID(), Integer.parseInt(productID), null);
+	        			if(AuthDAO.notifyUser(notification)){
+	        				System.out.println("Notification inserted successfully");
+	        			}
+	        			else{
+	        				System.out.println("Notification insertion failed");
+	        			}
+					}
+					
+					
+        			request.setAttribute("orderMessage", "Cancellation successful");
+        			
 				}else{
 					request.setAttribute("orderMessage", "Cancellation failed");
 				}
