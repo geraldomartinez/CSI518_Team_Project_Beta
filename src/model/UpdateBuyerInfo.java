@@ -153,6 +153,7 @@ public class UpdateBuyerInfo extends HttpServlet {
                     updateMessage = "Update Account Failed, Please Try Again.";
                 }
                  else{
+                 	 rd = request.getRequestDispatcher("view_buyer_account.jsp");
                 	 updateMessage = "Buyer Details updated";
             }
         }
@@ -163,7 +164,7 @@ public class UpdateBuyerInfo extends HttpServlet {
             }
             
             
-            
+
             request.setAttribute("updateMessage", updateMessage);
             rd.forward(request, response);
             

@@ -180,6 +180,7 @@ public class UpdateSellerInfo extends HttpServlet {
                 updateMessage = "Update Account Failed, Please Try Again.";
             }
             else {
+            	rd = request.getRequestDispatcher("view_seller_account.jsp");
                 updateMessage="Seller Account Information updated";
             }
         }
