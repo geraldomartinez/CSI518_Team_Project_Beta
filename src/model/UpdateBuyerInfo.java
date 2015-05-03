@@ -163,8 +163,6 @@ public class UpdateBuyerInfo extends HttpServlet {
                 request.setAttribute("updateMessage", request.getAttribute("updateMessage") + "<br />" + e.toString());
             }
             
-            
-
             request.setAttribute("updateMessage", updateMessage);
             rd.forward(request, response);
             
