@@ -64,6 +64,7 @@
 		      	String floatConv = String.format("%.2f", pPrice);
 		      	avgRating = new_prd.GetRating();
 		      	numberOfReviewers = new_prd.getReviewCount();
+		      
         %>
         
         <div id="page_content_wrapper">
@@ -109,8 +110,9 @@
         	
         	
         	<br />
-        	
+        		
         	<%
+        	System.out.println("QUANTITY IS " + pQuantity);
         	if (navLoggedIn.equals("true") && acctType.equals("B")){
         	%>
 			<form id="add_2_cart_form" action="Add2WishlistServlet" method="POST">
@@ -123,6 +125,7 @@
 			%>
         	
         	<%
+        	
         	if ((!navLoggedIn.equals("true") || (navLoggedIn.equals("true") && acctType.equals("B"))) && pQuantity > 0){
         	%>
 			<form id="add_2_cart_form" action="Add2CartServlet" method="POST">
@@ -130,7 +133,7 @@
 				<button type="submit" class="gold_btn"><img src="img/cart.png" alt="cart icon" style="height: 20px;" /> Add To Cart</button>
 			</form>
 			<%
-        	}else{
+        	}else if(pQuantity < 1){
         		%>
         		<h5>OUT OF STOCK!</h5>
         		<%

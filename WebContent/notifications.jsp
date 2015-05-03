@@ -5,9 +5,34 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>My Notifications - Great Danes Electronics</title>
+	<style type="text/css">
+        	#product_list_table{
+        		width: 100%;
+        	}
+        	
+        	#product_list_table th{
+        		background: #2C193B;
+        		text-align: left;
+        		padding: 5px;
+        	}
+        	
+        	#product_list_table td:first-child{
+        		padding-left: 10px;
+        	}
+        	
+        	#product_list_table td{
+        		padding-top: 5px;
+        		padding-bottom: 5px;
+        	}
+        	
+        </style>
+
+
 </head>
 <body>
 <%@include file="top_menu.jsp"%>
+<%@ page
+		import="controller.AuthDAO,controller.Notification,java.util.*, java.sql.*"%>
         <br />
         <div id="page_content_wrapper">
         <%
@@ -22,7 +47,42 @@
             }else {%>
         <h2>My Notifications</h2>
         
-        <%} %>
+        <table id="product_list_table">
+        <tr>
+        			<th colspan="1">
+        				Notification ID
+        			</th>
+        			<th colspan="1">
+        				Message
+        			</th>
+        			
+        			<th colspan="1">
+        				Date
+        			</th>
+        </tr>
+        <%
+        int userID = usr.GetUserID();
+        List<Notification> notifications = AuthDAO.getUserNotifications(userID);
+        
+        for(int i = 0; i < notifications.size(); i++){
+        	Notification notification = notifications.get(i);
+        	%> 
+        	
+        	<tr>
+        		<td align="center"><%=notification.getNotificationID() %></td>
+        		<td align="center"><a href="#" style="color:white"><%=notification.getNotificationMessage() %></a></td>
+        		<td align="center"><%=notification.getDatetime() %></td>
+        	
+        	</tr>
+        	
+        	<%
+        	
+        }
+            
+            
+            } %>
+            </tr>
+            </table>
         </div>
 
 </body>

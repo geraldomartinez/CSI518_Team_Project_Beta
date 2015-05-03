@@ -1487,6 +1487,54 @@ public class AuthDAO {
      
     }
     
+    public static List<Notification> getUserNotifications(int userID){
+    	List<Notification> notifications = new ArrayList<Notification>();
+    	
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM `Notifications` WHERE toUserID = '"
+					+ userID + "' order by insertTime desc;";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+            	Notification notification = new Notification(
+            			rs.getInt("notificationID"),
+            			rs.getInt("toUserID"),
+            			rs.getString("type").charAt(0),
+            			rs.getString("text"),
+            			rs.getInt("aboutUserID"),
+            			rs.getInt("typeID"),
+            			rs.getString("insertTime")
+            			);
+            	
+            	notifications.add(notification); 
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get notifications by userID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            //return new Product();
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+    	
+    	return notifications;
+    }
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
