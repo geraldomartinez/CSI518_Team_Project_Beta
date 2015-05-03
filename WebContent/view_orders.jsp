@@ -183,7 +183,7 @@
 		        	
 			        		%>
 			        		<tr>
-			        			<td><%=orderID%></td>
+			        			<td><a href="view_order.jsp?orderID=<%=orderID%>"><%=orderID%></a></td>
 			        			<td><%=orderTimestamp%></td>
 			        			<%= ((acctType.equals("A"))?("<td>"+buyerID+"</td>"):"") %>
 			        			<td><%=buyerEmail%></td>
