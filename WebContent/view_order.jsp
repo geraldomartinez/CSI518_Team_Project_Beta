@@ -223,6 +223,7 @@
 								<span class="tinytext">Tax is on price + shipping</span>
 							</th>
 							<%=((acctType.equals("B"))?"<th>Update Quantity<br /><span class='tinytext'>Update available if item <br /> has not been shipped or canceled</span></th>":"<th>Quantity</th>")%>
+							<%=((acctType.equals("S"))?"<th>Mark as Shipped</th>":"")%>
 							<th>
 								Cancel Item
 								<br />
@@ -231,7 +232,6 @@
 							<th>
 								Shipped
 							</th>
-							<%=((acctType.equals("S"))?"<th>Mark as Shipped</th>":"")%>
 							<th>
 								Canceled
 							</th>
@@ -263,9 +263,9 @@
 								out.print("<td>"+shippingPrice+"</td>");
 								out.print("<td>"+tax+"</td>");
 								out.print(((acctType.equals("B") && !rs.getBoolean("hasShipped") && !rs.getBoolean("canceled"))?"<td><form action='UpdateOrderQuantityServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='number' value='"+quantity+"' name='quantity' /> &nbsp; <input type='submit' value='Update' /></form></td>":"<td>"+quantity+"</td>"));
+								out.print(((acctType.equals("S"))?"<td><form action='MarkItemAsShippedServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='submit' value='Mark as Shipped' "+((rs.getBoolean("hasShipped"))?"disabled":"")+" /></td>":""));
 								out.print("<td><form action='CancelItemServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='submit' name='submitBtn' value='Cancel' "+((rs.getBoolean("hasShipped") || (rs.getBoolean("canceled"))?"disabled":""))+" /></form></td>");
 								out.print("<td>"+shipped+"</td>");
-								out.print(((acctType.equals("S"))?"<td><input type='button' value='Mark as Shipped' /></td>":""));
 								out.print("<td>"+canceled+"</td>");
 							out.print("</tr>");
 						}
