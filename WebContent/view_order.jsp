@@ -108,7 +108,7 @@
 					try {
 						switch (acctType){
 							case "B":
-								sql = "SELECT *, COUNT(`OrderItems`.`productID`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice`) as totalCost, SUM(`OrderItems`.`shippingPrice`) as totalShipping, SUM(`OrderItems`.`tax`) as totalTax "+
+								sql = "SELECT *, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax "+
 										"FROM `Orders` LEFT JOIN (`OrderItems`) ON (`OrderItems`.`orderID`=`Orders`.`orderID`)" + 
 										"WHERE `buyerID` = '"+usr.GetUserID()+"' AND `Orders`.`OrderID`='"+orderID+"'"+
 										"GROUP BY `Orders`.`orderID`";
@@ -153,7 +153,7 @@
 								break;
 							case "A":
 							case "S":
-								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`orderTimestamp`,`Users`.`email`, COUNT(`OrderItems`.`productID`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice`) as totalCost, SUM(`OrderItems`.`shippingPrice`) as totalShipping, SUM(`OrderItems`.`tax`) as totalTax" + 
+								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
 										"	FROM `Orders` LEFT JOIN (`OrderItems`,`Products`,`Users`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID` AND `Orders`.`buyerID`=`Users`.`userID`)" +
 											"WHERE `Orders`.`orderID` = '"+orderID+"' "+((acctType.equals("S"))?("	AND `Products`.`sellerID` = '"+usr.GetUserID()+"'"):"");
 								System.out.println(sql);
@@ -262,8 +262,8 @@
 								out.print("<td>"+itemPrice+"</td>");
 								out.print("<td>"+shippingPrice+"</td>");
 								out.print("<td>"+tax+"</td>");
-								out.print(((acctType.equals("B") && !rs.getBoolean("hasShipped") && !rs.getBoolean("canceled"))?"<td><input type='number' value='"+quantity+"' class='quantity' /> &nbsp; <input type='button' value='Update' /></td>":"<td>"+quantity+"</td>"));
-								out.print("<td><input type='button' value='Cancel' "+((rs.getBoolean("hasShipped") || (rs.getBoolean("canceled"))?"disabled":""))+" /></td>");
+								out.print(((acctType.equals("B") && !rs.getBoolean("hasShipped") && !rs.getBoolean("canceled"))?"<td><form action='UpdateOrderQuantityServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='number' value='"+quantity+"' name='quantity' /> &nbsp; <input type='submit' value='Update' /></form></td>":"<td>"+quantity+"</td>"));
+								out.print("<td><form action='CancelItemServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='submit' name='submitBtn' value='Cancel' "+((rs.getBoolean("hasShipped") || (rs.getBoolean("canceled"))?"disabled":""))+" /></form></td>");
 								out.print("<td>"+shipped+"</td>");
 								out.print(((acctType.equals("S"))?"<td><input type='button' value='Mark as Shipped' /></td>":""));
 								out.print("<td>"+canceled+"</td>");

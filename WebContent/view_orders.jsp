@@ -50,6 +50,13 @@
 	        %>
         	<h1><%= ((acctType.equals("A"))?"All":"My") %> Orders</h1>
         	<br />
+            <%
+                String ordersMessage = (String) request.getAttribute("ordersMessage"); //Obtain the login message from the session
+                if (ordersMessage == null) { //Prevent null pointer exception
+                	ordersMessage = "";
+                }
+            %>
+            <div id="orders_message" class="message"><%=ordersMessage%></div>
         	<table id="orders_table">
         		<tr>
        			 	<th>Order ID</th>
@@ -95,7 +102,7 @@
 				try {
 					switch (acctType){
 						case "B":
-							sql = "SELECT *, COUNT(`OrderItems`.`productID`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice`) as totalCost, SUM(`OrderItems`.`shippingPrice`) as totalShipping, SUM(`OrderItems`.`tax`) as totalTax "+
+							sql = "SELECT *, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax "+
 									"FROM `Orders` LEFT JOIN (`OrderItems`) ON (`OrderItems`.`orderID`=`Orders`.`orderID`)" + 
 									"WHERE `buyerID` = '"+usr.GetUserID()+"'"+
 									"GROUP BY `Orders`.`orderID`";
@@ -141,7 +148,7 @@
 							break;
 						case "A":
 						case "S":
-							sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`orderTimestamp`,`Users`.`email`, COUNT(`OrderItems`.`productID`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice`) as totalCost, SUM(`OrderItems`.`shippingPrice`) as totalShipping, SUM(`OrderItems`.`tax`) as totalTax" + 
+							sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
 									"	FROM `Orders` LEFT JOIN (`OrderItems`,`Products`,`Users`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID` AND `Orders`.`buyerID`=`Users`.`userID`)" +
 										((acctType.equals("S"))?("	WHERE `Products`.`sellerID` = '"+usr.GetUserID()+"'"):"") +
 									"	GROUP BY `Orders`.`orderID`";

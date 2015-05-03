@@ -1244,6 +1244,11 @@ public class AuthDAO {
 			            
 			            System.out.println(sql);
 			            stmt.executeUpdate(sql);
+			            
+			            //Reduce the item quantity from the Products table
+						sql = "UPDATE `Products` SET `quantity`=(`quantity` - "+itemList.get(i).GetQuantity()+") WHERE `productID` = '"+prd.GetProductID()+"'";
+			            stmt.executeUpdate(sql);
+						System.out.println(sql);
 					}
 				}
 	            return orderID;
@@ -1288,7 +1293,97 @@ public class AuthDAO {
     	
     	return false;
     }
-    
+
+	public static boolean CancelItem(int userID, int orderID, int productID) {
+		Statement stmt;
+		String sql;
+		Connection conn = createConn();
+
+		System.out.println("Creating statement...");
+
+		try {
+			stmt = conn.createStatement();
+			sql = "UPDATE `OrderItems` INNER JOIN (`Orders`,`Products`) ON (`Orders`.`orderID`=`OrderItems`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) SET `OrderItems`.`canceled`='1', `Products`.`quantity` = (`Products`.`quantity` + `OrderItems`.`quantity`) WHERE (`Orders`.`buyerID`='" + userID + "' OR `Products`.`sellerID`='" + userID + "') AND `Orders`.`orderID`='" + orderID + "' AND `OrderItems`.`productID`='" + productID + "' AND `OrderItems`.`hasShipped`='0'";
+			System.out.println(sql);
+			if (stmt.executeUpdate(sql) == 0){ //If there were no rows updated
+				return false; //The item was not canceled
+			}else{ //There were rows updated
+				return true; //The item was canceled
+			}
+		} catch (SQLException | NumberFormatException ex) { // An error occurred
+			// Log the exception
+			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+	}
+
+	public static boolean UpdateOrderQuantity(int userID, int orderID, int productID, int quantity) {
+		Statement stmt;
+		String sql;
+		Connection conn = createConn();
+
+		System.out.println("Creating statement...");
+
+		try {
+			stmt = conn.createStatement();
+			sql = "UPDATE `OrderItems` INNER JOIN (`Orders`,`Products`) ON (`Orders`.`orderID`=`OrderItems`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) SET `OrderItems`.`quantity`='"+quantity+"', `Products`.`quantity`=(`Products`.`quantity` + `OrderItems`.`quantity` - "+quantity+")  WHERE `Orders`.`buyerID`='" + userID + "' AND `Orders`.`orderID`='" + orderID + "' AND `OrderItems`.`productID`='" + productID + "' AND `OrderItems`.`hasShipped`='0'";
+			System.out.println(sql);
+			if (stmt.executeUpdate(sql) == 0){ //If there were no rows updated
+				return false; //The item was not canceled
+			}else{ //There were rows updated
+				return true; //The item was canceled
+			}
+		} catch (SQLException | NumberFormatException ex) { // An error occurred
+			// Log the exception
+			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+	}
+	
+
+
+    public static int GetQtyOfItemInOrder(int productID, int orderID) {
+   	 Statement stmt;
+     ResultSet rs;
+     String prd_sql;
+     
+     Connection conn = createConn(); //Create DB connection
+     
+     //Execute query to check for matching product
+     System.out.println("Creating statement...");
+     try {
+         stmt = conn.createStatement();
+         prd_sql = "SELECT `quantity` FROM `OrderItems` WHERE `productID`='"+productID+"' and `orderID`='"+orderID+"'";
+         System.out.println(prd_sql);
+         rs = stmt.executeQuery(prd_sql);
+
+         //Extract data from result set
+         while (rs.next()) {
+             //Retrieve by column name
+        	 return rs.getInt("quantity");
+         }       
+         
+        
+         
+     } catch (Exception ex) { //An error occurred
+         //Log the exception
+     	System.out.println("Failed to get Product by ID");
+         Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+         return -1;
+     }
+
+     //Clean-up
+     try {
+    	 rs.close(); //Close result set
+         stmt.close(); //Close statement object
+     } catch (Exception ex) { //An error occurred
+         //Log the exception
+         //If it fails to close, just leave it.
+     }
+
+     return -1;
+     
+    }
     
     
     public static void DB_Close() throws Throwable {
