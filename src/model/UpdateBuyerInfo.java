@@ -16,7 +16,7 @@ import controller.User;
 /**
  * Servlet implementation class UpdateBuyerInfo
  */
-@WebServlet("/UpdateBuyerInfo")
+@WebServlet(urlPatterns ={"/UpdateBuyerInfo"})
 public class UpdateBuyerInfo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -31,42 +31,39 @@ public class UpdateBuyerInfo extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-	}
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	  protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	        
 		// TODO Auto-generated method stub
 		 RequestDispatcher rd = request.getRequestDispatcher("edit_buyer_account.jsp");
 		
-	        String updateMessage1 = "";
-	        String email, password, passwordConfirm, firstName="", lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum,companyName,url,shipping;
+	       
+	        String   firstName="", lastName,middleName,phone,address,city,state,zip,accountType,accountNum,routingNum,companyName,url,shipping;
 	        boolean newUserID = false;
 	        String updatebt=request.getParameter("updatebt");
-	        String checkEmailBtn = request.getParameter("check_email");
+	        
 	        boolean insertNewUser = true;
 	        // String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 	      
 	        accountType=request.getParameter("accountType");
-	        password = request.getParameter("password");
+	      
 	       
-	        firstName = request.getParameter("fname");
-	        lastName = request.getParameter("lname");
-	        middleName = request.getParameter("mname");
+	        firstName = request.getParameter("firstName");
+	        lastName = request.getParameter("lastName");
+	        middleName = request.getParameter("middleName");
 	        phone = request.getParameter("phone");
 	        address = request.getParameter("address");
 	        city = request.getParameter("city");
 	        state = request.getParameter("state");
 	        zip = request.getParameter("zip");
-	      int userID=User.GetUserID();
-	        String updateMessage11 = null;
+	        int userID=User.GetUserID();
+	        String updateMessage = null;
 	     
-	        if (password == null) {
-	            password = "";
-	        }
+	      
 	       
 	        if (firstName == null) {
 	            firstName = "";
@@ -106,58 +103,38 @@ public class UpdateBuyerInfo extends HttpServlet {
 
 	        if (updatebt.length() != 0) { //If the submit button was pressed
 	            if (firstName.equals("")) {
-	                if (!updateMessage11.equals("")) {
-	                    updateMessage11 += "<br />";
-	                }
-	                updateMessage11 += "You did not enter a first name";
+	                
+	                updateMessage += "You did not enter a first name";
 	                insertNewUser = false;
 	            }
-	        /*    if (middleName.equals("")) {
-	                if (!updateMessage.equals("")) {
-	                    updateMessage1 += "<br />";
-	                }
-	                updateMessage1 += "You did not enter  middle name";
+	          if (middleName.equals("")) {
+	                
+	                updateMessage += "You did not enter  middle name";
 	                insertNewUser = false;
-	            }*/
+	            }
 	            if (lastName.equals("")) {
-	                if (!updateMessage11.equals("")) {
-	                    updateMessage11 += "<br />";
-	                }
-	                updateMessage11 += "You did not enter a last name";
-	                insertNewUser = false;
-	            }
-	            if (password.equals("")) {
-	                if (!updateMessage11.equals("")) {
-	                    updateMessage11 += "<br />";
-	                }
-	                updateMessage11 += "You did not enter a password";
+	                
+	                updateMessage += "You did not enter a last name";
 	                insertNewUser = false;
 	            }
 	           
-	            }
 	            if (phone.equals("")) {
-	                if (!updateMessage11.equals("")) {
-	                    updateMessage11 += "<br />";
-	                }
-	                updateMessage11 += "You did not enter a phone number";
+	                
+	                updateMessage += "You did not enter a phone number";
 	                insertNewUser = false;
 	            }
 	            
 	           
 	            if (phone.length()!=10) {
-	                if (!updateMessage11.equals("")) {
-	                    updateMessage11 += "<br />";
-	                }
-	                updateMessage11 += "The phone number you entered was not valid. Please enter a 10-digit phone number.";
+	               
+	                updateMessage += "The phone number you entered was not valid. Please enter a 10-digit phone number.";
 	                insertNewUser = false;
 	            }
 	            
 	            if(zip.length()!=5)
 	            {
-	            	 if (!updateMessage11.equals("")) {
-	                     updateMessage11 += "<br />";
-	                 }
-	                 updateMessage11 += "The zip code you entered was in an invalid format. Please enter a 5-digit zip code.";
+	            	 
+	                 updateMessage += "The zip code you entered was in an invalid format. Please enter a 5-digit zip code.";
 	                 insertNewUser = false;	
 	            }
 	         
@@ -165,41 +142,29 @@ public class UpdateBuyerInfo extends HttpServlet {
 	            
 	            if(state.length()!=2)
 	            {
-	            	 if (!updateMessage11.equals("")) {
-	                     updateMessage11 += "<br />";
-	                 }
-	                 updateMessage11 += "The state must be in 2-letter format.";
+	            	 
+	                 updateMessage += "The state must be in 2-letter format.";
 	                 insertNewUser = false;
 	            }
-	            if(accountType.equals("seller"))
-	            {
-	            	accountType="S";
-	            }
-	            else
-	            {
-	            	accountType="B";
-	            }
-	            
-	          
-	            
+	           
 
 	            if (insertNewUser) {
 	                
 	                if (newUserID == false) {
-	                    updateMessage11 = "New User Insert Failed.";
+	                    updateMessage = "Buyer Details updated";
 	                } else if (!AuthDAO.UpdateUserDetails(userID,firstName,middleName,lastName,phone,address,city,state,zip)) {
-	                    updateMessage11 = "Create Account Failed, Please Try Again.";
+	                    updateMessage = "Create Account Failed, Please Try Again.";
 	                }
 	            }
+	            try {
+	                AuthDAO.DB_Close();
+	            } catch (Throwable e) {
+	                request.setAttribute("loginMessage", request.getAttribute("loginMessage") + "<br />" + e.toString());
+	            }
+
+
 	        
-
-	        try {
-	            AuthDAO.DB_Close();
-	        } catch (Throwable e) {
-	            request.setAttribute("loginMessage", request.getAttribute("loginMessage") + "<br />" + e.toString());
-	        }
-
-	        request.setAttribute("updateMessage", updateMessage11);
+	        request.setAttribute("updateMessage", updateMessage);
 	        rd.forward(request, response);
 	       
 
@@ -207,4 +172,44 @@ public class UpdateBuyerInfo extends HttpServlet {
 
 	}
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+
+}
 

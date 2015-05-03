@@ -243,7 +243,7 @@ public class AuthDAO {
  
         return true;
     }
-    public static boolean UpdateSellerDetails(int sellerID, String acctNum, String routingNum, String companyName, String url) {
+    public static boolean UpdateSellerDetails(int userID, String acctNum, String routingNum, String companyName, String url) {
    	 
         Statement stmt;
         String sql;
@@ -253,7 +253,8 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO `SellerDetails` (`sellerID`,`isVerified`,`accountNumber`,`routingNumber`, `companyName`,`url`) VALUES ('" + sellerID + "', 0, '" + acctNum +"','" + routingNum + "','" + companyName + "','" + url + "');";
+            sql = "UPDATE `SellerDetails` SET `sellerID`='" + userID + "','"+"'`accountNumber`='" + acctNum +"','" + "'`routingNumber`='"+routingNum + "','" +"' `companyName`='" +companyName + "','"
+            		+"'`url`'"+url+"WHERE `sellerID`='" + userID + "';'";
             System.out.println(sql);
             stmt.executeUpdate(sql);
         } catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -298,9 +299,8 @@ public class AuthDAO {
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "INSERT INTO `UserProfile` (`userID`,`firstName`,`middleName`,`lastName`,`phone`,`address`,`city`,`state`,`zip`)"
-                        + " VALUES ('" + userID + "','" + firstName + "','" + middleName + "','"+ lastName + "','"+phone+"','"+address+"','"+
-                        city+"','"+state+"','"+zip+"');";
+            sql = "UPDATE `UserProfile` SET `userID`='"+ userID + "','" +"'`firstName`='"+ firstName + "','"+"'`middleName`='" + middleName + "','"+"'`lastName`='"+lastName 
+            		+ "','"+"'`phone`='"+phone+"','"+"'`address`='"+address+"','"+"'`city`='"+city+"','"+"'`state`='" +state+"','"+"'`zip`='"+zip+"'WHERE userID='"+userID+"';'";
         System.out.println("["+sql+"]");
             insertSuccess = stmt.executeUpdate(sql) > 0;
         } catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -375,7 +375,7 @@ public class AuthDAO {
          
             sql = "SELECT sellerID FROM `SellerDetails` "
             		+ "JOIN `Products` ON `SellerDetails`.`sellerID`=`Products`.`sellerID`"
-            		+ " WHERE `sellerDetails`.`sellerID`='" + sellerID + "';";
+            		+ " WHERE `SellerDetails`.`sellerID`='" + sellerID + "';";
             stmt.executeQuery(sql);
             
         } 

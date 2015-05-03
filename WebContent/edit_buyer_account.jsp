@@ -30,7 +30,7 @@
 			<H1>Account Information</H1>
 			<br>
 			<br>
-			<form method="UpdateBuyerInfo" method="POST">
+			<form action="UpdateBuyerInfo" method="POST">
 				<table id="buyerInfo" border=1 align=center>
 					<tr>
 						<th>First Name</th>
@@ -46,10 +46,26 @@
 					<tr>
 		
 						<%
+						RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
+				        String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
+						String updateMessage = (String) request.getAttribute("updateMessage"); //Obtain the message from the session (if there is one)
+						
+						if (updateMessage == null) { //Prevent null pointer exception
+							updateMessage = "";
+						}
+						
+				        if (loggedIn == null) { //Prevent null pointer exception
+				            loggedIn = "false";
+				        }
+				
+				        if (loggedIn != "true") { //If the user is logged in
+				            //Alert the user that they are already logged in
+				            request.setAttribute("indexMessage", "Please log into your  account before attempting to edit a account information");
+				            rd.forward(request, response); //Forward the user with the response above
+				        }
 							int userID = User.GetUserID(); //Page will error out if there is no seller logged in...
 							Connection conn = null;
-							ResultSet rs = null; //Handles the list of categories
-							ResultSet rs2 = null; //Handles the list of products
+							ResultSet rs = null; 
 							int categoryID = 0;
 							int productID = 0;
 							String firstName = "";
@@ -94,15 +110,15 @@
 							}
 						%>
 		
-						<td><input type="text" value="<%=firstName%>" name="first_name" /></td>
-						<td><input type="text" value="<%=middleName%>"name="middle_name" /></td>
-						<td><input type="text" value="<%=lastName%>" name="last_name" /></td>
+						<td><input type="text" value="<%=firstName%>" name="firstNname" /></td>
+						<td><input type="text" value="<%=middleName%>"name="middleName" /></td>
+						<td><input type="text" value="<%=lastName%>" name="lastName" /></td>
 						<td><input type="text" value="<%=phone%>" name="phone" /></td>
 						<td><input type="text" value="<%=address%>" name="address" /></td>
 						<td><input type="text" value="<%=city%>" name="city" /></td>
 						<td><input type="text" value="<%=state%>" name="state" /></td>
 						<td><input type="text" value="<%=zip%>" name="zip" /></td>
-						<input type="submit" value="Submit" name="insertbt">
+						
 						
 					</tr>
 				</table>

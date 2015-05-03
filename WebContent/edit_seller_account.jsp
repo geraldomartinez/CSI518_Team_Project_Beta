@@ -39,13 +39,33 @@
 						<th>City</th>
 						<th>State</th>
 						<th>Zip</th>
+						<th>accounting Number</th>
+						<th>routing Number</th>
+						<th>company Name</th>
 					</tr>
 					<tr>
 					<%
+					RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
+			        String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
+					String updateMessage = (String) request.getAttribute("updateMessage"); //Obtain the message from the session (if there is one)
+					
+					if (updateMessage == null) { //Prevent null pointer exception
+						updateMessage = "";
+					}
+					
+			        if (loggedIn == null) { //Prevent null pointer exception
+			            loggedIn = "false";
+			        }
+			
+			        if (loggedIn != "true") { //If the user is logged in
+			            //Alert the user that they are already logged in
+			            request.setAttribute("indexMessage", "Please log into your  account before attempting to edit a account information");
+			            rd.forward(request, response); //Forward the user with the response above
+			        }
 						int sellerID = User.GetUserID(); //Page will error out if there is no seller logged in...
 						Connection conn = null;
-						ResultSet rs = null; //Handles the list of categories
-						ResultSet rs2 = null; //Handles the list of products
+						ResultSet rs = null; 
+						 
 						int categoryID = 0;
 						int productID = 0;
 						String firstName = "";
@@ -62,9 +82,9 @@
 		
 						try {
 		
-							if (AuthDAO.VerifySellerID(sellerID)) {
+							
 		
-								String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip ,s.accountNumber,s.routingNumber,s.companyNameFROM UserProfile u, Users v, SellerDetails s WHERE u.UserID = v.UserID AND v.accountType =  'S'AND u.UserID = s.sellerID AND s.sellerID ='" + sellerID + "';";
+								String sql = "SELECT u.firstName, u.middleName, u.lastName, u.phone, u.address, u.city, u.state, u.zip ,s.accountNumber,s.routingNumber,s.companyName FROM UserProfile u, Users v, SellerDetails s WHERE u.userID = v.userID AND v.accountType =  'S' AND u.userID = s.sellerID AND s.sellerID ='" + sellerID + "';";
 								System.out.println(sql);
 								conn = AuthDAO.createConn();
 								HttpSession ss = request.getSession();
@@ -90,13 +110,7 @@
 									routingNumber=rs.getInt("routingNumber");
 									companyName=rs.getString("comapanyName");
 								}
-							} else {
-								String error = "Not logged in as seller";
-								System.out.println("Not logged in as seller");
-								out.println("<tr><td>");
-								out.println(error);
-								out.println("</td>");
-							}
+							
 					%>
 		
 					<%
@@ -104,9 +118,9 @@
 							out.print(e);
 						}
 					%>
-						<td><input type="text" value="<%=firstName%>" name="first_name" /></td>
-						<td><input type="text" value="<%=middleName%>"name="middle_name" /></td>
-						<td><input type="text" value="<%=lastName%>" name="last_name" /></td>
+						<td><input type="text" value="<%=firstName%>" name="firstName" /></td>
+						<td><input type="text" value="<%=middleName%>"name="middleName" /></td>
+						<td><input type="text" value="<%=lastName%>" name="lastName" /></td>
 						<td><input type="text" value="<%=phone%>" name="phone" /></td>
 						<td><input type="text" value="<%=address%>" name="address" /></td>
 						<td><input type="text" value="<%=city%>" name="city" /></td>
