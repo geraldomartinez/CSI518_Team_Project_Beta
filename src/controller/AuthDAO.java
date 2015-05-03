@@ -322,18 +322,18 @@ public class AuthDAO {
  
         return true;
     }
-    public static boolean UpdateSellerDetails(int userID, String acctNum, String routingNum, String companyName, String url) {
-   	 
+public static boolean UpdateSellerDetails(int userID, String acctNum, String routingNum, String companyName, String url) {
+        
         Statement stmt;
         String sql;
         Connection conn = createConn();
- 
+        
         //Execute query to insert seller details
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
             sql = "UPDATE `SellerDetails` SET `sellerID`='" + userID + "','"+"'`accountNumber`='" + acctNum +"','" + "'`routingNumber`='"+routingNum + "','" +"' `companyName`='" +companyName + "','"
-            		+"'`url`'"+url+"WHERE `sellerID`='" + userID + "';'";
+            +"'`url`'"+url+"WHERE `sellerID`='" + userID + "';'";
             System.out.println(sql);
             stmt.executeUpdate(sql);
         } catch (SQLException | NumberFormatException ex) { //An error occurred
@@ -341,9 +341,10 @@ public class AuthDAO {
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
- 
+        
         return true;
     }
+
     public static boolean enterUserName(int userID, String firstName,String middleName, String lastName,String phone,String address,String city,String state,String zip) {
  
         Statement stmt;
@@ -367,28 +368,29 @@ public class AuthDAO {
  
         return insertSuccess;
     }
-    public static boolean UpdateUserDetails(int userID, String firstName,String middleName, String lastName,String phone,String address,String city,String state,String zip) {
-   	 
+ public static boolean UpdateUserDetails(int userID, String firstName,String middleName, String lastName,String phone,String address,String city,String state,String zip) {
+        
         Statement stmt;
         String sql;
         boolean insertSuccess = false;
         Connection conn = createConn();
- 
+        
         //Execute query to check username and password
         System.out.println("Creating statement...");
         try {
             stmt = conn.createStatement();
-            sql = "UPDATE `UserProfile` SET `userID`='"+ userID + "','" +"'`firstName`='"+ firstName + "','"+"'`middleName`='" + middleName + "','"+"'`lastName`='"+lastName 
-            		+ "','"+"'`phone`='"+phone+"','"+"'`address`='"+address+"','"+"'`city`='"+city+"','"+"'`state`='" +state+"','"+"'`zip`='"+zip+"'WHERE userID='"+userID+"';'";
-        System.out.println("["+sql+"]");
+            sql = "UPDATE `UserProfile` SET `firstName`='"+ firstName +"',`middleName`='"+ middleName +"',`lastName`='"+lastName
+            + "',`phone`='"+phone+"',`address`='"+address+"',`city`='"+city+"',`state`='" +state+"',`zip`='"+zip+"'WHERE userID='"+userID+"';";
+            System.out.println("["+sql+"]");
             insertSuccess = stmt.executeUpdate(sql) > 0;
         } catch (SQLException | NumberFormatException ex) { //An error occurred
             //Log the exception
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
- 
+        
         return insertSuccess;
     }
+
 
  
     public static boolean isEmailAvailable(String email) {
@@ -1487,6 +1489,54 @@ public class AuthDAO {
      
     }
     
+    public static List<Notification> getUserNotifications(int userID){
+    	List<Notification> notifications = new ArrayList<Notification>();
+    	
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM `Notifications` WHERE toUserID = '"
+					+ userID + "' order by insertTime desc;";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+            	Notification notification = new Notification(
+            			rs.getInt("notificationID"),
+            			rs.getInt("toUserID"),
+            			rs.getString("type").charAt(0),
+            			rs.getString("text"),
+            			rs.getInt("aboutUserID"),
+            			rs.getInt("typeID"),
+            			rs.getString("insertTime")
+            			);
+            	
+            	notifications.add(notification); 
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get notifications by userID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            //return new Product();
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+    	
+    	return notifications;
+    }
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection

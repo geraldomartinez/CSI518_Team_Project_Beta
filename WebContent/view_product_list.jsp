@@ -116,6 +116,7 @@
         				<%=categoryName%>
         			</th>
         		</tr>
+<<<<<<< HEAD
 	           	<%
 	        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "' and removed='0' AND `sellerID` LIKE '"+sellerID+"' order by productName;";
 	        			pst = conn.prepareStatement(sql2);
@@ -123,6 +124,15 @@
 	        			while(rs2.next()){
 	        				productID = rs2.getInt("productID");
 	        				prd = AuthDAO.getProductById(productID);
+=======
+        		<%
+        			String sql2 = "SELECT * FROM  `Products` WHERE categoryID ='"+ categoryID + "' and removed='0' AND sellerID ='"+ sellerID + "' order by productName;";
+        			pst = conn.prepareStatement(sql2);
+					rs2 = pst.executeQuery();
+        			while(rs2.next()){
+        				productID = rs2.getInt("productID");
+        				prd = AuthDAO.getProductById(productID);
+>>>>>>> branch 'master' of https://github.com/sampellino/CSI518_Team_Project_Beta.git
         				%>
         		<tr>
         			<td>

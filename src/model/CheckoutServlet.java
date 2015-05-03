@@ -1,7 +1,10 @@
 package model;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -175,11 +178,24 @@ public class CheckoutServlet extends HttpServlet {
             	cart = (Cart) session.getAttribute("cart"); //Get the cart from the session
             	if ((orderID = AuthDAO.checkout(usr.GetUserID(),cart,shippingName,shippingAddr,shippingCity,shippingState,shippingZip,paypalEmail)) != -1){
             		
-            		//Notify sellers for each product sold
+            		//Get a list of all the items in the order
             		List<CartItem> items = cart.GetAllItems();
-            		for(int i = 0; i < items.size(); i++){
-            			
-            			int toUserID = AuthDAO.getProductById(items.get(i).GetProductID()).GetSellerID();
+            		List<Integer> sellerIDs = new ArrayList<Integer>();
+            		
+            		//Create a list of each product's sellerID in the order
+            		for(int i = 0; i<items.size();i++){
+            			sellerIDs.add(AuthDAO.getProductById(items.get(i).GetProductID()).GetSellerID());
+            		}
+            		
+            		//Use a Set to eliminate duplicate sellers in the order
+            		Set<Integer> uniqueSellers = new HashSet<Integer>(sellerIDs);
+            		System.out.println("Unique gas count: " + uniqueSellers.size());  
+            		//Get a list of each individual seller to notify
+            		List<Integer> sellers = new ArrayList<Integer>(uniqueSellers);
+            
+            		
+            		for(int i = 0; i < sellers.size(); i++){
+            			int toUserID = sellers.get(i);
             			Notification notification = new Notification(-1, toUserID, 'O', 
             					"One of your products has been purchased", usr.GetUserID(), orderID, null);
             			if(AuthDAO.notifyUser(notification)){
