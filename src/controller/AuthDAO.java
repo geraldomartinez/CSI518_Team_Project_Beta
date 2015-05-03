@@ -102,9 +102,7 @@ public class AuthDAO {
             Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        if (!isActive){ //If the account has been deactivated
-        	id = -4; //Return -4, indicating that the user may not log in because their account is deactivated
-        }else if (id != -1 && accountType.toUpperCase().equals("S")){ //If the account credentials are valid, and it is a seller account
+        if (id != -1 && accountType.toUpperCase().equals("S")){ //If the account credentials are valid, and it is a seller account
             System.out.println("Creating statement...");
             try {
                 stmt = conn.createStatement();
@@ -121,6 +119,10 @@ public class AuthDAO {
                 
                 if (!isVerified){ //If the seller has not been verified by an admin 
                 	id = -3; //Return -3, indicating that the seller is not verified
+                }
+                
+                if (!isActive){ //If the account has been deactivated
+                	id = -4; //Return -4, indicating that the user may not log in because their account is deactivated
                 }
             } catch (Exception ex) { //An error occurred
                 //Log the exception
@@ -149,7 +151,7 @@ public class AuthDAO {
 		Connection conn = createConn();
 		try {
 			stmt = conn.createStatement();
-			String sql = "SELECT `OrderItems`.`productID` FROM `OrderItems` LEFT JOIN (`Orders`, `Products`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) WHERE `Orders`.`buyerID` = '" + userID + "' AND `OrderItems`.`productID` = '" + productID + "'";
+			String sql = "SELECT `OrderItems`.`productID` FROM `OrderItems` LEFT JOIN (`Orders`, `Products`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID`) WHERE `Orders`.`buyerID` = '" + userID + "' AND `OrderItems`.`productID` = '" + productID + "' AND `OrderItems`.`hasShipped` = '1' AND `OrderItems`.`canceled` <> '0'";
 
 			System.out.println("SQL Statement:");
 			System.out.println(sql);
@@ -1316,8 +1318,8 @@ public class AuthDAO {
 						}
 						
 			            sql = "INSERT INTO `OrderItems` "
-			            		+ "(`orderID`,`productID`,`quantity`,`unitPrice`,`shippingPrice`) "
-			            		+ "VALUES ('"+orderID+"','"+prd.GetProductID()+"','"+itemList.get(i).GetQuantity()+"','"+prd.GetPrice()+"','"+shippingPrice+"');";
+			            		+ "(`orderID`,`productID`,`quantity`,`unitPrice`,`shippingPrice`,`tax`) "
+			            		+ "VALUES ('"+orderID+"','"+prd.GetProductID()+"','"+itemList.get(i).GetQuantity()+"','"+prd.GetPrice()+"','"+shippingPrice+"','"+((prd.GetPrice()+shippingPrice)*0.07)+"');";
 			            
 			            System.out.println(sql);
 			            stmt.executeUpdate(sql);

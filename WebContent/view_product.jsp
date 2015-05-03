@@ -137,50 +137,30 @@
         		
         	}
 			%>
-
-
-		<%
-			int userID = usr.GetUserID();
-		 				HttpSession ss1 = request.getSession();
-				// user = (User) ss1.getAttribute("user");
-
-				System.out.println("hello the id" + usr.GetUserID());
-
-				//userID=usr.GetUserID();
-				System.out.println("new id" + userID);
-				System.out.println("new id" + productID);
-			//	ss1.setAttribute("productID", productID);
+		<br />
+		<br />
+		<div class="message" style='width: 95%;'><%
+				int userID = usr.GetUserID();
 
 				if (AuthDAO.okayToLeaveReview(userID, productID)) {
-
-				 
-
-					System.out.println("hi"+ productMessage);
-
-					out.print("<br><br><br>");
-					out.print("Please review your purchased product");
-					out.print("<br><br>");
-
-					out.print("<form name=insertreview action=AddReviewServlet method=post>");
-					out.print("Rate your product from 1 to 5 ");
-							out.print("<select id=Rating name=Rating>");
-
-					out.print("<option value='1'>1</option>");
-					out.print(" <option value='2'>2</option>");
-					out.print("<option value='3'>3</option>");
-					out.print("<option value='4'>4</option>");
-					out.print("<option value='5'>5</option>");
+					out.print("<form name=insertreview action=AddReviewServlet method=post style='width: 100%;'>");
+					out.print("<h4 style='text-align: center;'>Please review your purchased product</h4>");
+					out.print("Rate your product overall (5 being the best): &nbsp;");
+					out.print("<select id=Rating name=Rating>");
+						out.print("<option value='1'>1</option>");
+						out.print(" <option value='2'>2</option>");
+						out.print("<option value='3'>3</option>");
+						out.print("<option value='4'>4</option>");
+						out.print("<option value='5'>5</option>");
 					out.print("</select><br><br>");
-					out.print(" Review : <textarea name=review></textarea>");
+					out.print("Review:<br /> <textarea name=review style='width: 95%; height: 75px;'></textarea>");
 					out.print("<br><br>");
 					out.print("<input type='hidden' name='productID' value='"+(productID)+"' />");
-					out.print("<input type=submit name=addreview value=Review>");
+					out.print("<input type=submit name=addreview value='Leave Review'>");
 
 					out.print("</form>");
 				}
-		%>
-
-
+		%></div>
 		<h3>Customer Reviews</h3>
 		<!--	<table> -->
 			

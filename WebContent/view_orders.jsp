@@ -135,7 +135,7 @@
 		        	
 			        		%>
 			        		<tr>
-			        			<td><%=orderID%></td>
+			        			<td><a href="view_order.jsp?orderID=<%=orderID%>"><%=orderID%></a></td>
 			        			<td><%=orderTimestamp%></td>
 			        			<td><%=itemCount%></td>
 			        			<td>$<%=orderTotal%></td>

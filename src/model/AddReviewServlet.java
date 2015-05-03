@@ -72,6 +72,8 @@ public class AddReviewServlet extends HttpServlet {
 			{
 				review="";
 			}
+
+			review = review.replace("'","\\'");
 			
 			
 			//userID=user.GetUserID();
