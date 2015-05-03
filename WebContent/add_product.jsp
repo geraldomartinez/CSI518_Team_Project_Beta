@@ -47,6 +47,7 @@
 			RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
 	        String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
 			String addProductMessage = (String) request.getAttribute("addProductMessage"); //Obtain the message from the session (if there is one)
+			String strProductID = request.getParameter("productID");
 			
 			if (addProductMessage == null) { //Prevent null pointer exception
 				addProductMessage = "";
@@ -55,10 +56,17 @@
 	        if (loggedIn == null) { //Prevent null pointer exception
 	            loggedIn = "false";
 	        }
+	        
+        	if (strProductID == null){
+        		strProductID = "";
+        	}
 	
-	        if (loggedIn != "true") { //If the user is logged in
-	            //Alert the user that they are already logged in
+	        if (loggedIn != "true") {
 	            request.setAttribute("indexMessage", "Please log into your seller account before attempting to add a product");
+	            rd.forward(request, response); //Forward the user with the response above
+	        }else if (strProductID == ""){
+	        	rd = request.getRequestDispatcher("view_product_list.jsp"); //Setup the request dispatcher for the view productl ist page
+	            request.setAttribute("productListMessage", "No product ID given");
 	            rd.forward(request, response); //Forward the user with the response above
 	        }
 		%>

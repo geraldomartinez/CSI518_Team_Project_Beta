@@ -46,9 +46,9 @@
         	
         	if (strProductID == ""){
    		%>
-<!-- 	        <div id="page_content_wrapper"> -->
-<!-- 	        	<h3 style="text-align: center;">No product ID given</h3> -->
-<!-- 	        </div> -->
+			<div id="page_content_wrapper">
+				<h3 style="text-align: center;">No product ID given</h3>
+			</div>
    		<%
         	}else{
 	       		int productID = Integer.parseInt(strProductID);

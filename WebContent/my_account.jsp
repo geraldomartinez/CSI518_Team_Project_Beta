@@ -46,9 +46,6 @@
 			<%
 			if (acctType.equals("S")){
 			%>
-			<a href="view_product_list.jsp">View Product List</a>
-			<br />
-        	<br />
 			<a href="add_product.jsp">Add Product</a>
 			<br />
         	<br />
@@ -58,12 +55,16 @@
         	<%
 			}
 			%>
+			<%
+			if (acctType.equals("S") || acctType.equals("A")){
+			%>
+			<a href="view_product_list.jsp">View Product List</a>
+			<br />
+			<br />
         	<%
+			}
 			if ( acctType.equals("A")){
 			%>
-			<a href="admin_product_list.jsp">View Product List</a>
-			<br/>
-			<br/>
 			<a href="add_product.jsp">Add Product</a>
 			<br />
         	<br />
