@@ -47,7 +47,7 @@ public class AddReviewServlet extends HttpServlet {
 		
 		
 		HttpSession session = request.getSession(true);
-    	RequestDispatcher rd = request.getRequestDispatcher("view_product.jsp");
+    	RequestDispatcher rd;
     	String navLoggedIn = (String) session.getAttribute("loggedIn"); //Obtain the "logged in" attribute from the session
     	User usr = (User) session.getAttribute("user"); //Get the user object from the session	
 		int productID = -1;
@@ -79,24 +79,19 @@ public class AddReviewServlet extends HttpServlet {
 
 		//productID=Integer.parseInt(request.getParameter("ProductID"));
 			productID=Integer.parseInt(request.getParameter("productID"));
-			
 			System.out.println("entered insert"+productID);
-			
+			rd = request.getRequestDispatcher("view_product.jsp?productID="+productID);
 			
 			if (navLoggedIn != "true") {
 				request.setAttribute("productMessage", "You must logged in to perform this request");
-			}else
+			}else if(AuthDAO.insertreview(userID, productID, rating, review)){
+				request.setAttribute("productMessage", "Product with ID " + productID + " has been reviewed successfully. Thank you for your feedback!");
+				System.out.println("the prod id"+ productID);
+			}else{
+				request.setAttribute("productMessage", "Review of product ID " + productID + " failed");
+			}
 		
-		if(AuthDAO.insertreview(userID, productID, rating, review))
-		{
-			request.setAttribute("productMessage", "Product with ID " + productID + " has been reviewed");
-			
-			System.out.println("the prod id"+ productID);
-			rd = request.getRequestDispatcher("/view_product.jsp");
-			rd.forward(request, response);
-		} else {
-			request.setAttribute("productMessage", "Review " + productID + " failed");
-		}
+		rd.forward(request, response);
 		
 	}
 
