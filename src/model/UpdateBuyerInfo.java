@@ -159,7 +159,7 @@ public class UpdateBuyerInfo extends HttpServlet {
 	            try {
 	                AuthDAO.DB_Close();
 	            } catch (Throwable e) {
-	                request.setAttribute("updateMessage", request.getAttribute("loginMessage") + "<br />" + e.toString());
+	                request.setAttribute("updateMessage", request.getAttribute("updateMessage") + "<br />" + e.toString());
 	            }
 
 
