@@ -70,7 +70,7 @@
         	
         	<tr>
         		<td align="center"><%=notification.getNotificationID() %></td>
-        		<td align="center"><a href="#" style="color:white"><%=notification.getNotificationMessage() %></a></td>
+        		<td align="center"><a href="view_notification.jsp?notificationID=<%=notification.getNotificationID()%>" style="color:white"><%=notification.getNotificationMessage() %></a></td>
         		<td align="center"><%=notification.getDatetime() %></td>
         	
         	</tr>

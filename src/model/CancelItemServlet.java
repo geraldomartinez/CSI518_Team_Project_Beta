@@ -73,7 +73,7 @@ public class CancelItemServlet extends HttpServlet {
 						int buyerID = AuthDAO.getOrderBuyer(Integer.parseInt(orderID));
 						Notification notification = new Notification(-1, buyerID, 'C', 
 	        					"The order of item - " + prd.GetProductName() + " has been cancelled by the seller.", 
-	        					usr.GetUserID(), Integer.parseInt(productID), null);
+	        					usr.GetUserID(), Integer.parseInt(orderID), null);
 	        			if(AuthDAO.notifyUser(notification)){
 	        				System.out.println("Notification inserted successfully");
 	        			}
@@ -87,7 +87,7 @@ public class CancelItemServlet extends HttpServlet {
 						int sellerID = prd.GetSellerID();
 						Notification notification = new Notification(-1, sellerID, 'C', 
 	        					"The order of item - " + prd.GetProductName() + " has been cancelled by the buyer.", 
-	        					usr.GetUserID(), Integer.parseInt(productID), null);
+	        					usr.GetUserID(), Integer.parseInt(orderID), null);
 	        			if(AuthDAO.notifyUser(notification)){
 	        				System.out.println("Notification inserted successfully");
 	        			}

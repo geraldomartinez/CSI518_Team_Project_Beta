@@ -1559,6 +1559,55 @@ public class AuthDAO {
     	return notifications;
     }
     
+    public static Notification getNotificationByID(int notificationID){
+    	Notification notification = null;
+    	
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT * FROM `Notifications` WHERE notificationID = '"
+					+ notificationID + "';";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+            	 notification = new Notification(
+            			rs.getInt("notificationID"),
+            			rs.getInt("toUserID"),
+            			rs.getString("type").charAt(0),
+            			rs.getString("text"),
+            			rs.getInt("aboutUserID"),
+            			rs.getInt("typeID"),
+            			rs.getString("insertTime")
+            			);
+            	
+            	
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get notifications by userID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+            //return new Product();
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+    	
+    	return notification;
+    }
+    
     public static int getOrderBuyer(int orderID){
     	int buyerID = -1;
     	
@@ -1598,8 +1647,8 @@ public class AuthDAO {
     	
     	return buyerID;
     }
-    
-    public static String GetCompanyName(int sellerID){
+	
+	 public static String GetCompanyName(int sellerID){
     	String companyName = "";
     	Statement stmt = null;
         String sql;
