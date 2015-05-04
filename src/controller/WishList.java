@@ -3,16 +3,6 @@ import controller.CartItem;
 import controller.Cart;
 
 public class WishList extends Cart{
-	int quantity=0;
-	
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
 	public WishList() {
 		super(); //Call Cart's constructor
 	}
