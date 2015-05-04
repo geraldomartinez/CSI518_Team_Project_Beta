@@ -90,7 +90,7 @@
                     <br />
                     <input name="zip" type="text" placeholder="Zip"/>
                     <br />
-                    <input name="URL" type="text" placeholder="URL"/>
+                    <input name="url" type="text" placeholder="url"/>
                     <br/>
                     <input name="company_name" type="text" style="display: none;" placeholder="Company Name"/>
                     <br />
