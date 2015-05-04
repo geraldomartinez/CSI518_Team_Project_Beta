@@ -56,17 +56,9 @@
 	        if (loggedIn == null) { //Prevent null pointer exception
 	            loggedIn = "false";
 	        }
-	        
-        	if (strProductID == null){
-        		strProductID = "";
-        	}
 	
 	        if (loggedIn != "true") {
 	            request.setAttribute("indexMessage", "Please log into your seller account before attempting to add a product");
-	            rd.forward(request, response); //Forward the user with the response above
-	        }else if (strProductID == ""){
-	        	rd = request.getRequestDispatcher("view_product_list.jsp"); //Setup the request dispatcher for the view productl ist page
-	            request.setAttribute("productListMessage", "No product ID given");
 	            rd.forward(request, response); //Forward the user with the response above
 	        }
 		%>
