@@ -78,6 +78,11 @@ public class ProductServlet extends HttpServlet {
 
 		//Image
 		Part filePart=request.getPart("product_image");
+		if (filePart == null){
+			System.out.println(filePart.getName());
+		}else{
+			System.out.println("filePart is null");
+		}
 		
 		if (strProductID == null) {
 			strProductID = "";
@@ -209,9 +214,9 @@ public class ProductServlet extends HttpServlet {
 					e.printStackTrace();
 				}
                 if (productID == -1) {
-                	inputMessage = "Product insert/update failed.";
+                	inputMessage = "Product "+((!strProductID.equals(""))?"insert":"update")+" failed.";
                 }else{
-                	inputMessage = "Product inserted/updated successfully";
+                	inputMessage = "Product "+((!strProductID.equals(""))?"inserted":"updated")+" successfully";
                 }
             }
         } else if (insertbt.length() == 0) { //If the check username button was not pressed

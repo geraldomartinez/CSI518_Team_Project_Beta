@@ -549,7 +549,7 @@ public class AuthDAO {
 				+ "`groundCost` = '"+groundCost+"',"
 				+ "`twoCost`='"+twoCost+"',"
 				+ "`nextCost`='"+nextCost+"'";
-			if (filePart != null){
+			if (fileSize > 0){
 				sql += ",`pictureBlob` = ? ";
 			}
 			sql += "WHERE `productID` LIKE '"+productID+"'";
@@ -560,7 +560,7 @@ public class AuthDAO {
             	
             conn.setAutoCommit(false);
             ps = conn.prepareStatement(sql);  //Prepare the statement
-			if (filePart != null){
+			if (fileSize > 0){
 	            ps.setBinaryStream(1, inputStream, fileSize); //Add the binary stream to the statement
 			}
             System.out.println(ps);
