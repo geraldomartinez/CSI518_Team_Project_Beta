@@ -109,7 +109,7 @@
 					try {
 						switch (acctType){
 							case "B":
-								sql = "SELECT *, SUM(`OrderItems`.`quantity`) as itemCount, SUM(  `OrderItems`.`hasShipped` *  `quantity` ) AS numItemsShipped, SUM(  `OrderItems`.`canceled` *  `quantity` ) AS numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax "+
+								sql = "SELECT *, SUM(`OrderItems`.`quantity`) as itemCount, SUM(  `OrderItems`.`hasShipped` *  `OrderItems`.`quantity` ) AS numItemsShipped, SUM(  `OrderItems`.`canceled` *  `OrderItems`.`quantity` ) AS numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax "+
 										"FROM `Orders` LEFT JOIN (`OrderItems`) ON (`OrderItems`.`orderID`=`Orders`.`orderID`)" + 
 										"WHERE `buyerID` = '"+usr.GetUserID()+"' AND `Orders`.`OrderID`='"+orderID+"'"+
 										"GROUP BY `Orders`.`orderID`";
@@ -154,7 +154,7 @@
 								break;
 							case "A":
 							case "S":
-								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`buyerPaypalEmail`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, SUM(  `OrderItems`.`hasShipped` *  `quantity` ) AS numItemsShipped, SUM(  `OrderItems`.`canceled` *  `quantity` ) AS numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
+								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`buyerPaypalEmail`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, SUM(  `OrderItems`.`hasShipped` *  `OrderItems`.`quantity` ) AS numItemsShipped, SUM(  `OrderItems`.`canceled` *  `OrderItems`.`quantity` ) AS numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
 										"	FROM `Orders` LEFT JOIN (`OrderItems`,`Products`,`Users`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID` AND `Orders`.`buyerID`=`Users`.`userID`)" +
 											"WHERE `Orders`.`orderID` = '"+orderID+"' "+((acctType.equals("S"))?("	AND `Products`.`sellerID` = '"+usr.GetUserID()+"'"):"");
 								System.out.println(sql);
