@@ -23,7 +23,14 @@
 		
         <%@include file="top_menu.jsp"%>
         <div id="page_content_wrapper">
-       
+        <%
+           	RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
+            String adminMessage = (String) request.getAttribute("adminMessage"); //Obtain the message to be displayed for the product list page (if there is one)
+			
+            if (adminMessage == null) { //Prevent null pointer exception
+            	adminMessage = "";
+            }
+			%>
        
         <H1>List of sellers</H1>
         
@@ -39,7 +46,8 @@
 					<th>City</th>
 					<th>State</th>
 					<th>Zip</th>
-					<th>Status<th>
+					<th>Status</th>
+					<th>Verify</th>
 				</tr>
 				
 				<%
@@ -58,9 +66,12 @@
 				String state="";
 				String zip="";
 				int active=0;
+				int isVerified = 0;
 				
 				try {
-					String sql = "select  u.firstName, u.middleName,u.lastName,u.phone,u.address,u.city,u.state,u.zip,v.active from UserProfile u,Users v WHERE u.UserID=v.UserID and v.accountType='S' ;";
+					String sql = "select  u.firstName, u.middleName,u.lastName,u.phone,u.address,u.city,u.state,u.zip,v.active, s.* "
+							+"from UserProfile u,Users v, SellerDetails s " 
+							+"WHERE u.UserID=v.UserID AND s.sellerID = v.userID and v.accountType='S' ";
 					System.out.println(sql);
 					conn = AuthDAO.createConn();
 					HttpSession ss = request.getSession();
@@ -86,15 +97,31 @@
 						zip=rs.getString("zip");
 						out.println("<td>");out.println(zip);out.println("</td>");
 						active=rs.getInt("active");
+						isVerified =rs.getInt("isVerified");
 						if(active==1)
 						{
-							out.println("<td>");out.println("Active");out.println("</td></tr>");
+							out.println("<td>");out.println("Active");out.println("</td>");
 						
 						}else
 						{
-							out.println("<td>");out.println("InActive");out.println("</td></tr>");
+							out.println("<td>");out.println("InActive");out.println("</td>");
 						}
 						
+						if(isVerified ==0){
+							//out.println("<td><form></td></tr>");
+							%>
+							<td>
+							<form id="approve_seller" action="ApproveSellerServlet" method="POST">
+		            		<input name="sellerID" value="<%=rs.getInt("sellerID") %>" type="text" style="display: none;" />
+			            	<button type="submit" name="approve" value="approve"> Approve </button>
+			         
+		            	</form>
+						</td>
+						</tr>		
+							<%
+						}else{
+							out.println("<td>");out.println("Verified");out.println("</td></tr>");
+						}
 						
         	
         		%>
@@ -106,5 +133,6 @@
 					}
 				%>
         </table>
+        </div>
 </body>
 </html>

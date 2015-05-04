@@ -1684,6 +1684,29 @@ public class AuthDAO {
     	
     	return companyName;
     }
+	 
+	public static boolean verifySeller(int sellerID){
+		Statement stmt;
+		String sql;
+		Connection conn = createConn();
+
+		System.out.println("Creating statement...");
+
+		try {
+			stmt = conn.createStatement();
+			sql = "UPDATE `SellerDetails` SET `SellerDetails`.`isVerified`='1'  WHERE `SellerDetails`.`sellerID`='" + sellerID + "'";
+			System.out.println(sql);
+			if (stmt.executeUpdate(sql) == 0){ //If there were no rows updated
+				return false; //The item was not canceled
+			}else{ //There were rows updated
+				return true; //The item was canceled
+			}
+		} catch (SQLException | NumberFormatException ex) { // An error occurred
+			// Log the exception
+			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+	}
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
