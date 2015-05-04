@@ -76,7 +76,7 @@
                     <br />
                     <input name="fname" type="text" placeholder="First Name"/>
                     <br />
-                    <input name="mname" type="text" placeholder="Middle Name"/>
+                    <input name="mname" type="text" placeholder="Middle Name (optional)"/>
                     <br />
                     <input name="lname" type="text" placeholder="Last Name"/>
                     <br />

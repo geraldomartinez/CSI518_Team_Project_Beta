@@ -65,15 +65,10 @@ public class ApproveSellerServlet extends HttpServlet {
 		{
 			switch(usr.getAccountType()){
 				case "B":
-					System.out.println("B");
-					request.setAttribute("adminMessage", "Buyers are not allowed to approve a seller"); // buyers are not allowed to remove a product
-					break;
 				case "S":
-					System.out.println("S");
-					request.setAttribute("adminMessage", "Buyers are not allowed to approve a seller"); // Verify that the seller is actually sellerID == seller who is logged in
+					request.setAttribute("adminMessage", "Only admin accounts are allowed to approve a seller"); // Verify that the seller is actually sellerID == seller who is logged in
 					break;
 				case "A":
-					System.out.println("A");
 					verified = true;
 					break;
 			}

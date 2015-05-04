@@ -15,30 +15,55 @@
        		#page_content_wrapper a{
        			color: white;
        		}
+       		#sellerInfo{
+       			border: none;
+       			margin-left: auto;
+       			margin-right: auto;
+       			border-collapse: collapse;
+       		}
+       		#sellerInfo th, #sellerInfo td{
+       			padding: 5px;
+       		}
+       		#sellerInfo th{
+       			border-bottom: 1px solid white;
+       		}
+       		#sellerInfo td{
+       			border-bottom: 1px solid rgba(255,255,255,0.1);
+       		}
        	</style>
 	</head>
-	<body>
+	<body style="width: 1200px;">
 	<%@ page
 		import="controller.AuthDAO,controller.Utilities,java.util.*, java.sql.*"%>
 		
         <%@include file="top_menu.jsp"%>
         <div id="page_content_wrapper">
-        <%
-           	RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
-            String adminMessage = (String) request.getAttribute("adminMessage"); //Obtain the message to be displayed for the product list page (if there is one)
+       
+        <%			
+	        RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
 			
+			if (navLoggedIn != "true" || !usr.getAccountType().equals("A")) { //If the user is logged in
+				//Alert the user that they are already logged in
+				request.setAttribute("indexMessage", "Please log into an admin account before attempting to view accounts");
+				rd.forward(request, response); //Forward the user with the response above
+			}
+		%>
+       
+        <H1>Sellers</H1>
+        <%
+            String adminMessage = (String) request.getAttribute("adminMessage"); //Obtain the message to be displayed for the index page (if there is one)
             if (adminMessage == null) { //Prevent null pointer exception
             	adminMessage = "";
             }
-			%>
-       
-        <H1>List of sellers</H1>
+        %>
+       	<div id="admin_message" class="message"><%=adminMessage%></div>
         
         <br>
         <br>
-        <table id="sellerInfo" border=1 align=center>
+        <table id="sellerInfo">
 				<tr>
-					<th >First Name</th>
+					<th>User ID</th>
+					<th>First Name</th>
 					<th>Middle Name</th>
 					<th>Last Name</th>
 					<th>Phone</th>
@@ -46,9 +71,11 @@
 					<th>City</th>
 					<th>State</th>
 					<th>Zip</th>
+					<th>Verified</th>
 					<th>Status</th>
-					<th>Verify</th>
+					<th>Toggle Activation</th>
 				</tr>
+				<tr>
 				
 				<%
         		int sellerID = usr.GetUserID(); //Page will error out if there is no seller logged in...
@@ -57,6 +84,7 @@
 				ResultSet rs2 = null; //Handles the list of products
 				int categoryID =0;
 				int productID = 0;
+				String strID = "";
 				String firstName = "";
 				String middleName = "";
 				String lastName = "";
@@ -79,9 +107,10 @@
 					PreparedStatement pst = conn.prepareStatement(sql);
 					rs = pst.executeQuery();
 					while (rs.next()) {
+						strID = rs.getString("sellerID");
+						out.println("<td>");out.println(strID);out.println("</td>");
 						firstName = rs.getString("firstName");
-						System.out.println(firstName);
-						out.println("<tr><td>");out.println(firstName);out.println("</td>");
+						out.println("<td>");out.println(firstName);out.println("</td>");
 						middleName = rs.getString("middleName");
 						out.println("<td>");out.println(middleName);out.println("</td>");
 						lastName = rs.getString("lastName");
@@ -98,34 +127,39 @@
 						out.println("<td>");out.println(zip);out.println("</td>");
 						active=rs.getInt("active");
 						isVerified =rs.getInt("isVerified");
+						
+						if(isVerified ==0){
+						%>
+						<td>
+							<form id="approve_seller" action="ApproveSellerServlet" method="POST">
+			            		<input name="sellerID" value="<%=rs.getInt("sellerID") %>" type="text" style="display: none;" />
+				            	<button type="submit" name="approve" value="approve"> Approve </button>
+		            		</form>
+						</td>	
+						<%
+						}else{
+							out.println("<td>");out.println("Verified");out.println("</td>");
+						}
+						
+						
 						if(active==1)
 						{
 							out.println("<td>");out.println("Active");out.println("</td>");
 						
 						}else
 						{
-							out.println("<td>");out.println("InActive");out.println("</td>");
+							out.println("<td>");out.println("Inactive");out.println("</td>");
 						}
 						
-						if(isVerified ==0){
-							//out.println("<td><form></td></tr>");
-							%>
-							<td>
-							<form id="approve_seller" action="ApproveSellerServlet" method="POST">
-		            		<input name="sellerID" value="<%=rs.getInt("sellerID") %>" type="text" style="display: none;" />
-			            	<button type="submit" name="approve" value="approve"> Approve </button>
-			         
-		            	</form>
+						%>
+						<td>
+							<form id="toggle_activation" action="ToggleActivationStatusServlet" method="POST">
+			            		<input name="userID" value="<%=rs.getInt("sellerID") %>" type="text" style="display: none;" />
+			            		<input name="page" value="seller" type="text" style="display: none;" />
+				            	<button type="submit" name="toggleBtn" value="toggle_activation"> Toggle Activation Status </button>
+			            	</form>
 						</td>
-						</tr>		
-							<%
-						}else{
-							out.println("<td>");out.println("Verified");out.println("</td></tr>");
-						}
-						
-        	
-        		%>
-        		
+        		</tr>
         		<% }
         			
 					} catch (Exception e) {

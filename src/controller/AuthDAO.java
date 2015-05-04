@@ -1707,6 +1707,29 @@ public class AuthDAO {
 			return false;
 		}
 	}
+	
+	public static boolean ToggleAccountStatus(int userID){
+		Statement stmt;
+		String sql;
+		Connection conn = createConn();
+
+		System.out.println("Creating statement...");
+
+		try {
+			stmt = conn.createStatement();
+			sql = "UPDATE `Users` SET `active`= NOT `active` WHERE `userID`='" + userID + "'"; //Flip the boolean value of "active"
+			System.out.println(sql);
+			if (stmt.executeUpdate(sql) == 0){ //If there were no rows updated
+				return false; //The item was not canceled
+			}else{ //There were rows updated
+				return true; //The item was canceled
+			}
+		} catch (SQLException | NumberFormatException ex) { // An error occurred
+			// Log the exception
+			Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+			return false;
+		}
+	}
     
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
