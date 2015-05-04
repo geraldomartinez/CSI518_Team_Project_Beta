@@ -96,6 +96,10 @@ public class AuthDAO {
                 isActive = rs.getBoolean("active");
                 System.out.print("isActive: ");
                 System.out.print(isActive);
+                
+                if (!isActive){ //If the account has been deactivated
+                	id = -4; //Return -4, indicating that the user may not log in because their account is deactivated
+                }
             }
         } catch (Exception ex) { //An error occurred
             //Log the exception
@@ -119,10 +123,6 @@ public class AuthDAO {
                 
                 if (!isVerified){ //If the seller has not been verified by an admin 
                 	id = -3; //Return -3, indicating that the seller is not verified
-                }
-                
-                if (!isActive){ //If the account has been deactivated
-                	id = -4; //Return -4, indicating that the user may not log in because their account is deactivated
                 }
             } catch (Exception ex) { //An error occurred
                 //Log the exception
