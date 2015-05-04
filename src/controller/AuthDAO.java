@@ -1599,6 +1599,43 @@ public class AuthDAO {
     	return buyerID;
     }
     
+    public static String GetCompanyName(int sellerID){
+    	String companyName = "";
+    	Statement stmt = null;
+        String sql;
+        ResultSet rs = null;
+        Connection conn = AuthDAO.createConn();
+    	
+        try {
+            stmt = conn.createStatement();
+            sql = "SELECT `companyName` FROM `SellerDetails` WHERE `sellerID` = '"+ sellerID + "';";
+            System.out.println(sql);
+            rs = stmt.executeQuery(sql);
+
+            //Extract data from result set
+            while (rs.next()) {
+            	companyName = rs.getString("companyName");
+            }       
+            
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+        	System.out.println("Failed to get buyerID by orderID");
+            Logger.getLogger(AuthDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //Clean-up
+        try {
+        	rs.close(); //Close result set
+            stmt.close(); //Close statement object
+        } catch (Exception ex) { //An error occurred
+            //Log the exception
+            //If it fails to close, just leave it.
+        }
+    	
+    	
+    	return companyName;
+    }
+    
     public static void DB_Close() throws Throwable {
         try { //Attempt to close the database connection
             if (conn != null) { //If the connection object is set

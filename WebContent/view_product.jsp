@@ -56,6 +56,7 @@
 		      	String pName = new_prd.GetProductName();
 		      	String pDescription = new_prd.GetDescription();
 		      	String pSpecs = new_prd.GetSpecs();
+		      	String companyName = AuthDAO.GetCompanyName(new_prd.GetSellerID());
 		      	float pPrice = new_prd.GetPrice();
 		      	int pQuantity = new_prd.GetNumInStock();
 		      	int avgRating = 0;
@@ -103,10 +104,21 @@
 				
 				%>
         	<br>
-        	<strong>Description:</strong> <%=pDescription%>  <br/>
-        	<strong>Specs:</strong> <%=pSpecs%>  <br/>
-        	<strong>Quantity Available:</strong> <%=pQuantity%>  <br/>
-        	<strong>Price:</strong> <%=floatConv%>  <br/>
+        	<br/>
+        	<strong>Sold By:</strong> <%=companyName%>  
+        	<br/>
+        	<br/>
+        	<strong>Description:</strong><br/><%=pDescription%>  
+        	<br/>
+        	<br/>
+        	<strong>Specs:</strong><br/> <%=pSpecs%>  
+        	<br/>
+        	<br/>
+        	<strong>Quantity Available:</strong> <%=pQuantity%>  
+        	<br/>
+        	<br/>
+        	<strong>Price:</strong> $<%=floatConv%>  
+        	<br/>
         	
         	
         	<br />
