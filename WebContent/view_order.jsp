@@ -109,7 +109,7 @@
 					try {
 						switch (acctType){
 							case "B":
-								sql = "SELECT *, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax "+
+								sql = "SELECT *, SUM(`OrderItems`.`quantity`) as itemCount, SUM(  `OrderItems`.`hasShipped` *  `quantity` ) AS numItemsShipped, SUM(  `OrderItems`.`canceled` *  `quantity` ) AS numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax "+
 										"FROM `Orders` LEFT JOIN (`OrderItems`) ON (`OrderItems`.`orderID`=`Orders`.`orderID`)" + 
 										"WHERE `buyerID` = '"+usr.GetUserID()+"' AND `Orders`.`OrderID`='"+orderID+"'"+
 										"GROUP BY `Orders`.`orderID`";
@@ -154,7 +154,7 @@
 								break;
 							case "A":
 							case "S":
-								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`buyerPaypalEmail`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, COUNT(CASE WHEN `OrderItems`.`hasShipped`=1 THEN 0 END) as numItemsShipped, COUNT(CASE WHEN `OrderItems`.`canceled`=1 THEN 0 END) as numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
+								sql = "		SELECT `Orders`.`orderID`,`Orders`.`buyerID`,`Orders`.`buyerPaypalEmail`,`Orders`.`orderTimestamp`,`Users`.`email`, SUM(`OrderItems`.`quantity`) as itemCount, SUM(  `OrderItems`.`hasShipped` *  `quantity` ) AS numItemsShipped, SUM(  `OrderItems`.`canceled` *  `quantity` ) AS numItemsCanceled, SUM(`OrderItems`.`unitPrice` * `OrderItems`.`quantity`) as totalCost, SUM(`OrderItems`.`shippingPrice` * `OrderItems`.`quantity`) as totalShipping, SUM(`OrderItems`.`tax` * `OrderItems`.`quantity`) as totalTax" + 
 										"	FROM `Orders` LEFT JOIN (`OrderItems`,`Products`,`Users`) ON (`OrderItems`.`orderID`=`Orders`.`orderID` AND `OrderItems`.`productID`=`Products`.`productID` AND `Orders`.`buyerID`=`Users`.`userID`)" +
 											"WHERE `Orders`.`orderID` = '"+orderID+"' "+((acctType.equals("S"))?("	AND `Products`.`sellerID` = '"+usr.GetUserID()+"'"):"");
 								System.out.println(sql);
@@ -266,7 +266,7 @@
 								out.print("<td>"+shippingPrice+"</td>");
 								out.print("<td>"+tax+"</td>");
 								out.print(((acctType.equals("B") && !rs.getBoolean("hasShipped") && !rs.getBoolean("canceled"))?"<td><form action='UpdateOrderQuantityServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='number' value='"+quantity+"' name='quantity' /> &nbsp; <input type='submit' value='Update' /></form></td>":"<td>"+quantity+"</td>"));
-								out.print(((acctType.equals("S"))?"<td><form action='MarkItemAsShippedServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='submit' value='Mark as Shipped' "+((rs.getBoolean("hasShipped"))?"disabled":"")+" /></td>":""));
+								out.print(((acctType.equals("S"))?"<td><form action='MarkItemAsShippedServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='submit' value='Mark as Shipped' "+((rs.getBoolean("hasShipped"))?"disabled":"")+" /></form></td>":""));
 								out.print("<td><form action='CancelItemServlet' method='POST'><input type='hidden' name='orderID' value='"+orderID+"' /><input type='hidden' name='productID' value='"+Integer.toString(productID)+"' /><input type='submit' name='submitBtn' value='Cancel' "+((rs.getBoolean("hasShipped") || (rs.getBoolean("canceled"))?"disabled":""))+" /></form></td>");
 								out.print("<td>"+shipped+"</td>");
 								out.print("<td>"+canceled+"</td>");
