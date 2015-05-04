@@ -47,7 +47,6 @@
 			RequestDispatcher rd = request.getRequestDispatcher("index.jsp"); //Setup the request dispatcher for the index page
 	        String loggedIn = (String) session.getAttribute("loggedIn"); //Get the "logged in" attribute from the session
 			String addProductMessage = (String) request.getAttribute("addProductMessage"); //Obtain the message from the session (if there is one)
-			String strProductID = request.getParameter("productID");
 			
 			if (addProductMessage == null) { //Prevent null pointer exception
 				addProductMessage = "";
