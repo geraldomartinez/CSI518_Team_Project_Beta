@@ -177,13 +177,6 @@ public class SignupServlet extends HttpServlet {
                  registerMessage += "The zip code you entered was in an invalid format. Please enter a 5-digit zip code.";
                  insertNewUser = false;	
             }
-            if (url.equals("")) {
-                if (!registerMessage.equals("")) {
-                    registerMessage += "<br />";
-                }
-                registerMessage += "You did not enter url";
-                insertNewUser = false;
-            }
             
             
             if(state.length()!=2)
@@ -201,6 +194,40 @@ public class SignupServlet extends HttpServlet {
             else
             {
             	accountType="B";
+            }
+            
+            if (accountType.equals("S")){
+                if (url.equals("")) {
+                    if (!registerMessage.equals("")) {
+                        registerMessage += "<br />";
+                    }
+                    registerMessage += "You did not enter url";
+                    insertNewUser = false;
+                }
+                
+                if (companyName.equals("")) {
+                    if (!registerMessage.equals("")) {
+                        registerMessage += "<br />";
+                    }
+                    registerMessage += "You did not enter a company name";
+                    insertNewUser = false;
+                }
+                
+                if (accountNum.equals("")) {
+                    if (!registerMessage.equals("")) {
+                        registerMessage += "<br />";
+                    }
+                    registerMessage += "You did not enter a bank account number";
+                    insertNewUser = false;
+                }
+                
+                if (routingNum.equals("")) {
+                    if (!registerMessage.equals("")) {
+                        registerMessage += "<br />";
+                    }
+                    registerMessage += "You did not enter a bank routing number";
+                    insertNewUser = false;
+                }
             }
             
             if(atpostn<1 || dotpostn<atpostn+2 || dotpostn+2>=email.length())

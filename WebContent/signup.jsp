@@ -20,10 +20,12 @@
                 		$("input[name=account_number]").fadeIn();
                 		$("input[name=routing_number]").fadeIn();
                 		$("input[name=company_name]").fadeIn();
+                		$("input[name=url]").fadeIn();
                 	}else{
                 		$("input[name=account_number]").val('').fadeOut();
                 		$("input[name=routing_number]").val('').fadeOut();
                 		$("input[name=company_name]").val('').fadeOut();
+                		$("input[name=url]").val('').fadeOut();
                 	}
                 });
             });
@@ -90,7 +92,7 @@
                     <br />
                     <input name="zip" type="text" placeholder="Zip"/>
                     <br />
-                    <input name="url" type="text" placeholder="url"/>
+                    <input name="url" type="text" style="display: none;" placeholder="Url to company website" />
                     <br/>
                     <input name="company_name" type="text" style="display: none;" placeholder="Company Name"/>
                     <br />
